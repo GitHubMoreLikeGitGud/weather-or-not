@@ -71,7 +71,7 @@ export function mount(el, ctx) {
     let cik = ctx.params.cik ?? null;
     let name = null;
     if (!cik) {
-      const id = await pickRunId(null);
+      const id = await pickRunId(ctx.params.run ?? null);
       if (id) {
         const r = await loadRun(id);
         if (r.ok) {
