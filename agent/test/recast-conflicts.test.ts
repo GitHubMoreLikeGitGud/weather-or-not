@@ -1,5 +1,8 @@
+import { mkdtempSync, readFileSync } from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { HMEM, provenanceOf, type WonProvenance } from "../src/memory/hmemFacade.ts";
+import { HMEM, PROVENANCE_HISTORY, provenanceOf, type WonProvenance } from "../src/memory/hmemFacade.ts";
 import { ruleR1 } from "../src/memory/recastConflicts.ts";
 import type { EvidenceRecord } from "../src/evidence/store.ts";
 
@@ -133,6 +136,52 @@ describe("recast conflicts in H-MEM", () => {
     h.rememberStationChoice("0000000001", ["USW00000002", "USW00000001"], null, []);
     expect(h.stationChoice("0000000001")!.stations).toEqual(["USW00000001", "USW00000002"]);
     expect(h.memoryContext({ cik: "0000000001", period: "CY2025Q1" })).toContain("REMEMBERED FROM EARLIER RUNS");
+  });
+
+  it("refreshes a fact's provenance on reconfirmation: the latest retrieval wins, earlier ones are kept in history, capped (D1)", () => {
+    const dir = mkdtempSync(path.join(os.tmpdir(), "won-hmem-"));
+    const h = new HMEM({ actor: "won-agent", clock, persistDir: dir });
+    const first = { ...prov, zetaris_object: "won.concept_{cik10}_{tag}", evidence_id: "ev-1", run_id: "r1", retrieved_at: "2026-10-24T20:30:00+08:00" };
+    const a = h.addFact({ content: "Revenues CY2025Q1: 5463400000", source: "zetaris:won.concept", label: "fact", provenance: first, refs: ["ev-1"], key: "v1" });
+    expect(a.created).toBe(true);
+    expect(h.provenanceFor(a.memory.id)).toEqual(first);
+    expect(h.provenanceFor(a.memory.id)!.history).toBeUndefined();
+    // The same fact again from a later run with the filled object name.
+    const second = { ...prov, zetaris_object: "won.concept_0000000001_Revenues", evidence_id: "ev-9", run_id: "r2", retrieved_at: "2026-10-24T21:40:00+08:00", latency_ms: 219 };
+    const again = h.addFact({ content: "Revenues CY2025Q1: 5463400000", source: "zetaris:won.concept", label: "fact", provenance: second, refs: ["ev-9"], key: "v1" });
+    expect(again.created).toBe(false);
+    expect(again.memory.id).toBe(a.memory.id);
+    const p = h.provenanceFor(a.memory.id)!;
+    expect(p).toMatchObject(second);
+    expect(p.zetaris_object).toBe("won.concept_0000000001_Revenues");
+    expect(p.history).toEqual([first]);
+    // why() prints the current provenance, not the placeholder, and names the kept history.
+    const why = h.why(a.memory.id).lines.join("\n");
+    expect(why).toContain("Provenance: won.concept_0000000001_Revenues");
+    expect(why).not.toContain("{cik10}");
+    expect(why).toContain("1 earlier retrieval(s) kept, the first 2026-10-24T20:30:00+08:00");
+    expect(h.why(a.memory.id).provenance).toEqual(p);
+    // Persisted: provenance.json carries the same shape and no placeholder at the top level.
+    const onDisk = JSON.parse(readFileSync(path.join(dir, "provenance.json"), "utf8")) as Record<string, { zetaris_object: string; history?: unknown[] }>;
+    expect(onDisk[a.memory.id]!.zetaris_object).toBe("won.concept_0000000001_Revenues");
+    expect(onDisk[a.memory.id]!.history).toHaveLength(1);
+    // A reload sees the refreshed provenance.
+    expect(new HMEM({ actor: "won-agent", clock, persistDir: dir }).provenanceFor(a.memory.id)).toEqual(p);
+    // Reconfirming with the same evidence changes nothing; without provenance keeps the latest.
+    h.addFact({ content: "Revenues CY2025Q1: 5463400000", source: "zetaris:won.concept", label: "fact", provenance: second, refs: ["ev-9"], key: "v1" });
+    h.addFact({ content: "Revenues CY2025Q1: 5463400000", source: "zetaris:won.concept", label: "fact", provenance: null, refs: [], key: "v1" });
+    expect(h.provenanceFor(a.memory.id)).toEqual(p);
+    // The history is capped at PROVENANCE_HISTORY, most recent first.
+    for (let i = 0; i < PROVENANCE_HISTORY + 3; i++) {
+      h.addFact({ content: "Revenues CY2025Q1: 5463400000", source: "zetaris:won.concept", label: "fact", provenance: { ...second, evidence_id: `ev-${100 + i}`, run_id: `r${3 + i}`, retrieved_at: `2026-10-25T0${i}:00:00+08:00` }, refs: [], key: "v1" });
+    }
+    const capped = h.provenanceFor(a.memory.id)!;
+    expect(capped.evidence_id).toBe(`ev-${100 + PROVENANCE_HISTORY + 2}`);
+    expect(capped.history).toHaveLength(PROVENANCE_HISTORY);
+    expect(capped.history![0]!.evidence_id).toBe(`ev-${100 + PROVENANCE_HISTORY + 1}`);
+    expect(capped.history!.every((x) => !("history" in x))).toBe(true);
+    const reads = h.ledger.history(a.memory.id).filter((e) => e.action === "read" && (e.details as { provenance_refreshed?: boolean })?.provenance_refreshed);
+    expect(reads.length).toBe(PROVENANCE_HISTORY + 3);
   });
 
   it("builds provenance from an evidence record", () => {

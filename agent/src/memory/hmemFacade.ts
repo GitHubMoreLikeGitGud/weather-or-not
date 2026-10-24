@@ -3,7 +3,9 @@
 // what the weather-attribution agent needs:
 //   - facts with Zetaris provenance {zetaris_object, sql_sha256, endpoint, accn, filed,
 //     licence, retrieved_at, latency_ms, cache_state}, deduplicated per fact key so a re-run
-//     reconfirms a fact instead of duplicating it;
+//     reconfirms a fact instead of duplicating it; a reconfirmation with new provenance
+//     refreshes it (the latest retrieval wins, the earlier ones are kept in `history`, at
+//     most PROVENANCE_HISTORY entries);
 //   - the recast_comparative conflicts (recastConflicts.ts), resolved by rule R1, with the
 //     analyst override hook;
 //   - tag_choice and station_choice facts that persist across runs, so a warm run skips the
@@ -73,6 +75,14 @@ export interface WonProvenance {
   run_id: string | null;
 }
 
+/** Earlier retrievals kept per fact when its provenance is refreshed (D1). */
+export const PROVENANCE_HISTORY = 5;
+
+/** What provenance.json holds per memory: the latest retrieval, plus the earlier ones (most recent first). */
+export interface StoredProvenance extends WonProvenance {
+  history?: WonProvenance[];
+}
+
 /** Provenance from a Zetaris evidence record (plus the filing the fact names, when it names one). */
 export function provenanceOf(ev: EvidenceRecord, extra: { accn?: string | null; filed?: string | null } = {}): WonProvenance {
   return {
@@ -118,7 +128,8 @@ export interface FactResult {
 
 export interface WhyTrace {
   memory: MemoryRecord | null;
-  provenance: WonProvenance | null;
+  /** The latest retrieval; `history` holds the earlier ones. */
+  provenance: StoredProvenance | null;
   ledger: LedgerEntry[];
   conflicts: RecastConflict[];
   /** Memories this one superseded or is superseded by. */
@@ -134,7 +145,7 @@ export class HMEM extends ReferenceHMEM {
   readonly actor: string;
   readonly persistDir: string | null;
   readonly recasts: RecastConflictService;
-  private provenance: Record<string, WonProvenance> = {};
+  private provenance: Record<string, StoredProvenance> = {};
   private seeded: Record<string, { sha12: string; memoryIds: string[]; via: string; at: string }> = {};
 
   constructor(opts: WonHMEMOptions = {}) {
@@ -190,7 +201,11 @@ export class HMEM extends ReferenceHMEM {
     return sha(stable({ source: f.source, key: f.key ?? f.content }));
   }
 
-  /** Adds a fact the agent relies on, or reconfirms it with the new evidence (refs merged, an update logged). */
+  /**
+   * Adds a fact the agent relies on, or reconfirms it with the new evidence (refs merged, an
+   * update logged). A reconfirmation that carries provenance refreshes the stored provenance:
+   * the latest retrieval wins and the earlier ones move to `history` (D1).
+   */
   addFact(f: FactInput): FactResult {
     const key = HMEM.factKey(f);
     const existing = this.byTag(`fact:${key}`);
@@ -198,11 +213,12 @@ export class HMEM extends ReferenceHMEM {
     if (existing) {
       const old = existing.provenance.refs ?? [];
       const fresh = refs.filter((r) => !old.includes(r));
+      const refreshed = f.provenance ? this.refreshProvenance(existing.id, f.provenance) : false;
       if (fresh.length) {
         this.store.update(existing.id, { provenance: { ...existing.provenance, refs: [...old, ...fresh].slice(0, 12) } });
       } else {
         this.store.touch(existing.id);
-        this.ledger.log(existing.id, "read", this.actor, { details: { reconfirmed: true } });
+        this.ledger.log(existing.id, "read", this.actor, { details: { reconfirmed: true, ...(refreshed ? { provenance_refreshed: true } : {}) } });
       }
       return { memory: existing, created: false };
     }
@@ -222,7 +238,22 @@ export class HMEM extends ReferenceHMEM {
     return { memory, created: true };
   }
 
-  provenanceFor(memoryId: string): WonProvenance | null {
+  /** Stores the latest provenance of a fact; the previous entry goes to the front of `history` (capped). Returns whether anything changed. */
+  private refreshProvenance(memoryId: string, prov: WonProvenance): boolean {
+    const prev = this.provenance[memoryId];
+    if (prev && prev.evidence_id !== null && prev.evidence_id === prov.evidence_id && prev.retrieved_at === prov.retrieved_at) return false;
+    let next: StoredProvenance = { ...prov };
+    if (prev) {
+      const { history: older = [], ...latest } = prev;
+      next = { ...next, history: [latest, ...older].slice(0, PROVENANCE_HISTORY) };
+    }
+    this.provenance[memoryId] = next;
+    this.writeFile("provenance.json", this.provenance);
+    return true;
+  }
+
+  /** The latest provenance of a fact (with the earlier retrievals in `history`). */
+  provenanceFor(memoryId: string): StoredProvenance | null {
     return this.provenance[memoryId] ?? null;
   }
 
@@ -337,8 +368,9 @@ export class HMEM extends ReferenceHMEM {
     else {
       lines.push(`${memory.content} (source ${memory.source}; ${memory.provenance.label}; learned ${new Date(memory.provenance.learnedAt).toISOString()}; confidence ${memory.confidence}).`);
       if (provenance) {
+        const earlier = provenance.history?.length ?? 0;
         lines.push(
-          `Provenance: ${provenance.zetaris_object ?? "no Zetaris object"}${provenance.sql_sha256 ? `, SQL sha256 ${provenance.sql_sha256.slice(0, 12)}` : ""}${provenance.endpoint ? `, endpoint ${provenance.endpoint}` : ""}${provenance.accn ? `, filing ${provenance.accn}${provenance.filed ? ` filed ${provenance.filed}` : ""}` : ""}; retrieved ${provenance.retrieved_at}${provenance.latency_ms !== null ? ` in ${provenance.latency_ms} ms` : ""}${provenance.cache_state ? `, cache ${provenance.cache_state}` : ""}; licence: ${provenance.licence ?? "n/a"}.`,
+          `Provenance: ${provenance.zetaris_object ?? "no Zetaris object"}${provenance.sql_sha256 ? `, SQL sha256 ${provenance.sql_sha256.slice(0, 12)}` : ""}${provenance.endpoint ? `, endpoint ${provenance.endpoint}` : ""}${provenance.accn ? `, filing ${provenance.accn}${provenance.filed ? ` filed ${provenance.filed}` : ""}` : ""}; retrieved ${provenance.retrieved_at}${provenance.latency_ms !== null ? ` in ${provenance.latency_ms} ms` : ""}${provenance.cache_state ? `, cache ${provenance.cache_state}` : ""}${provenance.evidence_id ? ` (evidence ${provenance.evidence_id}${provenance.run_id ? `, run ${provenance.run_id}` : ""})` : ""}; licence: ${provenance.licence ?? "n/a"}${earlier ? `; ${earlier} earlier retrieval(s) kept, the first ${provenance.history![earlier - 1]!.retrieved_at}` : ""}.`,
         );
       }
       if (memory.provenance.refs?.length) lines.push(`Evidence: ${memory.provenance.refs.join(", ")}.`);
