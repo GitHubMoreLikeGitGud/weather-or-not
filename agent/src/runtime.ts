@@ -139,6 +139,8 @@ export interface AskRequest {
   abortSignal?: AbortSignal;
   /** Skip the boot seed (tests). */
   noSeed?: boolean;
+  /** The run id to use (the server announces it before the run starts); default: a new id. */
+  runId?: string;
 }
 
 export interface AskOutcome {
@@ -150,7 +152,7 @@ export interface AskOutcome {
 /** Seeds memory (idempotent), runs the question and saves the run. */
 export async function ask(rt: Runtime, req: AskRequest, origin: { source: "cli" | "server"; note?: string } = { source: "cli" }): Promise<AskOutcome> {
   const seed = req.noSeed ? null : await seedMemory(rt.hmem, { log: () => {} });
-  const evidence = new EvidenceStore();
+  const evidence = new EvidenceStore(req.runId);
   const deps: ToolDeps = { gateway: rt.gateway, ollama: rt.ollama, evidence, seeds: rt.seeds, hmem: rt.hmem, world: rt.world, registrar: rt.registrar, log: rt.log };
   const result = await investigate({ cik: req.cik, period: req.period, claim: req.claim, think: req.think, maxChunks: req.maxChunks, onEvent: req.onEvent, abortSignal: req.abortSignal }, deps);
   rt.runs.save(result, origin);
