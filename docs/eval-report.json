@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-24T13:35:59.019Z",
+  "generated_at": "2026-10-24T13:57:08.662Z",
   "label": "measured",
   "inputs": {
     "runs": [
@@ -10,7 +10,7 @@
         "period": "CY2025Q1",
         "claim": "colder weather",
         "started_at": "2026-10-24T12:30:50.151Z",
-        "source": "data/runs"
+        "source": "saved copy 1"
       },
       {
         "run_id": "r20261024T2034350adc",
@@ -19,7 +19,7 @@
         "period": "CY2025Q1",
         "claim": "favorable weather",
         "started_at": "2026-10-24T12:34:35.825Z",
-        "source": "data/runs"
+        "source": "saved copy 1"
       },
       {
         "run_id": "r20261024T203648826a",
@@ -28,7 +28,7 @@
         "period": "CY2025Q1",
         "claim": "favorable weather",
         "started_at": "2026-10-24T12:36:48.574Z",
-        "source": "data/runs"
+        "source": "saved copy 1"
       },
       {
         "run_id": "r20261024T20391416bf",
@@ -37,7 +37,7 @@
         "period": "CY2025Q1",
         "claim": "colder weather",
         "started_at": "2026-10-24T12:39:14.725Z",
-        "source": "data/runs"
+        "source": "saved copy 1"
       },
       {
         "run_id": "r20261024T204637522f",
@@ -46,6 +46,42 @@
         "period": "CY2025Q1",
         "claim": "colder weather",
         "started_at": "2026-10-24T12:46:37.596Z",
+        "source": "saved copy 1"
+      },
+      {
+        "run_id": "r20261024T213805fb4e",
+        "cik": "0001031296",
+        "utility": "FIRSTENERGY CORP",
+        "period": "CY2025Q1",
+        "claim": "colder weather",
+        "started_at": "2026-10-24T13:38:05.321Z",
+        "source": "data/runs"
+      },
+      {
+        "run_id": "r20261024T214009cd85",
+        "cik": "0000004904",
+        "utility": "AMERICAN ELECTRIC POWER CO INC",
+        "period": "CY2025Q1",
+        "claim": "colder weather",
+        "started_at": "2026-10-24T13:40:09.051Z",
+        "source": "data/runs"
+      },
+      {
+        "run_id": "r20261024T214205a2e5",
+        "cik": "0001031296",
+        "utility": "FIRSTENERGY CORP",
+        "period": "CY2025Q1",
+        "claim": "colder weather",
+        "started_at": "2026-10-24T13:42:05.445Z",
+        "source": "data/runs"
+      },
+      {
+        "run_id": "r20261024T2145294e73",
+        "cik": "0000004904",
+        "utility": "AMERICAN ELECTRIC POWER CO INC",
+        "period": "CY2025Q1",
+        "claim": "colder weather",
+        "started_at": "2026-10-24T13:45:29.637Z",
         "source": "data/runs"
       }
     ],
@@ -948,7 +984,7 @@
     "elapsed_s": 97.6
   },
   "peers": {
-    "from_run": "r20261024T204637522f",
+    "from_run": "r20261024T214205a2e5",
     "target": "0001031296",
     "utility": "FIRSTENERGY CORP",
     "period": "CY2025Q1",
@@ -977,11 +1013,13 @@
     "runs": [
       "r20261024T203050a220",
       "r20261024T20391416bf",
-      "r20261024T204637522f"
+      "r20261024T204637522f",
+      "r20261024T213805fb4e",
+      "r20261024T214205a2e5"
     ]
   },
   "coverage": {
-    "from_run": "r20261024T204637522f",
+    "from_run": "r20261024T2145294e73",
     "periods": [
       "CY2025Q1",
       "CY2024Q1"
@@ -1520,10 +1558,12 @@
     {
       "cik": "0000004904",
       "utility": "AMERICAN ELECTRIC POWER CO INC",
-      "from_run": "r20261024T203648826a",
+      "from_run": "r20261024T2145294e73",
       "runs": [
         "r20261024T2034350adc",
-        "r20261024T203648826a"
+        "r20261024T203648826a",
+        "r20261024T214009cd85",
+        "r20261024T2145294e73"
       ],
       "identical_across_runs": true,
       "tag": "Revenues",
@@ -1570,11 +1610,13 @@
     {
       "cik": "0001031296",
       "utility": "FIRSTENERGY CORP",
-      "from_run": "r20261024T204637522f",
+      "from_run": "r20261024T214205a2e5",
       "runs": [
         "r20261024T203050a220",
         "r20261024T20391416bf",
-        "r20261024T204637522f"
+        "r20261024T204637522f",
+        "r20261024T213805fb4e",
+        "r20261024T214205a2e5"
       ],
       "identical_across_runs": true,
       "tag": "Revenues",
@@ -1737,13 +1779,14 @@
       "period": "CY2025Q1",
       "claim": "colder weather",
       "started_at": "2026-10-24T12:30:50.151Z",
-      "source": "data/runs",
+      "source": "saved copy 1",
       "mode": "cold",
       "chunks": 5,
       "wall_ms": 84146,
       "planner_calls": 9,
       "valid_first_try": 9,
       "repaired": 0,
+      "repairs_think_off": null,
       "fallbacks": 0,
       "tool_calls": 9,
       "tool_calls_by_model": 9,
@@ -1804,13 +1847,14 @@
       "period": "CY2025Q1",
       "claim": "favorable weather",
       "started_at": "2026-10-24T12:34:35.825Z",
-      "source": "data/runs",
+      "source": "saved copy 1",
       "mode": "cold",
       "chunks": 5,
       "wall_ms": 99727,
       "planner_calls": 9,
       "valid_first_try": 8,
       "repaired": 1,
+      "repairs_think_off": null,
       "fallbacks": 0,
       "tool_calls": 9,
       "tool_calls_by_model": 9,
@@ -1871,13 +1915,14 @@
       "period": "CY2025Q1",
       "claim": "favorable weather",
       "started_at": "2026-10-24T12:36:48.574Z",
-      "source": "data/runs",
+      "source": "saved copy 1",
       "mode": "warm",
       "chunks": 4,
       "wall_ms": 100650,
       "planner_calls": 8,
       "valid_first_try": 7,
       "repaired": 1,
+      "repairs_think_off": null,
       "fallbacks": 0,
       "tool_calls": 8,
       "tool_calls_by_model": 8,
@@ -1943,13 +1988,14 @@
       "period": "CY2025Q1",
       "claim": "colder weather",
       "started_at": "2026-10-24T12:39:14.725Z",
-      "source": "data/runs",
+      "source": "saved copy 1",
       "mode": "warm",
       "chunks": 4,
       "wall_ms": 105501,
       "planner_calls": 8,
       "valid_first_try": 7,
       "repaired": 1,
+      "repairs_think_off": null,
       "fallbacks": 0,
       "tool_calls": 8,
       "tool_calls_by_model": 8,
@@ -2009,13 +2055,14 @@
       "period": "CY2025Q1",
       "claim": "colder weather",
       "started_at": "2026-10-24T12:46:37.596Z",
-      "source": "data/runs",
+      "source": "saved copy 1",
       "mode": "warm",
       "chunks": 4,
       "wall_ms": 133226,
       "planner_calls": 8,
       "valid_first_try": 5,
       "repaired": 2,
+      "repairs_think_off": null,
       "fallbacks": 1,
       "tool_calls": 8,
       "tool_calls_by_model": 7,
@@ -2067,50 +2114,313 @@
       "refused_hosts": 0,
       "model": "nemotron-3-nano:4b",
       "think": true
+    },
+    {
+      "run_id": "r20261024T213805fb4e",
+      "cik": "0001031296",
+      "utility": "FIRSTENERGY CORP",
+      "period": "CY2025Q1",
+      "claim": "colder weather",
+      "started_at": "2026-10-24T13:38:05.321Z",
+      "source": "data/runs",
+      "mode": "cold",
+      "chunks": 5,
+      "wall_ms": 97457,
+      "planner_calls": 9,
+      "valid_first_try": 9,
+      "repaired": 0,
+      "repairs_think_off": 0,
+      "fallbacks": 0,
+      "tool_calls": 9,
+      "tool_calls_by_model": 9,
+      "median_tokens_per_s": 140.39490278254675,
+      "memo": {
+        "source": "model",
+        "words": 184,
+        "attempts": 1,
+        "tokens_per_s": 145.47817463685013,
+        "drafts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "words": 184,
+            "unknown_numbers": 0
+          }
+        ]
+      },
+      "evidence": {
+        "records": 20,
+        "complete_fields": 20,
+        "unresolved_object_names": 0,
+        "e_complete": 20,
+        "e_complete_ratio": 1,
+        "matches_run_quality": true
+      },
+      "claims": {
+        "total": 19,
+        "with_evidence": 19,
+        "e_cov": 1,
+        "matches_run_quality": true
+      },
+      "skipped_steps": [],
+      "weather_quarter_ms": {
+        "current": 20005,
+        "previous": 20959
+      },
+      "memo_ms": 2761,
+      "verdict": "supported",
+      "confidence": "high",
+      "dq_label": "pass",
+      "recast_conflicts": 0,
+      "cloud_model_calls": 0,
+      "refused_hosts": 0,
+      "model": "nemotron-3-nano:4b",
+      "think": true
+    },
+    {
+      "run_id": "r20261024T214009cd85",
+      "cik": "0000004904",
+      "utility": "AMERICAN ELECTRIC POWER CO INC",
+      "period": "CY2025Q1",
+      "claim": "colder weather",
+      "started_at": "2026-10-24T13:40:09.051Z",
+      "source": "data/runs",
+      "mode": "cold",
+      "chunks": 5,
+      "wall_ms": 114942,
+      "planner_calls": 9,
+      "valid_first_try": 7,
+      "repaired": 2,
+      "repairs_think_off": 1,
+      "fallbacks": 0,
+      "tool_calls": 9,
+      "tool_calls_by_model": 9,
+      "median_tokens_per_s": 139.46264309601196,
+      "memo": {
+        "source": "model",
+        "words": 176,
+        "attempts": 1,
+        "tokens_per_s": 147.8070349908781,
+        "drafts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "words": 176,
+            "unknown_numbers": 0
+          }
+        ]
+      },
+      "evidence": {
+        "records": 20,
+        "complete_fields": 20,
+        "unresolved_object_names": 0,
+        "e_complete": 20,
+        "e_complete_ratio": 1,
+        "matches_run_quality": true
+      },
+      "claims": {
+        "total": 19,
+        "with_evidence": 19,
+        "e_cov": 1,
+        "matches_run_quality": true
+      },
+      "skipped_steps": [],
+      "weather_quarter_ms": {
+        "current": 18308,
+        "previous": 18576
+      },
+      "memo_ms": 2845,
+      "verdict": "supported",
+      "confidence": "high",
+      "dq_label": "pass",
+      "recast_conflicts": 1,
+      "cloud_model_calls": 0,
+      "refused_hosts": 0,
+      "model": "nemotron-3-nano:4b",
+      "think": true
+    },
+    {
+      "run_id": "r20261024T214205a2e5",
+      "cik": "0001031296",
+      "utility": "FIRSTENERGY CORP",
+      "period": "CY2025Q1",
+      "claim": "colder weather",
+      "started_at": "2026-10-24T13:42:05.445Z",
+      "source": "data/runs",
+      "mode": "warm",
+      "chunks": 4,
+      "wall_ms": 128063,
+      "planner_calls": 8,
+      "valid_first_try": 6,
+      "repaired": 2,
+      "repairs_think_off": 2,
+      "fallbacks": 0,
+      "tool_calls": 8,
+      "tool_calls_by_model": 8,
+      "median_tokens_per_s": 139.1570890355889,
+      "memo": {
+        "source": "model",
+        "words": 184,
+        "attempts": 1,
+        "tokens_per_s": 149.1668410399415,
+        "drafts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "words": 184,
+            "unknown_numbers": 0
+          }
+        ]
+      },
+      "evidence": {
+        "records": 20,
+        "complete_fields": 20,
+        "unresolved_object_names": 0,
+        "e_complete": 20,
+        "e_complete_ratio": 1,
+        "matches_run_quality": true
+      },
+      "claims": {
+        "total": 19,
+        "with_evidence": 19,
+        "e_cov": 1,
+        "matches_run_quality": true
+      },
+      "skipped_steps": [
+        {
+          "item": "tag_chosen",
+          "memoryId": "mem-49"
+        }
+      ],
+      "weather_quarter_ms": {
+        "current": 23938,
+        "previous": 18804
+      },
+      "memo_ms": 2709,
+      "verdict": "supported",
+      "confidence": "high",
+      "dq_label": "pass",
+      "recast_conflicts": 0,
+      "cloud_model_calls": 0,
+      "refused_hosts": 0,
+      "model": "nemotron-3-nano:4b",
+      "think": true
+    },
+    {
+      "run_id": "r20261024T2145294e73",
+      "cik": "0000004904",
+      "utility": "AMERICAN ELECTRIC POWER CO INC",
+      "period": "CY2025Q1",
+      "claim": "colder weather",
+      "started_at": "2026-10-24T13:45:29.637Z",
+      "source": "data/runs",
+      "mode": "warm",
+      "chunks": 4,
+      "wall_ms": 112654,
+      "planner_calls": 8,
+      "valid_first_try": 6,
+      "repaired": 2,
+      "repairs_think_off": 1,
+      "fallbacks": 0,
+      "tool_calls": 8,
+      "tool_calls_by_model": 8,
+      "median_tokens_per_s": 139.83972894306487,
+      "memo": {
+        "source": "model",
+        "words": 176,
+        "attempts": 1,
+        "tokens_per_s": 140.50431782002545,
+        "drafts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "words": 176,
+            "unknown_numbers": 0
+          }
+        ]
+      },
+      "evidence": {
+        "records": 20,
+        "complete_fields": 20,
+        "unresolved_object_names": 0,
+        "e_complete": 20,
+        "e_complete_ratio": 1,
+        "matches_run_quality": true
+      },
+      "claims": {
+        "total": 19,
+        "with_evidence": 19,
+        "e_cov": 1,
+        "matches_run_quality": true
+      },
+      "skipped_steps": [
+        {
+          "item": "tag_chosen",
+          "memoryId": "mem-61"
+        }
+      ],
+      "weather_quarter_ms": {
+        "current": 18212,
+        "previous": 18564
+      },
+      "memo_ms": 2977,
+      "verdict": "supported",
+      "confidence": "high",
+      "dq_label": "pass",
+      "recast_conflicts": 1,
+      "cloud_model_calls": 0,
+      "refused_hosts": 0,
+      "model": "nemotron-3-nano:4b",
+      "think": true
     }
   ],
   "totals": {
-    "runs": 5,
-    "planner_calls": 42,
-    "valid_first_try": 36,
-    "repaired": 5,
+    "runs": 9,
+    "planner_calls": 76,
+    "valid_first_try": 64,
+    "repaired": 11,
+    "repairs_think_off": 4,
     "fallbacks": 1,
-    "tool_calls_by_model": 41,
-    "memo_drafts": 8,
+    "tool_calls_by_model": 75,
+    "memo_drafts": 12,
     "memo_drafts_with_unknown_numbers": 0,
-    "model_memos": 3,
+    "model_memos": 7,
     "template_memos": 2,
-    "evidence_records": 100,
-    "evidence_complete": 78,
-    "claims": 95,
-    "claims_with_evidence": 95,
+    "evidence_records": 180,
+    "evidence_complete": 158,
+    "claims": 171,
+    "claims_with_evidence": 171,
     "cloud_model_calls": 0,
     "refused_hosts": 0
   },
   "cold_vs_warm": {
     "all": {
       "cold": {
-        "runs": 2,
+        "runs": 4,
         "run_ids": [
           "r20261024T203050a220",
-          "r20261024T2034350adc"
+          "r20261024T2034350adc",
+          "r20261024T213805fb4e",
+          "r20261024T214009cd85"
         ],
         "chunks_mean": 5,
-        "wall_ms_mean": 91936.5,
+        "wall_ms_mean": 99068,
         "wall_ms_min": 84146,
-        "wall_ms_max": 99727,
+        "wall_ms_max": 114942,
         "planner_calls_mean": 9,
         "skipped_steps_mean": 0
       },
       "warm": {
-        "runs": 3,
+        "runs": 5,
         "run_ids": [
           "r20261024T203648826a",
           "r20261024T20391416bf",
-          "r20261024T204637522f"
+          "r20261024T204637522f",
+          "r20261024T214205a2e5",
+          "r20261024T2145294e73"
         ],
         "chunks_mean": 4,
-        "wall_ms_mean": 113125.66666666667,
+        "wall_ms_mean": 116018.8,
         "wall_ms_min": 100650,
         "wall_ms_max": 133226,
         "planner_calls_mean": 8,
@@ -2121,25 +2431,27 @@
       "0001031296": {
         "utility": "FIRSTENERGY CORP",
         "cold": {
-          "runs": 1,
+          "runs": 2,
           "run_ids": [
-            "r20261024T203050a220"
+            "r20261024T203050a220",
+            "r20261024T213805fb4e"
           ],
           "chunks_mean": 5,
-          "wall_ms_mean": 84146,
+          "wall_ms_mean": 90801.5,
           "wall_ms_min": 84146,
-          "wall_ms_max": 84146,
+          "wall_ms_max": 97457,
           "planner_calls_mean": 9,
           "skipped_steps_mean": 0
         },
         "warm": {
-          "runs": 2,
+          "runs": 3,
           "run_ids": [
             "r20261024T20391416bf",
-            "r20261024T204637522f"
+            "r20261024T204637522f",
+            "r20261024T214205a2e5"
           ],
           "chunks_mean": 4,
-          "wall_ms_mean": 119363.5,
+          "wall_ms_mean": 122263.33333333333,
           "wall_ms_min": 105501,
           "wall_ms_max": 133226,
           "planner_calls_mean": 8,
@@ -2149,26 +2461,28 @@
       "0000004904": {
         "utility": "AMERICAN ELECTRIC POWER CO INC",
         "cold": {
-          "runs": 1,
+          "runs": 2,
           "run_ids": [
-            "r20261024T2034350adc"
+            "r20261024T2034350adc",
+            "r20261024T214009cd85"
           ],
           "chunks_mean": 5,
-          "wall_ms_mean": 99727,
+          "wall_ms_mean": 107334.5,
           "wall_ms_min": 99727,
-          "wall_ms_max": 99727,
+          "wall_ms_max": 114942,
           "planner_calls_mean": 9,
           "skipped_steps_mean": 0
         },
         "warm": {
-          "runs": 1,
+          "runs": 2,
           "run_ids": [
-            "r20261024T203648826a"
+            "r20261024T203648826a",
+            "r20261024T2145294e73"
           ],
           "chunks_mean": 4,
-          "wall_ms_mean": 100650,
+          "wall_ms_mean": 106652,
           "wall_ms_min": 100650,
-          "wall_ms_max": 100650,
+          "wall_ms_max": 112654,
           "planner_calls_mean": 8,
           "skipped_steps_mean": 1
         }

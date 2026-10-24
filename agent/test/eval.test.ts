@@ -41,6 +41,7 @@ describe("eval report: per-run summary", () => {
     expect(s.planner_calls).toBe(8);
     expect(s.valid_first_try).toBe(7);
     expect(s.repaired).toBe(1);
+    expect(s.repairs_think_off).toBeNull();
     expect(s.fallbacks).toBe(0);
     expect(s.memo.source).toBe("model");
     expect(s.memo.words).toBe(184);
@@ -146,7 +147,12 @@ describe("eval report: whole report and markdown", () => {
     expect(report.peers?.count).toBe(39);
     expect(report.peers?.excluded).toHaveLength(3);
     expect(report.peers?.identical_across_runs).toBe(true);
-    expect(report.totals).toMatchObject({ runs: 2, planner_calls: 17, valid_first_try: 16, repaired: 1, fallbacks: 0, memo_drafts: 2, memo_drafts_with_unknown_numbers: 0, cloud_model_calls: 0 });
+    expect(report.totals).toMatchObject({ runs: 2, planner_calls: 17, valid_first_try: 16, repaired: 1, repairs_think_off: null, fallbacks: 0, memo_drafts: 2, memo_drafts_with_unknown_numbers: 0, cloud_model_calls: 0 });
+    const withThinkOff = coldClone(warm, "r-think-off", "2026-10-24T12:10:00.000Z");
+    withThinkOff.summary.planner_repairs_think_off = 1;
+    const r2 = buildReport({ runs: [{ run: warm, source: "fixture" }, { run: withThinkOff, source: "fixture" }], dq: null, joinmap: null, utilities, stations });
+    expect(r2.totals.repairs_think_off).toBe(1);
+    expect(renderMarkdown(r2)).toContain("(1 of them with think off)");
     expect(report.cold_vs_warm.all.cold.chunks_mean).toBe(5);
     expect(report.cold_vs_warm.all.warm.chunks_mean).toBe(4);
     expect(report.cold_vs_warm.all.cold.run_ids).toEqual(["r-cold-fixture"]);

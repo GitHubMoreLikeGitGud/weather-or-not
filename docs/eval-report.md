@@ -1,16 +1,20 @@
 # Weather-or-Not evaluation report
 
-Generated 2026-10-24T13:35:59.019Z. Every number below is measured and read from a file: the saved runs under data/runs, the DQ onboarding file (data/dq/latest.json) and the join-map measurements (data/eval/joinmap.json, one-off Lightning SQL statements under the reader allowlist). Nothing is typed by hand; "not measured" marks what the files do not hold.
+Generated 2026-10-24T13:57:08.662Z. Every number below is measured and read from a file: the saved runs under data/runs, the DQ onboarding file (data/dq/latest.json) and the join-map measurements (data/eval/joinmap.json, one-off Lightning SQL statements under the reader allowlist). Nothing is typed by hand; "not measured" marks what the files do not hold.
 
 ## Runs used
 
 | Run | Utility | CIK | Period | Claim | Started | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| r20261024T203050a220 | FIRSTENERGY CORP | 0001031296 | CY2025Q1 | colder weather | 2026-10-24T12:30:50.151Z | data/runs |
-| r20261024T2034350adc | AMERICAN ELECTRIC POWER CO INC | 0000004904 | CY2025Q1 | favorable weather | 2026-10-24T12:34:35.825Z | data/runs |
-| r20261024T203648826a | AMERICAN ELECTRIC POWER CO INC | 0000004904 | CY2025Q1 | favorable weather | 2026-10-24T12:36:48.574Z | data/runs |
-| r20261024T20391416bf | FIRSTENERGY CORP | 0001031296 | CY2025Q1 | colder weather | 2026-10-24T12:39:14.725Z | data/runs |
-| r20261024T204637522f | FIRSTENERGY CORP | 0001031296 | CY2025Q1 | colder weather | 2026-10-24T12:46:37.596Z | data/runs |
+| r20261024T203050a220 | FIRSTENERGY CORP | 0001031296 | CY2025Q1 | colder weather | 2026-10-24T12:30:50.151Z | saved copy 1 |
+| r20261024T2034350adc | AMERICAN ELECTRIC POWER CO INC | 0000004904 | CY2025Q1 | favorable weather | 2026-10-24T12:34:35.825Z | saved copy 1 |
+| r20261024T203648826a | AMERICAN ELECTRIC POWER CO INC | 0000004904 | CY2025Q1 | favorable weather | 2026-10-24T12:36:48.574Z | saved copy 1 |
+| r20261024T20391416bf | FIRSTENERGY CORP | 0001031296 | CY2025Q1 | colder weather | 2026-10-24T12:39:14.725Z | saved copy 1 |
+| r20261024T204637522f | FIRSTENERGY CORP | 0001031296 | CY2025Q1 | colder weather | 2026-10-24T12:46:37.596Z | saved copy 1 |
+| r20261024T213805fb4e | FIRSTENERGY CORP | 0001031296 | CY2025Q1 | colder weather | 2026-10-24T13:38:05.321Z | data/runs |
+| r20261024T214009cd85 | AMERICAN ELECTRIC POWER CO INC | 0000004904 | CY2025Q1 | colder weather | 2026-10-24T13:40:09.051Z | data/runs |
+| r20261024T214205a2e5 | FIRSTENERGY CORP | 0001031296 | CY2025Q1 | colder weather | 2026-10-24T13:42:05.445Z | data/runs |
+| r20261024T2145294e73 | AMERICAN ELECTRIC POWER CO INC | 0000004904 | CY2025Q1 | colder weather | 2026-10-24T13:45:29.637Z | data/runs |
 
 Seeds: 43 utilities, 56 stations. DQ file present; join-map file present.
 
@@ -61,7 +65,7 @@ Recorded (not re-run; zetaris/README.md, SEC-side verification and DQ (Day 1 onb
 
 ## 2. Peers per tag and exclusions
 
-From run r20261024T204637522f (FIRSTENERGY CORP, CY2025Q1): 39 peers, 39 with weather; the peer set is identical across the 3 run(s) of this utility.
+From run r20261024T214205a2e5 (FIRSTENERGY CORP, CY2025Q1): 39 peers, 39 with weather; the peer set is identical across the 5 run(s) of this utility.
 
 | Tag | Peers |
 | --- | --- |
@@ -77,7 +81,7 @@ From run r20261024T204637522f (FIRSTENERGY CORP, CY2025Q1): 39 peers, 39 with we
 
 ## 3. Weather coverage per utility
 
-From the weather_quarter evidence rows of run r20261024T204637522f (CY2025Q1: 56 stations; CY2024Q1: 56 stations). Utility coverage is the minimum over its stations, then the minimum of the two periods. 43 of 43 utilities have every station in the rows; lowest utility coverage 0.9556; 0 below 0.9.
+From the weather_quarter evidence rows of run r20261024T2145294e73 (CY2025Q1: 56 stations; CY2024Q1: 56 stations). Utility coverage is the minimum over its stations, then the minimum of the two periods. 43 of 43 utilities have every station in the rows; lowest utility coverage 0.9556; 0 below 0.9.
 
 | CIK | Utility | Stations | CY2025Q1 | CY2024Q1 | Min |
 | --- | --- | --- | --- | --- | --- |
@@ -127,7 +131,7 @@ From the weather_quarter evidence rows of run r20261024T204637522f (CY2025Q1: 56
 
 ## 4. Attribution with bootstrap ranges
 
-### AMERICAN ELECTRIC POWER CO INC (CIK 0000004904), run r20261024T203648826a
+### AMERICAN ELECTRIC POWER CO INC (CIK 0000004904), run r20261024T2145294e73
 
 | Quantity | Value |
 | --- | --- |
@@ -146,9 +150,9 @@ From the weather_quarter evidence rows of run r20261024T204637522f (CY2025Q1: 56
 | Confidence | high |
 | Claim ratio / verdict | 1.024 / supported |
 | Recast conflicts on the card | 1 |
-| Identical across runs | yes (2 run(s): r20261024T2034350adc, r20261024T203648826a) |
+| Identical across runs | yes (4 run(s): r20261024T2034350adc, r20261024T203648826a, r20261024T214009cd85, r20261024T2145294e73) |
 
-### FIRSTENERGY CORP (CIK 0001031296), run r20261024T204637522f
+### FIRSTENERGY CORP (CIK 0001031296), run r20261024T214205a2e5
 
 | Quantity | Value |
 | --- | --- |
@@ -167,7 +171,7 @@ From the weather_quarter evidence rows of run r20261024T204637522f (CY2025Q1: 56
 | Confidence | high |
 | Claim ratio / verdict | 0.564 / supported |
 | Recast conflicts on the card | 0 |
-| Identical across runs | yes (3 run(s): r20261024T203050a220, r20261024T20391416bf, r20261024T204637522f) |
+| Identical across runs | yes (5 run(s): r20261024T203050a220, r20261024T20391416bf, r20261024T204637522f, r20261024T213805fb4e, r20261024T214205a2e5) |
 
 ## 5. Data quality
 
@@ -182,13 +186,17 @@ Utility FK rule (recorded at onboarding, see 1d): 43 / 42 / 1; the invalid row i
 
 ## 6. Per run
 
-| Run | Utility | Mode | Chunks | Wall | Planner calls | Valid first try | Repaired | Fallbacks | Median tok/s | Memo | E-complete | E-cov | Skipped steps | Verdict |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| r20261024T203050a220 | FIRSTENERGY CORP | cold | 5 | 84.1 s | 9 | 9 | 0 | 0 | 140.7 | model, 135 words, 2 attempt(s) | 9/20 (11 unresolved object names) | 19/19 (1.000) | none | supported / high / DQ pass |
-| r20261024T2034350adc | AMERICAN ELECTRIC POWER CO INC | cold | 5 | 99.7 s | 9 | 8 | 1 | 0 | 140.6 | template, 243 words, 2 attempt(s) | 9/20 (11 unresolved object names) | 19/19 (1.000) | none | supported / high / DQ pass |
-| r20261024T203648826a | AMERICAN ELECTRIC POWER CO INC | warm | 4 | 100.7 s | 8 | 7 | 1 | 0 | 141.2 | template, 243 words, 2 attempt(s) | 20/20 | 19/19 (1.000) | tag_chosen (mem-61) | supported / high / DQ pass |
-| r20261024T20391416bf | FIRSTENERGY CORP | warm | 4 | 105.5 s | 8 | 7 | 1 | 0 | 140.2 | model, 184 words, 1 attempt(s) | 20/20 | 19/19 (1.000) | tag_chosen (mem-49) | supported / high / DQ pass |
-| r20261024T204637522f | FIRSTENERGY CORP | warm | 4 | 133.2 s | 8 | 5 | 2 | 1 | 139.5 | model, 184 words, 1 attempt(s) | 20/20 | 19/19 (1.000) | tag_chosen (mem-49) | supported / high / DQ pass |
+| Run | Utility | Mode | Chunks | Wall | Planner calls | Valid first try | Repaired | Repaired with think off | Fallbacks | Median tok/s | Memo | E-complete | E-cov | Skipped steps | Verdict |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| r20261024T203050a220 | FIRSTENERGY CORP | cold | 5 | 84.1 s | 9 | 9 | 0 | not recorded | 0 | 140.7 | model, 135 words, 2 attempt(s) | 9/20 (11 unresolved object names) | 19/19 (1.000) | none | supported / high / DQ pass |
+| r20261024T2034350adc | AMERICAN ELECTRIC POWER CO INC | cold | 5 | 99.7 s | 9 | 8 | 1 | not recorded | 0 | 140.6 | template, 243 words, 2 attempt(s) | 9/20 (11 unresolved object names) | 19/19 (1.000) | none | supported / high / DQ pass |
+| r20261024T203648826a | AMERICAN ELECTRIC POWER CO INC | warm | 4 | 100.7 s | 8 | 7 | 1 | not recorded | 0 | 141.2 | template, 243 words, 2 attempt(s) | 20/20 | 19/19 (1.000) | tag_chosen (mem-61) | supported / high / DQ pass |
+| r20261024T20391416bf | FIRSTENERGY CORP | warm | 4 | 105.5 s | 8 | 7 | 1 | not recorded | 0 | 140.2 | model, 184 words, 1 attempt(s) | 20/20 | 19/19 (1.000) | tag_chosen (mem-49) | supported / high / DQ pass |
+| r20261024T204637522f | FIRSTENERGY CORP | warm | 4 | 133.2 s | 8 | 5 | 2 | not recorded | 1 | 139.5 | model, 184 words, 1 attempt(s) | 20/20 | 19/19 (1.000) | tag_chosen (mem-49) | supported / high / DQ pass |
+| r20261024T213805fb4e | FIRSTENERGY CORP | cold | 5 | 97.5 s | 9 | 9 | 0 | 0 | 0 | 140.4 | model, 184 words, 1 attempt(s) | 20/20 | 19/19 (1.000) | none | supported / high / DQ pass |
+| r20261024T214009cd85 | AMERICAN ELECTRIC POWER CO INC | cold | 5 | 114.9 s | 9 | 7 | 2 | 1 | 0 | 139.5 | model, 176 words, 1 attempt(s) | 20/20 | 19/19 (1.000) | none | supported / high / DQ pass |
+| r20261024T214205a2e5 | FIRSTENERGY CORP | warm | 4 | 128.1 s | 8 | 6 | 2 | 2 | 0 | 139.2 | model, 184 words, 1 attempt(s) | 20/20 | 19/19 (1.000) | tag_chosen (mem-49) | supported / high / DQ pass |
+| r20261024T2145294e73 | AMERICAN ELECTRIC POWER CO INC | warm | 4 | 112.7 s | 8 | 6 | 2 | 1 | 0 | 139.8 | model, 176 words, 1 attempt(s) | 20/20 | 19/19 (1.000) | tag_chosen (mem-61) | supported / high / DQ pass |
 
 Memo drafts (word count, numbers not found in any tool output):
 
@@ -202,6 +210,10 @@ Memo drafts (word count, numbers not found in any tool output):
 | r20261024T203648826a | 2 | 95 | 0 | no |
 | r20261024T20391416bf | 1 | 184 | 0 | yes |
 | r20261024T204637522f | 1 | 184 | 0 | yes |
+| r20261024T213805fb4e | 1 | 184 | 0 | yes |
+| r20261024T214009cd85 | 1 | 176 | 0 | yes |
+| r20261024T214205a2e5 | 1 | 184 | 0 | yes |
+| r20261024T2145294e73 | 1 | 176 | 0 | yes |
 
 Degree-day statements and memo time per run:
 
@@ -212,8 +224,12 @@ Degree-day statements and memo time per run:
 | r20261024T203648826a | 19.2 s | 18.3 s | 2.8 s | nemotron-3-nano:4b | on | 0 | 0 | 1 |
 | r20261024T20391416bf | 18.5 s | 18.4 s | 2.7 s | nemotron-3-nano:4b | on | 0 | 0 | 0 |
 | r20261024T204637522f | 18.4 s | 18.3 s | 2.7 s | nemotron-3-nano:4b | on | 0 | 0 | 0 |
+| r20261024T213805fb4e | 20.0 s | 21.0 s | 2.8 s | nemotron-3-nano:4b | on | 0 | 0 | 0 |
+| r20261024T214009cd85 | 18.3 s | 18.6 s | 2.8 s | nemotron-3-nano:4b | on | 0 | 0 | 1 |
+| r20261024T214205a2e5 | 23.9 s | 18.8 s | 2.7 s | nemotron-3-nano:4b | on | 0 | 0 | 0 |
+| r20261024T2145294e73 | 18.2 s | 18.6 s | 3.0 s | nemotron-3-nano:4b | on | 0 | 0 | 1 |
 
-Totals over 5 run(s): 42 planner calls, 36 valid on the first reply, 5 repaired, 1 deterministic fallback(s); 41 tool calls chosen by the model; memo drafts 8 (0 with an unknown number), 3 model memo(s) kept, 2 template memo(s); evidence 78/100 complete; claims 95/95 cited; cloud model calls 0; refused hosts 0.
+Totals over 9 run(s): 76 planner calls, 64 valid on the first reply, 11 repaired (4 of them with think off), 1 deterministic fallback(s); 75 tool calls chosen by the model; memo drafts 12 (0 with an unknown number), 7 model memo(s) kept, 2 template memo(s); evidence 158/180 complete; claims 171/171 cited; cloud model calls 0; refused hosts 0.
 
 ## 7. Cold against warm
 
@@ -221,10 +237,10 @@ A warm run is one that skipped at least one checklist step from memory (the reme
 
 | Group | Runs | Chunks (mean) | Wall (mean) | Wall (min to max) | Planner calls (mean) | Skipped steps (mean) | Runs |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| all, cold | 2 | 5.00 | 91.9 s | 84.1 s to 99.7 s | 9.00 | 0.00 | r20261024T203050a220, r20261024T2034350adc |
-| all, warm | 3 | 4.00 | 113.1 s | 100.7 s to 133.2 s | 8.00 | 1.00 | r20261024T203648826a, r20261024T20391416bf, r20261024T204637522f |
-| FIRSTENERGY CORP, cold | 1 | 5.00 | 84.1 s | 84.1 s to 84.1 s | 9.00 | 0.00 | r20261024T203050a220 |
-| FIRSTENERGY CORP, warm | 2 | 4.00 | 119.4 s | 105.5 s to 133.2 s | 8.00 | 1.00 | r20261024T20391416bf, r20261024T204637522f |
-| AMERICAN ELECTRIC POWER CO INC, cold | 1 | 5.00 | 99.7 s | 99.7 s to 99.7 s | 9.00 | 0.00 | r20261024T2034350adc |
-| AMERICAN ELECTRIC POWER CO INC, warm | 1 | 4.00 | 100.7 s | 100.7 s to 100.7 s | 8.00 | 1.00 | r20261024T203648826a |
+| all, cold | 4 | 5.00 | 99.1 s | 84.1 s to 114.9 s | 9.00 | 0.00 | r20261024T203050a220, r20261024T2034350adc, r20261024T213805fb4e, r20261024T214009cd85 |
+| all, warm | 5 | 4.00 | 116.0 s | 100.7 s to 133.2 s | 8.00 | 1.00 | r20261024T203648826a, r20261024T20391416bf, r20261024T204637522f, r20261024T214205a2e5, r20261024T2145294e73 |
+| FIRSTENERGY CORP, cold | 2 | 5.00 | 90.8 s | 84.1 s to 97.5 s | 9.00 | 0.00 | r20261024T203050a220, r20261024T213805fb4e |
+| FIRSTENERGY CORP, warm | 3 | 4.00 | 122.3 s | 105.5 s to 133.2 s | 8.00 | 1.00 | r20261024T20391416bf, r20261024T204637522f, r20261024T214205a2e5 |
+| AMERICAN ELECTRIC POWER CO INC, cold | 2 | 5.00 | 107.3 s | 99.7 s to 114.9 s | 9.00 | 0.00 | r20261024T2034350adc, r20261024T214009cd85 |
+| AMERICAN ELECTRIC POWER CO INC, warm | 2 | 4.00 | 106.7 s | 100.7 s to 112.7 s | 8.00 | 1.00 | r20261024T203648826a, r20261024T2145294e73 |
 

@@ -20,6 +20,8 @@ export interface EvalRun {
     planner_valid: number;
     planner_valid_first_try: number;
     planner_repaired: number;
+    /** Repair rounds run with think off after an empty, length-cut reply (absent in runs before that change). */
+    planner_repairs_think_off?: number;
     fallback_steps: number;
     tool_calls: number;
     tool_calls_by_model: number;
@@ -134,6 +136,7 @@ export interface RunSummary {
   planner_calls: number;
   valid_first_try: number;
   repaired: number;
+  repairs_think_off: number | null;
   fallbacks: number;
   tool_calls: number;
   tool_calls_by_model: number;
@@ -231,6 +234,7 @@ export interface EvalReport {
     planner_calls: number;
     valid_first_try: number;
     repaired: number;
+    repairs_think_off: number | null;
     fallbacks: number;
     tool_calls_by_model: number;
     memo_drafts: number;
@@ -314,6 +318,7 @@ export function summariseRun(run: EvalRun, source: string): RunSummary {
     planner_calls: run.summary.planner_calls,
     valid_first_try: run.summary.planner_valid_first_try,
     repaired: run.summary.planner_repaired,
+    repairs_think_off: typeof run.summary.planner_repairs_think_off === "number" ? run.summary.planner_repairs_think_off : null,
     fallbacks: run.summary.fallback_steps,
     tool_calls: run.summary.tool_calls,
     tool_calls_by_model: run.summary.tool_calls_by_model,
@@ -535,6 +540,7 @@ export function buildReport(inputs: BuildInputs): EvalReport {
       planner_calls: runs.reduce((a, r) => a + r.planner_calls, 0),
       valid_first_try: runs.reduce((a, r) => a + r.valid_first_try, 0),
       repaired: runs.reduce((a, r) => a + r.repaired, 0),
+      repairs_think_off: runs.some((r) => r.repairs_think_off !== null) ? runs.reduce((a, r) => a + (r.repairs_think_off ?? 0), 0) : null,
       fallbacks: runs.reduce((a, r) => a + r.fallbacks, 0),
       tool_calls_by_model: runs.reduce((a, r) => a + r.tool_calls_by_model, 0),
       memo_drafts: drafts.length,
@@ -713,7 +719,7 @@ export function renderMarkdown(r: EvalReport): string {
   out.push("");
   out.push(
     table(
-      ["Run", "Utility", "Mode", "Chunks", "Wall", "Planner calls", "Valid first try", "Repaired", "Fallbacks", "Median tok/s", "Memo", "E-complete", "E-cov", "Skipped steps", "Verdict"],
+      ["Run", "Utility", "Mode", "Chunks", "Wall", "Planner calls", "Valid first try", "Repaired", "Repaired with think off", "Fallbacks", "Median tok/s", "Memo", "E-complete", "E-cov", "Skipped steps", "Verdict"],
       r.runs.map((x) => [
         x.run_id,
         x.utility ?? x.cik,
@@ -723,6 +729,7 @@ export function renderMarkdown(r: EvalReport): string {
         String(x.planner_calls),
         String(x.valid_first_try),
         String(x.repaired),
+        x.repairs_think_off === null ? "not recorded" : String(x.repairs_think_off),
         String(x.fallbacks),
         num(x.median_tokens_per_s, 1),
         x.memo.source ? `${x.memo.source}, ${x.memo.words} words, ${x.memo.attempts} attempt(s)` : "n/a",
@@ -743,7 +750,7 @@ export function renderMarkdown(r: EvalReport): string {
   out.push(table(["Run", "weather_quarter current", "weather_quarter previous", "Memo", "Model", "Think", "Cloud model calls", "Refused hosts", "Recast conflicts"], r.runs.map((x) => [x.run_id, ms(x.weather_quarter_ms.current), ms(x.weather_quarter_ms.previous), ms(x.memo_ms), x.model ?? "n/a", x.think ? "on" : "off", String(x.cloud_model_calls), String(x.refused_hosts), String(x.recast_conflicts)])));
   out.push("");
   const t = r.totals;
-  out.push(`Totals over ${t.runs} run(s): ${t.planner_calls} planner calls, ${t.valid_first_try} valid on the first reply, ${t.repaired} repaired, ${t.fallbacks} deterministic fallback(s); ${t.tool_calls_by_model} tool calls chosen by the model; memo drafts ${t.memo_drafts} (${t.memo_drafts_with_unknown_numbers} with an unknown number), ${t.model_memos} model memo(s) kept, ${t.template_memos} template memo(s); evidence ${t.evidence_complete}/${t.evidence_records} complete; claims ${t.claims_with_evidence}/${t.claims} cited; cloud model calls ${t.cloud_model_calls}; refused hosts ${t.refused_hosts}.`);
+  out.push(`Totals over ${t.runs} run(s): ${t.planner_calls} planner calls, ${t.valid_first_try} valid on the first reply, ${t.repaired} repaired${t.repairs_think_off === null ? "" : ` (${t.repairs_think_off} of them with think off)`}, ${t.fallbacks} deterministic fallback(s); ${t.tool_calls_by_model} tool calls chosen by the model; memo drafts ${t.memo_drafts} (${t.memo_drafts_with_unknown_numbers} with an unknown number), ${t.model_memos} model memo(s) kept, ${t.template_memos} template memo(s); evidence ${t.evidence_complete}/${t.evidence_records} complete; claims ${t.claims_with_evidence}/${t.claims} cited; cloud model calls ${t.cloud_model_calls}; refused hosts ${t.refused_hosts}.`);
   out.push("");
 
   out.push("## 7. Cold against warm");
