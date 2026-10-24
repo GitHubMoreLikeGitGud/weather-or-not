@@ -12,7 +12,7 @@ Open Agent Hackathon 2026, Track 2: The Agent That Can Explain Why. Team: Umar M
   - The run took 97.5 s on one local GPU: 5 Markovian chunks, 9 planner calls, all valid on the first reply; the two degree-day statements in Lightning SQL took 20.0 and 21.0 s of it. The memo (184 words) was written by the model and every one of its numbers matched a tool output.
   - A second utility (American Electric Power) carries a live restatement: its own 10-Q reports 5,463.4 million for the quarter, the next year's 10-Q restates it as 5,463.0 million. The agent records the conflict, resolves it by rule R1, and the analyst can override it under a signed contract.
 
-Demo video: link added at submission.
+Demo video: https://youtu.be/JXRQMF2Xfl0 (unlisted, 3:48).
 
 ![Weather-or-Not architecture: SEC EDGAR, NOAA GHCN-Daily and the company_dns SIC list are read only through Zetaris Lightning; a gateway exposes named SQL templates; a Markovian question chain planned by local Nemotron runs ten deterministic tools; H-MEM and the World Model keep provenance and history; every number cites its evidence record; the analyst works in the UI.](docs/architecture.png)
 

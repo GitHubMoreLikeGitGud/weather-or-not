@@ -4,7 +4,7 @@
   "track": "Track 2: The Agent That Can Explain Why",
   "team": "Umar Mohktar, Singapore - solo",
   "repository": "https://github.com/GitHubMoreLikeGitGud/weather-or-not",
-  "demo_video": "",
+  "demo_video": "https://youtu.be/JXRQMF2Xfl0",
   "licence": "Apache-2.0",
   "meterless": {
     "engines": ["hmem", "markovian", "world-model"],
