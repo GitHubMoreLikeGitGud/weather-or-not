@@ -1,0 +1,243 @@
+1
+00:00:00,600 --> 00:00:01,340
+Weather-or-Not.
+
+2
+00:00:01,540 --> 00:00:03,020
+The utility says it was the weather.
+
+3
+00:00:03,300 --> 00:00:04,610
+Weather-or-Not checks.
+
+4
+00:00:05,583 --> 00:00:07,313
+A solo entry from Singapore.
+
+5
+00:00:08,467 --> 00:00:11,287
+An analyst is handed a filing that credits colder weather.
+
+6
+00:00:11,867 --> 00:00:13,787
+Checking it means peers, degree days,
+
+7
+00:00:14,107 --> 00:00:16,767
+and a comparative column that a later filing can restate:
+
+8
+00:00:17,227 --> 00:00:22,547
+American Electric Power's own 10-Q reports 5,463.4 million;
+
+9
+00:00:23,147 --> 00:00:26,947
+the next year's restates it as 5,463.0.
+
+10
+00:00:27,627 --> 00:00:31,837
+Rule R1 keeps the quarter's own filing and records the conflict.
+
+11
+00:00:33,300 --> 00:00:36,660
+The analyst picks FirstEnergy, the first quarter of 2025,
+
+12
+00:00:37,120 --> 00:00:39,070
+and the claim: colder weather.
+
+13
+00:00:43,867 --> 00:00:47,007
+Each chunk streams as the local Nemotron model plans it.
+
+14
+00:00:47,387 --> 00:00:49,367
+The planner's text is shown as a plan,
+
+15
+00:00:49,607 --> 00:00:52,997
+never as a fact; only tool rows carry numbers.
+
+16
+00:00:54,315 --> 00:00:56,695
+Degree days are computed in Lightning SQL,
+
+17
+00:00:57,195 --> 00:00:58,455
+about 20 seconds a quarter;
+
+18
+00:00:58,895 --> 00:01:01,085
+the whole question takes about two minutes.
+
+19
+00:01:09,000 --> 00:01:11,960
+Revenue rose 14.5% like for like.
+
+20
+00:01:12,520 --> 00:01:15,120
+Weather is consistent with 8.2 points of that,
+
+21
+00:01:15,440 --> 00:01:21,240
+range 1.6 to 14.0; industry 2.9; the remainder 3.5.
+
+22
+00:01:21,780 --> 00:01:24,680
+Supported, with high confidence: 39 peers,
+
+23
+00:01:24,900 --> 00:01:28,830
+coverage 1.00, and the data-quality gate passed.
+
+24
+00:01:33,967 --> 00:01:35,167
+Every figure is a button.
+
+25
+00:01:35,687 --> 00:01:38,147
+The citation is the Lightning SQL itself:
+
+26
+00:01:38,707 --> 00:01:40,567
+the statement, its hash, the rows,
+
+27
+00:01:40,787 --> 00:01:42,567
+the Zetaris object, the endpoint,
+
+28
+00:01:42,967 --> 00:01:45,017
+the licence and the retrieval time.
+
+29
+00:01:48,133 --> 00:01:51,653
+In Zetaris Lightning, SEC EDGAR is a set of REST tables
+
+30
+00:01:51,673 --> 00:01:55,233
+and NOAA GHCN-Daily a set of parquet tables;
+
+31
+00:01:55,753 --> 00:01:58,653
+the weather_or_not_usl semantic layer joins
+
+32
+00:01:58,673 --> 00:02:01,243
+them with keys and a data-quality rule.
+
+33
+00:02:02,600 --> 00:02:04,980
+The layer has five tables with primary and
+
+34
+00:02:05,000 --> 00:02:07,640
+foreign keys and nine data-quality rules;
+
+35
+00:02:08,140 --> 00:02:11,490
+the coverage_ok rule on weather_quarter gates every verdict.
+
+36
+00:02:13,433 --> 00:02:14,473
+Memory and why.
+
+37
+00:02:14,973 --> 00:02:17,253
+The restatement is a conflict in H-MEM
+
+38
+00:02:17,273 --> 00:02:18,833
+with both accession numbers;
+
+39
+00:02:19,293 --> 00:02:22,483
+the why trace shows the fact's provenance and its trust ledger.
+
+40
+00:02:26,533 --> 00:02:29,413
+The analyst can override rule R1 with a reason.
+
+41
+00:02:30,033 --> 00:02:32,873
+The server signs a single-use high-risk contract,
+
+42
+00:02:33,073 --> 00:02:36,423
+applies the override, and the ledger records who decided.
+
+43
+00:02:39,467 --> 00:02:41,767
+The World Model keeps utilities, states,
+
+44
+00:02:42,147 --> 00:02:44,147
+stations and filings as a graph whose
+
+45
+00:02:44,167 --> 00:02:46,457
+edges carry the source's own dates.
+
+46
+00:02:49,633 --> 00:02:50,653
+The footer is measured:
+
+47
+00:02:51,093 --> 00:02:53,753
+the planner calls and how many were valid first try,
+
+48
+00:02:54,033 --> 00:02:57,173
+prompt tokens per chunk flat against the full-history estimate,
+
+49
+00:02:57,553 --> 00:03:01,183
+the median tokens a second, and zero cloud model calls.
+
+50
+00:03:02,433 --> 00:03:06,633
+One data path: Zetaris Lightning is the only route to SEC EDGAR,
+
+51
+00:03:07,033 --> 00:03:08,393
+NOAA and the SIC list,
+
+52
+00:03:08,713 --> 00:03:11,433
+and the gateway's named templates are the only SQL.
+
+53
+00:03:12,253 --> 00:03:15,653
+Meterless engines run the chain, the memory and the world model.
+
+54
+00:03:16,313 --> 00:03:18,933
+Nemotron plans and writes on one local GPU,
+
+55
+00:03:18,953 --> 00:03:20,983
+and never computes a number.
+
+56
+00:03:22,767 --> 00:03:28,607
+Measured over nine runs: 171 of 171 card claims cited;
+
+57
+00:03:28,627 --> 00:03:34,127
+join map 6 of 6; 300 of 300 bootstrap resamples;
+
+58
+00:03:34,147 --> 00:03:37,567
+64 of 76 planner calls valid first try, 1 fallback;
+
+59
+00:03:37,587 --> 00:03:40,757
+0 memo numbers from the model; 0 cloud calls.
+
+60
+00:03:42,133 --> 00:03:42,893
+Weather-or-Not.
+
+61
+00:03:43,113 --> 00:03:46,123
+Every number is cited, and every override is signed.
