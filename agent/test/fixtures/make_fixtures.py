@@ -345,11 +345,13 @@ def build_attribution() -> dict:
             {"peers": 15, "coverage": 0.85, "beta_lo": 0.2, "beta_hi": 1.1, "expected": "low"},
             {"peers": 11, "coverage": 0.99, "beta_lo": 0.2, "beta_hi": 1.1, "expected": "low"},
         ],
+        # Boundary cases use ratios that are exact in binary floating point (0.25 / 0.5 and
+        # 0.2 / 1.0), so the thresholds can be compared exactly without an epsilon.
         "claim_cases": [
-            {"g": 0.10, "weather": 0.05, "expected": "supported", "ratio": 0.5},
-            {"g": 0.10, "weather": 0.049, "expected": "partly supported", "ratio": 0.49},
-            {"g": 0.10, "weather": 0.02, "expected": "partly supported", "ratio": 0.2},
-            {"g": 0.10, "weather": 0.019, "expected": "not supported", "ratio": 0.19},
+            {"g": 0.5, "weather": 0.25, "expected": "supported", "ratio": 0.5},
+            {"g": 0.5, "weather": 0.245, "expected": "partly supported", "ratio": 0.49},
+            {"g": 1.0, "weather": 0.2, "expected": "partly supported", "ratio": 0.2},
+            {"g": 1.0, "weather": 0.19, "expected": "not supported", "ratio": 0.19},
             {"g": 0.10, "weather": -0.08, "expected": "not supported", "ratio": 0.8},
             {"g": -0.10, "weather": -0.06, "expected": "supported", "ratio": 0.6},
             {"g": 0.0, "weather": 0.01, "expected": "not supported", "ratio": None},

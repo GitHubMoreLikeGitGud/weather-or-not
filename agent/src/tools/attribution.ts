@@ -180,9 +180,8 @@ export function claimVerdict(
   }
   const ratio = Math.abs(weather) / Math.abs(g);
   const same = Math.sign(weather) === Math.sign(g);
-  // Allow a hair of float noise so exact thresholds (e.g. 0.02/0.1 ≈ 0.2) still classify.
-  if (same && ratio + 1e-15 >= 0.5) return { ratio, verdict: "supported" };
-  if (same && ratio + 1e-15 >= 0.2) return { ratio, verdict: "partly supported" };
+  if (same && ratio >= 0.5) return { ratio, verdict: "supported" };
+  if (same && ratio >= 0.2) return { ratio, verdict: "partly supported" };
   return { ratio, verdict: "not supported" };
 }
 
