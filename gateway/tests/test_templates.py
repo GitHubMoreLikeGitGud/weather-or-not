@@ -159,6 +159,51 @@ def test_reader_templates_read_the_cached_views_with_the_agreed_columns():
         assert templates.TEMPLATES[tid].role == "reader"
 
 
+def test_seed_ciks_come_from_the_seed_file_as_ten_digit_strings(tmp_path):
+    assert len(templates.SEED_CIKS) == 43 and len(set(templates.SEED_CIKS)) == 43
+    assert all(len(c) == 10 and c.isdigit() for c in templates.SEED_CIKS)
+    assert {"0001031296", "0000004904", "0001326160", "0000715957"} <= set(templates.SEED_CIKS)  # FirstEnergy, AEP, Duke, Dominion
+    assert templates.SEED_CIK_INTS_SQL.split(", ") == [str(int(c)) for c in templates.SEED_CIKS]
+    bad = tmp_path / "utilities.json"
+    bad.write_text('{"utilities": [{"cik": "1326160"}]}', encoding="utf-8")
+    with pytest.raises(ValueError):
+        templates.load_seed_ciks(bad)
+    bad.write_text('{"utilities": [{"cik": "0001326160"}, {"cik": "0001326160"}]}', encoding="utf-8")
+    with pytest.raises(ValueError):
+        templates.load_seed_ciks(bad)
+
+
+def test_frames_seeds_filters_a_period_to_the_seed_ciks_as_integers_and_casts_val():
+    from gateway import cache
+
+    t, sql = render("frames_seeds", {"tag": "Revenues", "period": "CY2025Q1"})
+    assert t.role == "reader" and allowlist.check(sql, "reader") == "read"
+    assert sql.startswith("SELECT cik, `entityName`, loc, `start`, `end`, CAST(val AS DOUBLE) AS val, accn FROM won.frames_Revenues_CY2025Q1 WHERE CAST(cik AS BIGINT) IN (")
+    assert sql.endswith(") ORDER BY cik")
+    in_list = sql.split("IN (")[1].split(")")[0].split(", ")
+    assert len(in_list) == 43 and all(x.isdigit() for x in in_list) and "1031296" in in_list and "4904" in in_list
+    assert "'" not in sql  # integers, never quoted strings
+    assert cache.resolve(t.raw_objects, {"tag": "Revenues", "period": "CY2025Q1"}) == ["won.frames_Revenues_CY2025Q1"]
+    _, sql2 = render("frames_seeds", {"tag": "RegulatedAndUnregulatedOperatingRevenue", "period": "CY2024Q1"})
+    assert "FROM won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2024Q1 WHERE" in sql2
+
+
+def test_usl_reader_templates_read_the_governed_sec_tables():
+    t, sql = render("usl_utility", {"cik10": "0001031296"})
+    assert sql == f"SELECT cik, name, ticker, sic, hq_state FROM {USL}.utility WHERE cik = '0001031296'"
+    assert t.role == "reader" and allowlist.check(sql, "reader") == "read" and t.objects == (f"{USL}.utility",)
+    assert len(t.raw_objects) == 43 and "won.submission_0001031296" in t.raw_objects and t.timeout_s == 120.0
+    t, sql = render("usl_revenue", {"cik10": "0000004904", "period": "CY2025Q1"})
+    assert sql == (f"SELECT cik, xbrl_tag, year, quarter, val, accn, filed, is_comparative FROM {USL}.revenue_quarter "
+                   "WHERE cik = '0000004904' AND CONCAT('CY', CAST(year AS STRING), 'Q', CAST(quarter AS STRING)) = 'CY2025Q1' ORDER BY xbrl_tag, accn")
+    assert allowlist.check(sql, "reader") == "read" and t.objects == (f"{USL}.revenue_quarter",)
+    assert len(t.raw_objects) == 6 and "won.frames_Revenues_CY2024Q1" in t.raw_objects
+    with pytest.raises(BadParams):
+        render("usl_revenue", {"cik10": "0000004904", "period": "CY2025Q4"})
+    with pytest.raises(BadParams):
+        render("usl_utility", {"cik10": "4904"})
+
+
 def test_registrar_plans_register_table_view_describe_cache_in_order():
     for action, params in (("register_frames", {"tag": "tag", "period": "period"}), ("register_concept", {"cik10": "cik10", "tag": "tag"}),
                            ("register_submission", {"cik10": "cik10"})):

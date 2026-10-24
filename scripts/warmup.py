@@ -4,6 +4,7 @@
     .venv/Scripts/python scripts/warmup.py --force    # CACHE every view again (no UNCACHE first)
     .venv/Scripts/python scripts/warmup.py --refresh  # UNCACHE then CACHE every view (re-reads S3)
     .venv/Scripts/python scripts/warmup.py --targets won.ghcn_2025_tmax,won.ghcn_2025_tmin
+    .venv/Scripts/python scripts/warmup.py --skip-dq  # caches only; no onboarding DQ pass at the end
 
 The Zetaris cache is driver-wide and is lost when the driver restarts, so the
 gateway warms up at start and on a driver app-id change (gateway/app.py); this
@@ -13,6 +14,11 @@ in-memory size the Spark UI shows afterwards, and a COUNT(*) read time. Targets
 come from gateway.app.CACHE_TARGETS (WON_CACHE_TARGETS overrides) and every
 statement passes the registrar allowlist, so only won.* / WON_*.* objects can be
 cached or uncached here. Each statement is logged to data/evidence/sql_log.jsonl.
+
+At the end it runs the onboarding DQ pass (scripts/dq_onboard.py: RUN DQ
+coverage_ok and SHOW DQ INVALID RECORD coverage_ok on the USL weather_quarter
+table, 9 to 12 minutes on this instance) and writes data/dq/latest.json, which the
+agent's DQ gate reads; --skip-dq leaves that out.
 """
 
 from __future__ import annotations
@@ -25,7 +31,9 @@ from pathlib import Path
 from urllib.request import urlopen
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import dq_onboard  # noqa: E402
 from gateway import allowlist, cache  # noqa: E402
 from gateway.app import CACHE_TIMEOUT_S, cache_targets  # noqa: E402
 from gateway.jdbc import LightningConnection, QueryTimeout, ZetarisError, load_env  # noqa: E402
@@ -72,6 +80,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--refresh", action="store_true", help="UNCACHE TABLE IF EXISTS, then CACHE, every target")
     p.add_argument("--targets", help="comma-separated qualified names instead of the gateway's cache targets")
     p.add_argument("--no-count", action="store_true", help="skip the COUNT(*) read after caching")
+    p.add_argument("--skip-dq", action="store_true", help="do not run the onboarding DQ pass (scripts/dq_onboard.py) at the end")
     args = p.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
@@ -120,7 +129,11 @@ def main(argv: list[str] | None = None) -> int:
         size = mem.get(t.lower())
         print(f"  {t:28} {size if size is not None else 'not in storage':>14} bytes" if size is not None else f"  {t:28} not in storage")
     print(f"total {time.time() - total_started:.1f} s, failures {failures}")
-    return 1 if failures else 0
+    if args.skip_dq:
+        return 1 if failures else 0
+    print("\nonboarding DQ pass (scripts/dq_onboard.py; 9 to 12 minutes on this instance; --skip-dq to leave it out)", flush=True)
+    dq_failed = dq_onboard.main([])
+    return 1 if failures or dq_failed else 0
 
 
 if __name__ == "__main__":

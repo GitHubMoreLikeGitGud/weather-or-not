@@ -9,10 +9,12 @@ registrar plan (REGISTRAR_PLANS) is a short ordered list of registrar templates 
 POST /registrar/<action> runs under an execution contract (gateway/registrar.py), for
 example the frames table + view + cache of a period the agent has not registered yet.
 
-SEC objects (zetaris/sql/01_won_sec_*.sql, 02_won_dns_*.sql, 03_won_frames_runtime_template.sql):
-raw REST tables WON_SEC.frames_<tag>_<period>, WON_SEC.concept_<cik10>_<tag>,
+SEC objects (zetaris/sql/01_won_sec_*.sql, 02_won_dns_*.sql, 03_won_frames_runtime_template.sql,
+06_won_sec_seeds_*.sql): raw REST tables WON_SEC.frames_<tag>_<period>, WON_SEC.concept_<cik10>_<tag>,
 WON_SEC.submissions_<cik10>, WON_DNS.sic_codes_v4_raw; flattened, cached SchemaStore views
 won.frames_<tag>_<period>, won.concept_<cik10>_<tag>, won.submission_<cik10>, won.sic_codes.
+frames_seeds filters a frames period to the seed utilities (SEED_CIKS, read from seeds/utilities.json
+at import), so the peer universe comes back in one reply under the gateway's row cap.
 The User-Agent in a REST statement is the placeholder YOUR_APP_NAME YOUR_CONTACT_EMAIL, filled
 from WON_USER_AGENT on the wire only (gateway/jdbc.py apply_user_agent); it is never a literal
 here or in a committed SQL file.
@@ -25,8 +27,28 @@ dq_run_coverage read the USL lightning.metastore.weatherornot.weather_or_not_usl
 
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass
+from pathlib import Path
+
+SEEDS_PATH = Path(__file__).resolve().parent.parent / "seeds" / "utilities.json"
+
+
+def load_seed_ciks(path: Path = SEEDS_PATH) -> tuple[str, ...]:
+    """The 10-digit CIKs of seeds/utilities.json in file order (the peer universe; the
+    frames_seeds template and the USL utility activation use the same list)."""
+    utilities = json.loads(path.read_text(encoding="utf-8"))["utilities"]
+    ciks = tuple(u["cik"] for u in utilities)
+    bad = [c for c in ciks if not re.fullmatch(r"\d{10}", c)]
+    if bad or len(set(ciks)) != len(ciks):
+        raise ValueError(f"seeds/utilities.json: every cik must be a distinct 10-digit string (bad: {bad[:3]})")
+    return ciks
+
+
+SEED_CIKS: tuple[str, ...] = load_seed_ciks()
+# frames carry cik as an integer: the IN list holds the seeds as integers (1326160, 92122, ...).
+SEED_CIK_INTS_SQL = ", ".join(str(int(c)) for c in SEED_CIKS)
 
 PARAM_PATTERNS = {
     "cik10": re.compile(r"^\d{10}$"),
@@ -103,7 +125,11 @@ SIC_RAW = "WON_DNS.sic_codes_v4_raw"
 SIC_VIEW = "won.sic_codes"
 
 FRAMES_COLUMNS = "cik, `entityName`, loc, `start`, `end`, val, accn"
+# frames `val` is inferred bigint for some periods and double for others: the seeds template casts it.
+FRAMES_SEEDS_COLUMNS = "cik, `entityName`, loc, `start`, `end`, CAST(val AS DOUBLE) AS val, accn"
 CONCEPT_COLUMNS = "fy, fp, form, filed, accn, `start`, `end`, val"
+UTILITY_COLUMNS = "cik, name, ticker, sic, hq_state"
+REVENUE_COLUMNS = "cik, xbrl_tag, year, quarter, val, accn, filed, is_comparative"
 SUBMISSION_COLUMNS = "cik, name, sic, `sicDescription`, state"
 SIC_COLUMNS = "code, description, division, division_desc, major_group, major_group_desc"
 
@@ -114,6 +140,14 @@ _C = {"cik10": "cik10"}
 # GHCN (zetaris/sql/04_won_ghcn_*.sql) and the USL (05_won_usl_*.sql).
 USL = "lightning.metastore.weatherornot.weather_or_not_usl"
 GHCN_VIEWS = ("won.ghcn_2025_tmax", "won.ghcn_2025_tmin", "won.ghcn_2024_tmax", "won.ghcn_2024_tmin")  # warm-up order
+# The SEC-side USL tables are activated over cached REST views (05_won_usl_create.sql steps 6 to 8):
+# utility over the submission view of every seed, revenue_quarter over the six frames views of the
+# two comparison quarters. A read of them is answered from those caches.
+USL_UTILITY_VIEWS = tuple(SUBMISSION_VIEW.format(cik10=c) for c in SEED_CIKS)
+USL_REVENUE_VIEWS = tuple(
+    FRAMES_VIEW.format(tag=t, period=p)
+    for t in ("Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "RegulatedAndUnregulatedOperatingRevenue")
+    for p in ("CY2025Q1", "CY2024Q1"))
 # Tmean in F from the two GHCN values in tenths of a degree C, in the evaluation order of
 # agent/src/tools/degreeDays.ts so both paths round identically.
 _TMEAN_F = "(((x.DATA_VALUE + n.DATA_VALUE) / 2.0) / 10.0 * 9.0 / 5.0 + 32)"
@@ -163,6 +197,12 @@ TEMPLATES: dict[str, Template] = {
         _t("frames_fact", f"SELECT {FRAMES_COLUMNS} FROM {FRAMES_VIEW} WHERE LPAD(CAST(cik AS STRING), 10, '0') = '{{cik10}}'",
            {**_TP, "cik10": "cik10"}, (FRAMES_VIEW,), (FRAMES_VIEW,),
            "One filer's fact in a frames period (frames carry cik as an integer; LPAD makes the 10-digit key)."),
+        # The peer universe in one call: the facts of the seed utilities (seeds/utilities.json) in a frames
+        # period. At most one row per seed, so the reply is never cut at the gateway's 200-row cap.
+        _t("frames_seeds", f"SELECT {FRAMES_SEEDS_COLUMNS} FROM {FRAMES_VIEW} WHERE CAST(cik AS BIGINT) IN ({SEED_CIK_INTS_SQL}) ORDER BY cik",
+           _TP, (FRAMES_VIEW,), (FRAMES_VIEW,),
+           f"The seed utilities' facts in one frames period ({len(SEED_CIKS)} CIKs from seeds/utilities.json compared as integers): "
+           "cik, entityName, loc, start, end, val (cast to DOUBLE), accn. One row per seed filer present; never more than the seed count."),
         # -- SEC companyconcept: one filer's full history for one tag ------------------------------
         _t("concept_history", f"SELECT {CONCEPT_COLUMNS} FROM {CONCEPT_VIEW} ORDER BY `end`, filed, accn", _CT, (CONCEPT_VIEW,), (CONCEPT_VIEW,),
            "Every USD fact a filer reported for one tag, across filings: fy, fp, form, filed, accn, start, end, val."),
@@ -172,6 +212,18 @@ TEMPLATES: dict[str, Template] = {
         # -- SIC reference (company_dns V4) ----------------------------------------------------------
         _t("sic", f"SELECT {SIC_COLUMNS} FROM {SIC_VIEW} WHERE code = '{{code}}'", {"code": "sic"}, (SIC_VIEW,), (SIC_VIEW,),
            "One SIC code with its description, division (letter) and major group (2-digit)."),
+        # -- the governed copies in the USL (keys, descriptions, DQ rules) -------------------------
+        # The USL layer visits each of the 43 source views on every read (live 45 s), so this is the governed
+        # copy for the evidence drawer, not the hot path: submission(cik10) answers the same profile in 0.2 s.
+        _t("usl_utility", f"SELECT {UTILITY_COLUMNS} FROM {USL}.utility WHERE cik = '{{cik10}}'", _C, (f"{USL}.utility",), USL_UTILITY_VIEWS,
+           "One seed utility from the USL utility table (cik, name, ticker, sic, hq_state; sic is the FK to sic_code). "
+           "Slow (about 45 s): the governed copy, not the hot path.", timeout_s=120.0),
+        _t("usl_revenue",
+           f"SELECT {REVENUE_COLUMNS} FROM {USL}.revenue_quarter WHERE cik = '{{cik10}}' "
+           f"AND CONCAT('CY', CAST(year AS STRING), 'Q', CAST(quarter AS STRING)) = '{{period}}' ORDER BY xbrl_tag, accn",
+           {"cik10": "cik10", "period": "period"}, (f"{USL}.revenue_quarter",), USL_REVENUE_VIEWS,
+           "One filer's revenue facts for one calendar quarter from the USL revenue_quarter table, every tag it reported under "
+           "(val as DOUBLE, accn of the filing frames served, is_comparative when that filing is later than the period's year)."),
         # -- registrar templates: only inside a plan (POST /registrar/<action>) ----------------------
         _t("registrar_frames_table",
            f'CREATE LIGHTNING REST TABLE frames_{{tag}}_{{period}} FROM WON_SEC REQUEST( '

@@ -68,3 +68,36 @@ SELECT station_id, year, quarter, days_observed, coverage
 FROM lightning.metastore.weatherornot.weather_or_not_usl.weather_quarter
 WHERE NOT (coverage >= 0.9)
 ORDER BY station_id, year, quarter;
+
+-- =============================================================================
+-- SEC side (steps 6 to 8 of the create file): these tables sit over cached REST
+-- views, so their reads and DQ runs take seconds, not minutes.
+-- =============================================================================
+
+-- 9. Counts: sic_code 1,005; utility 43 (one per seed); revenue_quarter = the
+-- seeds present across the six frames views (one row per filer, tag and period).
+SELECT COUNT(*) AS n FROM lightning.metastore.weatherornot.weather_or_not_usl.sic_code;
+SELECT COUNT(*) AS n, COUNT(ticker) AS with_ticker, COUNT(DISTINCT sic) AS sic_codes FROM lightning.metastore.weatherornot.weather_or_not_usl.utility;
+SELECT xbrl_tag, year, quarter, COUNT(*) AS n, SUM(CASE WHEN is_comparative THEN 1 ELSE 0 END) AS comparatives FROM lightning.metastore.weatherornot.weather_or_not_usl.revenue_quarter GROUP BY xbrl_tag, year, quarter ORDER BY xbrl_tag, year, quarter;
+
+-- 10. The agent's reads (gateway templates usl_utility and usl_revenue) for the demo utility.
+SELECT cik, name, ticker, sic, hq_state FROM lightning.metastore.weatherornot.weather_or_not_usl.utility WHERE cik = '0001031296';
+SELECT cik, xbrl_tag, year, quarter, val, accn, filed, is_comparative FROM lightning.metastore.weatherornot.weather_or_not_usl.revenue_quarter WHERE cik = '0001031296' AND CONCAT('CY', CAST(year AS STRING), 'Q', CAST(quarter AS STRING)) = 'CY2025Q1' ORDER BY xbrl_tag, accn;
+
+-- 11. A join across the USL (the FK path): each seed's revenue facts with its
+-- name and SIC description, for the two Revenues periods.
+SELECT u.cik, u.name, s.description AS sic_description, r.year, r.quarter, r.val, r.accn
+FROM lightning.metastore.weatherornot.weather_or_not_usl.revenue_quarter r
+JOIN lightning.metastore.weatherornot.weather_or_not_usl.utility u ON u.cik = r.cik
+LEFT JOIN lightning.metastore.weatherornot.weather_or_not_usl.sic_code s ON s.code = u.sic
+WHERE r.xbrl_tag = 'Revenues' AND u.cik IN ('0001031296', '0000004904')
+ORDER BY u.cik, r.year;
+
+-- 12. Data quality on the SEC side (onboarding check, run once; timings in
+-- ../README.md): the FK rule sic on utility (expect one invalid row, MGE Energy
+-- SIC 4900 absent from company_dns), the PK and FK rules on revenue_quarter and
+-- the PK rule on sic_code (expect 0 invalid), and the invalid records of the FK rule.
+RUN DQ sic TABLE lightning.metastore.weatherornot.weather_or_not_usl.utility;
+RUN DQ cik TABLE lightning.metastore.weatherornot.weather_or_not_usl.revenue_quarter;
+RUN DQ code TABLE lightning.metastore.weatherornot.weather_or_not_usl.sic_code;
+SHOW DQ INVALID RECORD sic TABLE lightning.metastore.weatherornot.weather_or_not_usl.utility;

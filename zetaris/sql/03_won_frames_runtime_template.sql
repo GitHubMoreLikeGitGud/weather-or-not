@@ -24,7 +24,10 @@
 --
 -- Steps 1 and 2 treat "already exists" as done, so re-registering a period
 -- the instance already holds only re-caches it. Step 4 has a 600 s bound.
--- Proved live 2026-10-24 with Revenues / CY2025Q2 (see ../README.md).
+-- Proved live 2026-10-24 with Revenues / CY2025Q2 (1,941 facts, 1.2 s) and
+-- Revenues / CY2024Q2 (2,018 facts, 1.1 s); see ../README.md. After the plan the
+-- agent reads the period with frames_count and frames_seeds (the seed filers
+-- only, at most 43 rows).
 -- =============================================================================
 
 -- Step 1: the raw REST table. One SEC request.

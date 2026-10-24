@@ -1,13 +1,13 @@
 -- =============================================================================
 -- USL weather_or_not_usl in lightning.metastore.weatherornot: five tables with
 -- primary and foreign keys, a description on the model, every table and every
--- column, two activations from the GHCN views (station, weather_quarter) and
--- the custom DQ rule coverage_ok.
+-- column, activations of station and weather_quarter from the GHCN views, the
+-- custom DQ rule coverage_ok, and activations of sic_code, utility and
+-- revenue_quarter from the SEC and SIC views.
 --
 -- Prerequisites: 04_won_ghcn_create.sql (the cached won.ghcn_<year>_<element>
--- views). The SEC lane activates utility, sic_code and revenue_quarter from its
--- views (01_won_sec_*.sql, 02_won_dns_*.sql); their activation shapes are at the
--- end of this file, commented out until those views exist on the instance.
+-- views) for steps 3 to 5; 01_won_sec_create.sql, 02_won_dns_create.sql and
+-- 06_won_sec_seeds_create.sql (the SEC and SIC views) for steps 6 to 8.
 --
 -- Rules: one statement per call. The COMPILE USL statement is sent as ONE
 -- statement (the runner merges the CREATE TABLE parts back into it). Description
@@ -217,20 +217,132 @@ GROUP BY d.station_id, d.year, d.quarter;
 REGISTER DQ coverage_ok TABLE lightning.metastore.weatherornot.weather_or_not_usl.weather_quarter AS coverage >= 0.9;
 
 -- =============================================================================
--- SEC lane: activations of sic_code, utility and revenue_quarter from the SEC
--- views, in this order (parents first). Shapes only; the SEC lane runs them once
--- won.sic_codes, won.submission_<cik10>, won.frames_<tag>_<period> and
--- won.concept_<cik10>_<tag> exist. Every NOT NULL column needs COALESCE.
+-- SEC side (Day 1): sic_code, utility and revenue_quarter from the cached SEC
+-- views, parents first. Prerequisites: 01_won_sec_create.sql, 02_won_dns_create.sql
+-- and 06_won_sec_seeds_create.sql (the submission view of every seed). These
+-- views are cached REST views, so the activations and reads of these three
+-- tables do not pay the filestore resolution cost of station and weather_quarter.
+-- Every NOT NULL column is wrapped in COALESCE.
 -- =============================================================================
--- ACTIVATE USL TABLE lightning.metastore.weatherornot.weather_or_not_usl.sic_code AS
--- SELECT COALESCE(code, '') AS code, description FROM won.sic_codes;
---
--- ACTIVATE USL TABLE lightning.metastore.weatherornot.weather_or_not_usl.utility AS
--- SELECT COALESCE(cik, '') AS cik, name, CAST(NULL AS STRING) AS ticker, sic, state AS hq_state FROM won.submission_0001326160
--- UNION ALL
--- SELECT COALESCE(cik, '') AS cik, name, CAST(NULL AS STRING) AS ticker, sic, state AS hq_state FROM won.submission_0000092122;
---
--- ACTIVATE USL TABLE lightning.metastore.weatherornot.weather_or_not_usl.revenue_quarter AS
--- SELECT COALESCE(LPAD(CAST(cik AS STRING), 10, '0'), '') AS cik, 'Revenues' AS xbrl_tag, 2025 AS year, 1 AS quarter,
---        CAST(val AS DOUBLE) AS val, COALESCE(accn, '') AS accn, CAST(NULL AS STRING) AS filed, false AS is_comparative
--- FROM won.frames_Revenues_CY2025Q1;
+
+-- Step 6: the SIC reference (1,005 codes from company_dns V4).
+ACTIVATE USL TABLE lightning.metastore.weatherornot.weather_or_not_usl.sic_code AS
+SELECT COALESCE(code, '') AS code, description AS description FROM won.sic_codes;
+
+-- Step 7: one row per seed utility from its submissions view (cik is the 10-digit
+-- string EDGAR serves, hq_state the business address state), the ticker from an
+-- inline VALUES list of seeds/utilities.json (seeds without a ticker stay NULL).
+-- MGE Energy carries SIC 4900, which company_dns does not list: the FK rule sic
+-- reports that one row as invalid (a kept, target-only seed; see ../README.md).
+ACTIVATE USL TABLE lightning.metastore.weatherornot.weather_or_not_usl.utility AS
+SELECT COALESCE(u.cik, '') AS cik, u.name AS name, t.ticker AS ticker, u.sic AS sic, u.state AS hq_state
+FROM (
+  SELECT cik, name, sic, state FROM won.submission_0001326160
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000092122
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000753308
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000004904
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072903
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000065984
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001711269
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001002910
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000811156
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000936340
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000783325
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000352541
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000922224
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001031296
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000788784
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001047862
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072741
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001109357
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000827052
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001004980
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001032208
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000764622
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000784977
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001057877
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001993004
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130464
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000104918
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001021635
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130310
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001692819
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001013871
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000354707
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000066756
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001466593
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001161728
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000755001
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001108426
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000715957
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001868275
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001111711
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0001193311
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000100122
+  UNION ALL SELECT cik, name, sic, state FROM won.submission_0000096271
+) u
+LEFT JOIN (
+  SELECT cik, ticker FROM VALUES
+    ('0001326160', 'DUK'),
+    ('0000092122', 'SO'),
+    ('0000753308', 'NEE'),
+    ('0000004904', 'AEP'),
+    ('0000072903', 'XEL'),
+    ('0000065984', 'ETR'),
+    ('0001711269', 'EVRG'),
+    ('0001002910', 'AEE'),
+    ('0000811156', 'CMS'),
+    ('0000936340', 'DTE'),
+    ('0000783325', 'WEC'),
+    ('0000352541', 'LNT'),
+    ('0000922224', 'PPL'),
+    ('0001031296', 'FE'),
+    ('0000788784', 'PEG'),
+    ('0001047862', 'ED'),
+    ('0000072741', 'ES'),
+    ('0001109357', 'EXC'),
+    ('0000827052', 'EIX'),
+    ('0001004980', 'PCG'),
+    ('0001032208', 'SRE'),
+    ('0000764622', 'PNW'),
+    ('0000784977', 'POR'),
+    ('0001057877', 'IDA'),
+    ('0001993004', 'NWE'),
+    ('0001130464', 'BKH'),
+    ('0000104918', 'AVA'),
+    ('0001021635', 'OGE'),
+    ('0001130310', 'CNP'),
+    ('0001692819', 'VST'),
+    ('0001013871', 'NRG'),
+    ('0000354707', 'HE'),
+    ('0000066756', 'ALE'),
+    ('0001466593', 'OTTR'),
+    ('0001161728', 'MGEE'),
+    ('0000755001', 'UTL'),
+    ('0001108426', 'TXNM'),
+    ('0000715957', 'D'),
+    ('0001868275', 'CEG'),
+    ('0001111711', 'NI')
+  AS seed(cik, ticker)
+) t ON t.cik = u.cik;
+
+-- Step 8: the seed utilities' facts in the six frames views of the two comparison
+-- quarters, one row per (filer, tag, period, filing). val is cast to DOUBLE (frames
+-- infer bigint for some periods); the frames endpoint serves the most recently
+-- filed fact, so is_comparative is true when the accession number's filing year
+-- (characters 12-13) is later than the period's year; filed is not in frames (NULL).
+-- Only seed CIKs are kept so that the FK cik -> utility holds.
+ACTIVATE USL TABLE lightning.metastore.weatherornot.weather_or_not_usl.revenue_quarter AS
+SELECT COALESCE(LPAD(CAST(f.cik AS STRING), 10, '0'), '') AS cik, COALESCE(f.xbrl_tag, '') AS xbrl_tag,
+       COALESCE(f.year, 0) AS year, COALESCE(f.quarter, 0) AS quarter,
+       CAST(f.val AS DOUBLE) AS val, COALESCE(f.accn, '') AS accn, CAST(NULL AS STRING) AS filed,
+       CAST(substr(f.accn, 12, 2) AS INT) + 2000 > f.year AS is_comparative
+FROM (
+  SELECT cik, val, accn, 'Revenues' AS xbrl_tag, 2025 AS year, 1 AS quarter FROM won.frames_Revenues_CY2025Q1
+  UNION ALL SELECT cik, val, accn, 'Revenues' AS xbrl_tag, 2024 AS year, 1 AS quarter FROM won.frames_Revenues_CY2024Q1
+  UNION ALL SELECT cik, val, accn, 'RevenueFromContractWithCustomerExcludingAssessedTax' AS xbrl_tag, 2025 AS year, 1 AS quarter FROM won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2025Q1
+  UNION ALL SELECT cik, val, accn, 'RevenueFromContractWithCustomerExcludingAssessedTax' AS xbrl_tag, 2024 AS year, 1 AS quarter FROM won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2024Q1
+  UNION ALL SELECT cik, val, accn, 'RegulatedAndUnregulatedOperatingRevenue' AS xbrl_tag, 2025 AS year, 1 AS quarter FROM won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2025Q1
+  UNION ALL SELECT cik, val, accn, 'RegulatedAndUnregulatedOperatingRevenue' AS xbrl_tag, 2024 AS year, 1 AS quarter FROM won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2024Q1
+) f
+WHERE CAST(f.cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271);

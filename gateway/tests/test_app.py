@@ -203,8 +203,10 @@ def test_query_error_on_live_connection_is_not_retried():
 def test_default_cache_targets_are_the_sec_views_and_pass_the_cache_shape():
     targets = app_module.templates.cache_targets_for(
         [(t, p) for t in app_module.SEC_TAGS for p in app_module.SEC_PERIODS], list(app_module.SEC_CONCEPTS), list(app_module.SEC_UTILITIES))
-    assert len(targets) == len(set(targets)) == 6 + 6 + 4 + 1
+    assert len(app_module.SEC_CONCEPTS) == 10 and app_module.SEC_UTILITIES == templates.SEED_CIKS and len(templates.SEED_CIKS) == 43
+    assert len(targets) == len(set(targets)) == 6 + 10 + 43 + 1
     assert "won.frames_Revenues_CY2025Q1" in targets and "won.submission_0001326160" in targets and targets[-1] == "won.sic_codes"
+    assert "won.submission_0001031296" in targets and "won.concept_0000004904_RevenueFromContractWithCustomerExcludingAssessedTax" in targets
     for name in targets:
         assert allowlist.check(f"CACHE TABLE {name}", "registrar") == "register"
 

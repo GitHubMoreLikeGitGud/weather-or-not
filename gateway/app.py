@@ -37,15 +37,18 @@ RETRY_MAX_S = 900.0
 TEMPLATE_ROLES = ("reader", "registrar")
 # Objects the warm-up keeps cached in the driver (SchemaStore views and raw WON_* tables the
 # reader templates read). WON_CACHE_TARGETS (comma-separated qualified names) overrides it for
-# a run. SEC: the views of zetaris/sql/01_won_sec_create.sql and 02_won_dns_create.sql (the
-# frames periods of the two comparison quarters for the three revenue tags; companyconcept and
-# submissions of the four Day-0 utilities; the SIC reference). Periods the registrar adds at
-# run time are cached by the plan itself and re-cached here only if listed.
+# a run. SEC: the views of zetaris/sql/01_won_sec_create.sql, 02_won_dns_create.sql and
+# 06_won_sec_seeds_create.sql (the frames periods of the two comparison quarters for the three
+# revenue tags; the submissions profile of every seed utility; companyconcept of the four Day-0
+# utilities plus the demo and warm-run utilities; the SIC reference). Periods and filers the
+# registrar adds at run time are cached by the plan itself and re-cached here only if listed.
 SEC_TAGS = ("Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "RegulatedAndUnregulatedOperatingRevenue")
 SEC_PERIODS = ("CY2025Q1", "CY2024Q1")
-SEC_UTILITIES = ("0001326160", "0000092122", "0000072903", "0000065984")  # Duke Energy, Southern Co, Xcel Energy, Entergy
-SEC_CONCEPTS = tuple((c, "Revenues") for c in SEC_UTILITIES) + (
-    ("0001326160", "RegulatedAndUnregulatedOperatingRevenue"), ("0000072903", "RegulatedAndUnregulatedOperatingRevenue"))
+SEC_UTILITIES = templates.SEED_CIKS  # the 43 seeds of seeds/utilities.json (submissions views)
+# Duke Energy, Southern Co, Xcel Energy, Entergy (Day 0); FirstEnergy and American Electric Power (Day 1) under the tags each filer uses.
+SEC_CONCEPTS = tuple((c, "Revenues") for c in ("0001326160", "0000092122", "0000072903", "0000065984", "0001031296", "0000004904")) + (
+    ("0001326160", "RegulatedAndUnregulatedOperatingRevenue"), ("0000072903", "RegulatedAndUnregulatedOperatingRevenue"),
+    ("0001031296", "RevenueFromContractWithCustomerExcludingAssessedTax"), ("0000004904", "RevenueFromContractWithCustomerExcludingAssessedTax"))
 CACHE_TARGETS: tuple[str, ...] = templates.cache_targets_for(
     [(t, p) for t in SEC_TAGS for p in SEC_PERIODS], list(SEC_CONCEPTS), list(SEC_UTILITIES)) + templates.GHCN_VIEWS
 # GHCN: the four station-filtered parquet views of zetaris/sql/04_won_ghcn_create.sql come last
