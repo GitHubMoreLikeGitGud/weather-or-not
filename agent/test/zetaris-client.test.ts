@@ -187,7 +187,7 @@ describe("local validation fails fast", () => {
     expect(() => validateTemplateParams("sic", { code: "49A1" })).toThrow(/invalid sic/u);
     expect(() => validateTemplateParams("frames_count", { tag: "Revenue", period: "CY2025Q1" })).toThrow(/invalid tag/u);
     expect(() => validateRegistrarParams("register_frames", { tag: "Revenues", period: "CY2025Q4" })).toThrow(/invalid period/u);
-    const tooMany = Array.from({ length: 41 }, (_, i) => `USW${String(i).padStart(8, "0")}`).join(",");
+    const tooMany = Array.from({ length: 61 }, (_, i) => `USW${String(i).padStart(8, "0")}`).join(",");
     expect(() => validateTemplateParams("weather_quarter", { year: "2025", quarter: "1", station_list: tooMany })).toThrow(/invalid station_list/u);
   });
 });

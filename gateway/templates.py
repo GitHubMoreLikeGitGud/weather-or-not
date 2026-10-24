@@ -57,7 +57,7 @@ PARAM_PATTERNS = {
     "year": re.compile(r"^20\d{2}$"),
     "quarter": re.compile(r"^[1-3]$"),
     "station": re.compile(r"^US[A-Z0-9]{9}$"),
-    "station_list": re.compile(r"^US[A-Z0-9]{9}(,US[A-Z0-9]{9}){0,39}$"),  # 1 to 40 ids, comma-separated
+    "station_list": re.compile(r"^US[A-Z0-9]{9}(,US[A-Z0-9]{9}){0,59}$"),  # 1 to 60 ids, comma-separated (56 seed stations)
     "element": re.compile(r"^(TMAX|TMIN)$"),
     "sic": re.compile(r"^\d{4}$"),
 }
@@ -206,6 +206,14 @@ TEMPLATES: dict[str, Template] = {
         # -- SEC companyconcept: one filer's full history for one tag ------------------------------
         _t("concept_history", f"SELECT {CONCEPT_COLUMNS} FROM {CONCEPT_VIEW} ORDER BY `end`, filed, accn", _CT, (CONCEPT_VIEW,), (CONCEPT_VIEW,),
            "Every USD fact a filer reported for one tag, across filings: fy, fp, form, filed, accn, start, end, val."),
+        # The like-for-like window: the facts whose period ends in a year or the year before (the current
+        # quarter and the previous quarter in every filing that reports them). A long history is cut at the
+        # gateway's 200-row cap in concept_history (AEP Revenues holds 304 facts), so the agent reads this.
+        _t("concept_window",
+           f"SELECT {CONCEPT_COLUMNS} FROM {CONCEPT_VIEW} WHERE CAST(substr(`end`, 1, 4) AS INT) BETWEEN {{year}} - 1 AND {{year}} ORDER BY `end`, filed, accn",
+           {**_CT, "year": "year"}, (CONCEPT_VIEW,), (CONCEPT_VIEW,),
+           "One filer's USD facts for one tag whose period end falls in the given year or the year before, across filings "
+           "(fy, fp, form, filed, accn, start, end, val): the like-for-like window, always under the gateway row cap."),
         # -- SEC submissions: the filer's profile ---------------------------------------------------
         _t("submission", f"SELECT {SUBMISSION_COLUMNS} FROM {SUBMISSION_VIEW}", _C, (SUBMISSION_VIEW,), (SUBMISSION_VIEW,),
            "A filer's cik, name, sic, sicDescription and business state (no street fields)."),

@@ -95,7 +95,7 @@ def test_usl_and_dq_templates_render_to_fixed_reader_statements():
     ("station", "USW00013740", True), ("station", "USC00011084", True), ("station", "usw00013740", False),
     ("station", "USW0001374", False), ("station", "CA001012345", False), ("station", "USW00013740'", False),
     ("station_list", "USW00013740", True), ("station_list", "USW00013740,USW00013722", True),
-    ("station_list", ",".join(["USW00013740"] * 40), True), ("station_list", ",".join(["USW00013740"] * 41), False),
+    ("station_list", ",".join(["USW00013740"] * 60), True), ("station_list", ",".join(["USW00013740"] * 61), False),
     ("station_list", "USW00013740,", False), ("station_list", "USW00013740, USW00013722", False),
     ("station_list", "USW00013740,usw00013722", False), ("station_list", "USW00013740','USW00013722", False),
     ("station_list", "", False),
@@ -150,12 +150,18 @@ def test_reader_templates_read_the_cached_views_with_the_agreed_columns():
     t, sql = render("concept_history", {"cik10": "0000092122", "tag": "Revenues"})
     assert sql.startswith("SELECT fy, fp, form, filed, accn, `start`, `end`, val FROM won.concept_0000092122_Revenues")
     assert t.raw_objects == ("won.concept_{cik10}_{tag}",)
+    t, sql = render("concept_window", {"cik10": "0000004904", "tag": "Revenues", "year": "2025"})
+    assert sql == ("SELECT fy, fp, form, filed, accn, `start`, `end`, val FROM won.concept_0000004904_Revenues "
+                   "WHERE CAST(substr(`end`, 1, 4) AS INT) BETWEEN 2025 - 1 AND 2025 ORDER BY `end`, filed, accn")
+    assert t.raw_objects == ("won.concept_{cik10}_{tag}",) and allowlist.check(sql, "reader") == "read"
+    with pytest.raises(BadParams):
+        render("concept_window", {"cik10": "0000004904", "tag": "Revenues", "year": "1999"})
     _, sql = render("submission", {"cik10": "0000065984"})
     assert sql == "SELECT cik, name, sic, `sicDescription`, state FROM won.submission_0000065984"
     assert "street" not in sql.lower()
     _, sql = render("sic", {"code": "4911"})
     assert sql == "SELECT code, description, division, division_desc, major_group, major_group_desc FROM won.sic_codes WHERE code = '4911'"
-    for tid in ("frames_period", "frames_count", "frames_fact", "concept_history", "submission", "sic"):
+    for tid in ("frames_period", "frames_count", "frames_fact", "concept_history", "concept_window", "submission", "sic"):
         assert templates.TEMPLATES[tid].role == "reader"
 
 

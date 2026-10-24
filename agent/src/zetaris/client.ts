@@ -87,7 +87,7 @@ export const PARAM_PATTERNS = {
   year: /^20\d{2}$/u,
   quarter: /^[1-3]$/u,
   station: /^US[A-Z0-9]{9}$/u,
-  station_list: /^US[A-Z0-9]{9}(,US[A-Z0-9]{9}){0,39}$/u,
+  station_list: /^US[A-Z0-9]{9}(,US[A-Z0-9]{9}){0,59}$/u,
   element: /^(TMAX|TMIN)$/u,
   sic: /^\d{4}$/u,
 } as const;
@@ -102,7 +102,7 @@ export const TEMPLATE_PARAMS: Record<string, Record<string, ParamKind>> = {
   show_databases: {},
   // GHCN degree days over the cached won.ghcn_<year>_<element> views (zetaris/sql/04_won_ghcn_*.sql):
   // station_id, year, quarter, hdd, cdd, days_observed, days_in_quarter, coverage per station,
-  // about 19 s for any station list (1 to 40 ids), so one call per (year, quarter).
+  // about 19 s for any station list (1 to 60 ids), so one call per (year, quarter).
   weather_quarter: { year: "year", quarter: "quarter", station_list: "station_list" },
   // USL model and data quality (zetaris/sql/05_won_usl_*.sql); the two DQ templates take minutes.
   usl_describe: {},
@@ -117,6 +117,9 @@ export const TEMPLATE_PARAMS: Record<string, Record<string, ParamKind>> = {
   frames_seeds: { tag: "tag", period: "period" },
   // SEC companyconcept (won.concept_<cik10>_<tag>): fy, fp, form, filed, accn, start, end, val.
   concept_history: { cik10: "cik10", tag: "tag" },
+  // The same columns for the facts whose period ends in `year` or the year before: the like-for-like
+  // window the get_revenue tool reads (concept_history is cut at the 200-row cap for long histories).
+  concept_window: { cik10: "cik10", tag: "tag", year: "year" },
   // SEC submissions (won.submission_<cik10>): cik, name, sic, sicDescription, state.
   submission: { cik10: "cik10" },
   // SIC reference (won.sic_codes): code, description, division, division_desc, major_group, major_group_desc.
