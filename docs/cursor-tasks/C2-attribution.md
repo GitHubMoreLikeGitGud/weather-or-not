@@ -118,4 +118,6 @@ Fetching revenue or weather numbers (they come from Lightning SQL through the ga
 
 ## Commit
 
+Do not run `git commit`; leave the changes in the working tree. The reviewer commits them, by explicit path, as:
+
 `C2: attribution with seeded bootstrap, confidence labels and claim verdict (Cursor Agent)`

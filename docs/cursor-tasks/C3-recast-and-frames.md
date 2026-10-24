@@ -124,4 +124,6 @@ Fetching from SEC (runs through Lightning REST tables), the H-MEM conflict recor
 
 ## Commit
 
+Do not run `git commit`; leave the changes in the working tree. The reviewer commits them, by explicit path, as:
+
 `C3: like-for-like revenue with recast rule R1 and frames helpers (Cursor Agent)`
