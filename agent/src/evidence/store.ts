@@ -180,7 +180,11 @@ export class EvidenceStore {
    */
   fromTemplate(res: TemplateResult, claim: string, opts: { kind?: "zetaris_sql" | "dq"; dqSource?: "zetaris_dq" | "dq_equivalent_sql"; details?: Record<string, unknown> } = {}): EvidenceRecord {
     const details: Record<string, unknown> = { ...(opts.details ?? {}) };
-    const sources: SourceRef[] = res.raw_objects.map((o) => ({ object: o, ...sourceFor(o), cached_at: res.source_cached_at?.[o] ?? null }));
+    // The gateway names a template's objects with their parameter placeholders (won.ghcn_{year}_tmax); the record names the object read.
+    const fill = (o: string) => o.replace(/\{(\w+)\}/gu, (m, k: string) => res.params[k] ?? m);
+    const objects = res.objects.map(fill);
+    const raw = res.raw_objects.map(fill);
+    const sources: SourceRef[] = raw.map((o, i) => ({ object: o, ...sourceFor(o), cached_at: res.source_cached_at?.[o] ?? res.source_cached_at?.[res.raw_objects[i]!] ?? null }));
     const primary = sources[0];
     if (res.truncated) details.truncated_by_gateway = true;
     if (res.warm_retries) details.warm_retries = res.warm_retries;
@@ -192,9 +196,9 @@ export class EvidenceStore {
       params: res.params,
       sql: res.sql ?? "",
       sql_sha256: res.sql_sha256 ?? "",
-      zetaris_object: res.objects[0] ?? "",
-      zetaris_objects: res.objects,
-      raw_objects: res.raw_objects,
+      zetaris_object: objects[0] ?? "",
+      zetaris_objects: objects,
+      raw_objects: raw,
       source_url: primary?.url ?? "none",
       licence: primary?.licence ?? "none",
       source_cached_at: primary?.cached_at ?? null,

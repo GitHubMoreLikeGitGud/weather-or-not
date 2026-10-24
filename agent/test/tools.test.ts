@@ -272,6 +272,37 @@ describe("the tool chain on the synthetic question (no model: every step is the 
     expect(r.checklist_complete).toBe(true);
   });
 
+  it("fills the gateway's object placeholders with the parameters in the evidence record", () => {
+    const store = new EvidenceStore("rph", null);
+    const res = {
+      template_id: "weather_quarter",
+      role: "reader" as const,
+      columns: ["station_id"],
+      rows: [["USW00000001"]],
+      row_count: 1,
+      truncated: false,
+      elapsed_ms: 10,
+      sql: "SELECT 1",
+      sql_sha256: "s",
+      objects: ["won.ghcn_{year}_tmax", "won.ghcn_{year}_tmin"],
+      raw_objects: ["won.ghcn_2025_tmax", "won.ghcn_2025_tmin"],
+      executed_at: "t",
+      cache_state: "hit",
+      cache_detail: {},
+      source_cached_at: { "won.ghcn_2025_tmax": "c" },
+      error: null,
+      params: { year: "2025", quarter: "1", station_list: "USW00000001" },
+      http_status: 200,
+      wall_ms: 12,
+      warm_retries: 0,
+    };
+    const ev = store.fromTemplate(res, "x");
+    expect(ev.zetaris_object).toBe("won.ghcn_2025_tmax");
+    expect(ev.zetaris_objects).toEqual(["won.ghcn_2025_tmax", "won.ghcn_2025_tmin"]);
+    expect(ev.source_url).toContain("YEAR=2025/ELEMENT=TMAX");
+    expect(ev.source_cached_at).toBe("c");
+  });
+
   it("memoMaterial names the allowed numbers from the tool outputs", async () => {
     const h = harness();
     const ctx = newQuestionContext(TARGET, PERIOD, "colder weather", h.deps.evidence);

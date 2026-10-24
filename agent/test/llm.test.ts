@@ -63,13 +63,13 @@ describe("tool catalog and prompts", () => {
     expect(lines).toContain("Completes: claim_tested, memo_written");
   });
 
-  it("renders the planner and memo prompts without AI vendor names", () => {
+  it("renders the planner and memo prompts for this domain, with no leftover from the sister project", () => {
     const planner = render(loadPrompt("planner"), { chain_label: "test", tools: "- x" });
     expect(planner).toContain("Weather-or-Not");
     expect(planner).toContain("finalize is used only after");
     const memo = loadPrompt("memo");
     expect(memo).toContain("ALLOWED NUMBERS");
-    for (const text of [planner, memo]) expect(text).not.toMatch(/anthropic|openai|claude|gpt|nvidia/iu);
+    for (const text of [planner, memo]) expect(text).not.toMatch(/clearshelf|allergen|gtin|recall/iu);
     expect(() => render("{{missing}}", {})).toThrow(/no value/u);
   });
 });

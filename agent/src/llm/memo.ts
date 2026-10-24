@@ -99,7 +99,7 @@ function requestText(m: MemoInput, feedback: string | null): string {
     `ALLOWED NUMBERS (the only numbers you may write, copied exactly):\n${allowed}`,
     `NOT TESTED:\n${m.notTested.map((n) => `- ${n}`).join("\n")}`,
     feedback,
-    "Write the memo now as {\"memo\": \"...\"}.",
+    `Write the memo now as {"memo": "..."}: at least ${MEMO_WORDS.min + 20} words and at most ${MEMO_WORDS.max} words, one paragraph each for the revenue change and the weather, the peer sensitivity and the three parts with their ranges, the verdict with the confidence label and the DQ gate, and what was not tested.`,
   ]
     .filter((x): x is string => x !== null)
     .join("\n\n");
@@ -148,6 +148,8 @@ export async function writeMemo(ollama: OllamaClient | null, input: MemoInput, o
       "Your previous draft was rejected:",
       ...(parseError ? [`- it was not valid JSON (${parseError})`] : []),
       ...schemaErrors.map((e) => `- ${e}`),
+      ...(memo && words < MEMO_WORDS.min ? [`- it had ${words} words; write at least ${MEMO_WORDS.min + 20} words this time, adding a paragraph on the industry-wide part and the remainder with their ranges and one on what was not tested, with the same numbers.`] : []),
+      ...(memo && words > MEMO_WORDS.max ? [`- it had ${words} words; cut it to at most ${MEMO_WORDS.max} words.`] : []),
       ...(unknown.length ? [`- it contained numbers that are not in the ALLOWED NUMBERS list: ${unknown.join(", ")}. Remove them or replace them with listed numbers.`] : []),
     ].join("\n");
   }

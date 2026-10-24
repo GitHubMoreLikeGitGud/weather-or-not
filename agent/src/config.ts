@@ -20,6 +20,7 @@ const ALLOWED_KEYS = [
   "WON_MODEL_FALLBACK",
   "WON_THINK",
   "WON_MIN_AVAILABLE_RAM_MIB",
+  "ZETARIS_GETTING_STARTED_DIR",
 ] as const;
 type Key = (typeof ALLOWED_KEYS)[number];
 
