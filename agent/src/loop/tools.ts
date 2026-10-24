@@ -328,6 +328,7 @@ function checkIds(input: ToolInput, ctx: QuestionContext): string[] {
   const out: string[] = [];
   if (input.cik !== undefined && input.cik !== ctx.cik) out.push(`action.input.cik ${input.cik} is not the utility under investigation (${ctx.cik})`);
   if (input.period !== undefined && input.period !== ctx.period) out.push(`action.input.period ${input.period} is not the period under investigation (${ctx.period})`);
+  if (input.tag !== undefined && ctx.tag !== null && input.tag !== ctx.tag) out.push(`action.input.tag ${input.tag} is not the utility's revenue tag (${ctx.tag})`);
   return out;
 }
 
@@ -582,7 +583,7 @@ const revenueTool = def("get_revenue", {
   optional: false,
   available: (ctx) => ctx.tag !== null && pending(ctx, "revenue_like_for_like"),
   defaultInput: (ctx) => ({ cik: ctx.cik, tag: ctx.tag ?? undefined, period: ctx.period }),
-  checkInput: (input, ctx) => [...checkIds(input, ctx), ...(input.tag !== undefined && ctx.tag !== null && input.tag !== ctx.tag ? [`action.input.tag ${input.tag} is not the utility's revenue tag (${ctx.tag})`] : [])],
+  checkInput: checkIds,
   async run(_input, ctx, deps) {
     const tag = ctx.tag!;
     const year = String(ctx.year);
@@ -1041,7 +1042,7 @@ const attributeTool = def("attribute", {
   optional: false,
   available: (ctx) => ctx.revenue !== null && ctx.weather !== null && ctx.checklist.isDone("peers_loaded") && pending(ctx, "attribution_done"),
   defaultInput: () => ({}),
-  checkInput: () => [],
+  checkInput: checkIds,
   async run(_input, ctx, deps) {
     const rev = ctx.revenue!;
     const w = ctx.weather!;
@@ -1093,7 +1094,7 @@ const notTestedTool = def("not_tested", {
   optional: false,
   available: (ctx) => pending(ctx, "not_tested_listed"),
   defaultInput: () => ({}),
-  checkInput: () => [],
+  checkInput: checkIds,
   async run(_input, ctx, deps) {
     ctx.notTested = [...NOT_TESTED];
     const ev = deps.evidence.add({ kind: "tool", claim: `Not tested (${NOT_TESTED.length} items): ${NOT_TESTED.map((n) => n.split(":")[0]).join("; ")}`, derived_from: [], details: { tool: "not_tested", items: NOT_TESTED } });
@@ -1170,7 +1171,7 @@ const finalizeTool = def("finalize", {
   optional: false,
   available: (ctx) => ctx.checklist.readyForFinal() && pending(ctx, "memo_written"),
   defaultInput: () => ({}),
-  checkInput: () => [],
+  checkInput: checkIds,
   async run(_input, ctx, deps) {
     const a = ctx.attribution;
     let verdict: Verdict;
