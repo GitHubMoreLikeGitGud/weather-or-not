@@ -1,0 +1,2178 @@
+{
+  "generated_at": "2026-10-24T13:35:59.019Z",
+  "label": "measured",
+  "inputs": {
+    "runs": [
+      {
+        "run_id": "r20261024T203050a220",
+        "cik": "0001031296",
+        "utility": "FIRSTENERGY CORP",
+        "period": "CY2025Q1",
+        "claim": "colder weather",
+        "started_at": "2026-10-24T12:30:50.151Z",
+        "source": "data/runs"
+      },
+      {
+        "run_id": "r20261024T2034350adc",
+        "cik": "0000004904",
+        "utility": "AMERICAN ELECTRIC POWER CO INC",
+        "period": "CY2025Q1",
+        "claim": "favorable weather",
+        "started_at": "2026-10-24T12:34:35.825Z",
+        "source": "data/runs"
+      },
+      {
+        "run_id": "r20261024T203648826a",
+        "cik": "0000004904",
+        "utility": "AMERICAN ELECTRIC POWER CO INC",
+        "period": "CY2025Q1",
+        "claim": "favorable weather",
+        "started_at": "2026-10-24T12:36:48.574Z",
+        "source": "data/runs"
+      },
+      {
+        "run_id": "r20261024T20391416bf",
+        "cik": "0001031296",
+        "utility": "FIRSTENERGY CORP",
+        "period": "CY2025Q1",
+        "claim": "colder weather",
+        "started_at": "2026-10-24T12:39:14.725Z",
+        "source": "data/runs"
+      },
+      {
+        "run_id": "r20261024T204637522f",
+        "cik": "0001031296",
+        "utility": "FIRSTENERGY CORP",
+        "period": "CY2025Q1",
+        "claim": "colder weather",
+        "started_at": "2026-10-24T12:46:37.596Z",
+        "source": "data/runs"
+      }
+    ],
+    "dq_file": true,
+    "joinmap_file": true,
+    "seeds": {
+      "utilities": 43,
+      "stations": 56
+    }
+  },
+  "join_map": {
+    "measured_at": "2026-10-24T21:30:45+0800",
+    "bound_s": 60,
+    "login": "admin",
+    "statements": [
+      {
+        "id": "lpad_loc.Revenues.CY2025Q1",
+        "group": "cik_lpad_and_loc",
+        "tag": "Revenues",
+        "period": "CY2025Q1",
+        "sql": "SELECT COUNT(*) AS matched, SUM(CASE WHEN f.loc = CONCAT('US-', u.state) THEN 1 ELSE 0 END) AS loc_equal, SUM(CASE WHEN f.loc IS NULL OR f.loc = '' THEN 1 ELSE 0 END) AS loc_missing FROM won.frames_Revenues_CY2025Q1 f JOIN (SELECT cik, name, sic, state FROM won.submission_0001326160 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000092122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000753308 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000004904 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072903 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000065984 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001711269 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001002910 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000811156 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000936340 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000783325 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000352541 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000922224 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001031296 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000788784 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001047862 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072741 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001109357 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000827052 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001004980 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001032208 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000764622 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000784977 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001057877 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001993004 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130464 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000104918 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001021635 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130310 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001692819 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001013871 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000354707 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000066756 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001466593 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001161728 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000755001 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001108426 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000715957 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001868275 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001111711 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001193311 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000100122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000096271) u ON LPAD(CAST(f.cik AS STRING), 10, '0') = u.cik",
+        "sql_sha256": "f0511abd85b6b81cdee54e91b225f08508aa74bcd38c25863a2a724cd5027a4a",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:30:45+0800",
+        "elapsed_ms": 6271,
+        "row_count": 1,
+        "columns": [
+          "matched",
+          "loc_equal",
+          "loc_missing"
+        ],
+        "rows": [
+          [
+            34,
+            34,
+            0
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "in_count.Revenues.CY2025Q1",
+        "group": "cik_in_count",
+        "tag": "Revenues",
+        "period": "CY2025Q1",
+        "sql": "SELECT COUNT(*) AS seeds_present FROM won.frames_Revenues_CY2025Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271)",
+        "sql_sha256": "c7cb859ec92b919cf5545e0052cfac685ef160ed23d4273fb91d94d83701779f",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:30:52+0800",
+        "elapsed_ms": 155,
+        "row_count": 1,
+        "columns": [
+          "seeds_present"
+        ],
+        "rows": [
+          [
+            34
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "lpad_loc.Revenues.CY2024Q1",
+        "group": "cik_lpad_and_loc",
+        "tag": "Revenues",
+        "period": "CY2024Q1",
+        "sql": "SELECT COUNT(*) AS matched, SUM(CASE WHEN f.loc = CONCAT('US-', u.state) THEN 1 ELSE 0 END) AS loc_equal, SUM(CASE WHEN f.loc IS NULL OR f.loc = '' THEN 1 ELSE 0 END) AS loc_missing FROM won.frames_Revenues_CY2024Q1 f JOIN (SELECT cik, name, sic, state FROM won.submission_0001326160 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000092122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000753308 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000004904 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072903 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000065984 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001711269 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001002910 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000811156 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000936340 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000783325 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000352541 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000922224 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001031296 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000788784 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001047862 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072741 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001109357 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000827052 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001004980 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001032208 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000764622 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000784977 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001057877 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001993004 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130464 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000104918 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001021635 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130310 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001692819 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001013871 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000354707 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000066756 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001466593 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001161728 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000755001 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001108426 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000715957 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001868275 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001111711 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001193311 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000100122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000096271) u ON LPAD(CAST(f.cik AS STRING), 10, '0') = u.cik",
+        "sql_sha256": "fc4d55b0305995e3f93e8af79949a3f6041d319af7ceaa66bc2acadd923c5419",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:30:52+0800",
+        "elapsed_ms": 6331,
+        "row_count": 1,
+        "columns": [
+          "matched",
+          "loc_equal",
+          "loc_missing"
+        ],
+        "rows": [
+          [
+            35,
+            35,
+            0
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "in_count.Revenues.CY2024Q1",
+        "group": "cik_in_count",
+        "tag": "Revenues",
+        "period": "CY2024Q1",
+        "sql": "SELECT COUNT(*) AS seeds_present FROM won.frames_Revenues_CY2024Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271)",
+        "sql_sha256": "9805f4e7be415736e859f67c1146aac9c1c16778c4256d84ac4b7f644357a4dc",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:30:58+0800",
+        "elapsed_ms": 157,
+        "row_count": 1,
+        "columns": [
+          "seeds_present"
+        ],
+        "rows": [
+          [
+            35
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "lpad_loc.RevenueFromContractWithCustomerExcludingAssessedTax.CY2025Q1",
+        "group": "cik_lpad_and_loc",
+        "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+        "period": "CY2025Q1",
+        "sql": "SELECT COUNT(*) AS matched, SUM(CASE WHEN f.loc = CONCAT('US-', u.state) THEN 1 ELSE 0 END) AS loc_equal, SUM(CASE WHEN f.loc IS NULL OR f.loc = '' THEN 1 ELSE 0 END) AS loc_missing FROM won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2025Q1 f JOIN (SELECT cik, name, sic, state FROM won.submission_0001326160 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000092122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000753308 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000004904 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072903 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000065984 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001711269 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001002910 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000811156 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000936340 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000783325 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000352541 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000922224 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001031296 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000788784 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001047862 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072741 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001109357 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000827052 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001004980 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001032208 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000764622 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000784977 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001057877 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001993004 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130464 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000104918 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001021635 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130310 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001692819 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001013871 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000354707 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000066756 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001466593 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001161728 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000755001 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001108426 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000715957 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001868275 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001111711 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001193311 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000100122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000096271) u ON LPAD(CAST(f.cik AS STRING), 10, '0') = u.cik",
+        "sql_sha256": "be539f23c99464633e23c73136054e83d6a28ffd783227e752a6b81c2954aca1",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:30:59+0800",
+        "elapsed_ms": 6165,
+        "row_count": 1,
+        "columns": [
+          "matched",
+          "loc_equal",
+          "loc_missing"
+        ],
+        "rows": [
+          [
+            21,
+            21,
+            0
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "in_count.RevenueFromContractWithCustomerExcludingAssessedTax.CY2025Q1",
+        "group": "cik_in_count",
+        "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+        "period": "CY2025Q1",
+        "sql": "SELECT COUNT(*) AS seeds_present FROM won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2025Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271)",
+        "sql_sha256": "c4350fbf632c8751bd5ffa119b4e84e3f058c1f1cc31a0eb39ece2be3e9fa69a",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:31:05+0800",
+        "elapsed_ms": 202,
+        "row_count": 1,
+        "columns": [
+          "seeds_present"
+        ],
+        "rows": [
+          [
+            21
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "lpad_loc.RevenueFromContractWithCustomerExcludingAssessedTax.CY2024Q1",
+        "group": "cik_lpad_and_loc",
+        "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+        "period": "CY2024Q1",
+        "sql": "SELECT COUNT(*) AS matched, SUM(CASE WHEN f.loc = CONCAT('US-', u.state) THEN 1 ELSE 0 END) AS loc_equal, SUM(CASE WHEN f.loc IS NULL OR f.loc = '' THEN 1 ELSE 0 END) AS loc_missing FROM won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2024Q1 f JOIN (SELECT cik, name, sic, state FROM won.submission_0001326160 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000092122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000753308 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000004904 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072903 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000065984 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001711269 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001002910 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000811156 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000936340 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000783325 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000352541 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000922224 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001031296 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000788784 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001047862 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072741 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001109357 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000827052 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001004980 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001032208 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000764622 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000784977 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001057877 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001993004 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130464 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000104918 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001021635 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130310 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001692819 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001013871 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000354707 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000066756 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001466593 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001161728 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000755001 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001108426 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000715957 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001868275 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001111711 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001193311 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000100122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000096271) u ON LPAD(CAST(f.cik AS STRING), 10, '0') = u.cik",
+        "sql_sha256": "80a8e539b78e6acc038b711a08c02cc0c7e918a3315ab0a7e698474fe56935c8",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:31:05+0800",
+        "elapsed_ms": 6219,
+        "row_count": 1,
+        "columns": [
+          "matched",
+          "loc_equal",
+          "loc_missing"
+        ],
+        "rows": [
+          [
+            23,
+            23,
+            0
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "in_count.RevenueFromContractWithCustomerExcludingAssessedTax.CY2024Q1",
+        "group": "cik_in_count",
+        "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+        "period": "CY2024Q1",
+        "sql": "SELECT COUNT(*) AS seeds_present FROM won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2024Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271)",
+        "sql_sha256": "5f64e20987302cab85243e89d59649a7e2e114909882983266b34714b45f6de6",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:31:11+0800",
+        "elapsed_ms": 182,
+        "row_count": 1,
+        "columns": [
+          "seeds_present"
+        ],
+        "rows": [
+          [
+            23
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "lpad_loc.RegulatedAndUnregulatedOperatingRevenue.CY2025Q1",
+        "group": "cik_lpad_and_loc",
+        "tag": "RegulatedAndUnregulatedOperatingRevenue",
+        "period": "CY2025Q1",
+        "sql": "SELECT COUNT(*) AS matched, SUM(CASE WHEN f.loc = CONCAT('US-', u.state) THEN 1 ELSE 0 END) AS loc_equal, SUM(CASE WHEN f.loc IS NULL OR f.loc = '' THEN 1 ELSE 0 END) AS loc_missing FROM won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2025Q1 f JOIN (SELECT cik, name, sic, state FROM won.submission_0001326160 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000092122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000753308 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000004904 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072903 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000065984 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001711269 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001002910 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000811156 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000936340 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000783325 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000352541 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000922224 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001031296 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000788784 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001047862 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072741 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001109357 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000827052 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001004980 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001032208 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000764622 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000784977 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001057877 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001993004 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130464 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000104918 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001021635 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130310 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001692819 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001013871 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000354707 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000066756 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001466593 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001161728 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000755001 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001108426 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000715957 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001868275 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001111711 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001193311 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000100122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000096271) u ON LPAD(CAST(f.cik AS STRING), 10, '0') = u.cik",
+        "sql_sha256": "c80d32eb81d6d983f77b7620b0110d8b6ef497ae3c5d5b4f25c7daabf8a65a38",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:31:11+0800",
+        "elapsed_ms": 6155,
+        "row_count": 1,
+        "columns": [
+          "matched",
+          "loc_equal",
+          "loc_missing"
+        ],
+        "rows": [
+          [
+            9,
+            9,
+            0
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "in_count.RegulatedAndUnregulatedOperatingRevenue.CY2025Q1",
+        "group": "cik_in_count",
+        "tag": "RegulatedAndUnregulatedOperatingRevenue",
+        "period": "CY2025Q1",
+        "sql": "SELECT COUNT(*) AS seeds_present FROM won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2025Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271)",
+        "sql_sha256": "981b6bfcac03e749367e2714445f312de1b0c98877f2a7a39a0886a127c34c21",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:31:17+0800",
+        "elapsed_ms": 172,
+        "row_count": 1,
+        "columns": [
+          "seeds_present"
+        ],
+        "rows": [
+          [
+            9
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "lpad_loc.RegulatedAndUnregulatedOperatingRevenue.CY2024Q1",
+        "group": "cik_lpad_and_loc",
+        "tag": "RegulatedAndUnregulatedOperatingRevenue",
+        "period": "CY2024Q1",
+        "sql": "SELECT COUNT(*) AS matched, SUM(CASE WHEN f.loc = CONCAT('US-', u.state) THEN 1 ELSE 0 END) AS loc_equal, SUM(CASE WHEN f.loc IS NULL OR f.loc = '' THEN 1 ELSE 0 END) AS loc_missing FROM won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2024Q1 f JOIN (SELECT cik, name, sic, state FROM won.submission_0001326160 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000092122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000753308 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000004904 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072903 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000065984 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001711269 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001002910 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000811156 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000936340 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000783325 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000352541 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000922224 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001031296 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000788784 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001047862 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072741 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001109357 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000827052 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001004980 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001032208 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000764622 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000784977 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001057877 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001993004 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130464 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000104918 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001021635 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130310 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001692819 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001013871 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000354707 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000066756 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001466593 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001161728 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000755001 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001108426 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000715957 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001868275 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001111711 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001193311 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000100122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000096271) u ON LPAD(CAST(f.cik AS STRING), 10, '0') = u.cik",
+        "sql_sha256": "75acd67a1c325074593ddcf18a51ed1c586f929ef4262f34f5b63db02fc8043e",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:31:18+0800",
+        "elapsed_ms": 6340,
+        "row_count": 1,
+        "columns": [
+          "matched",
+          "loc_equal",
+          "loc_missing"
+        ],
+        "rows": [
+          [
+            11,
+            11,
+            0
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "in_count.RegulatedAndUnregulatedOperatingRevenue.CY2024Q1",
+        "group": "cik_in_count",
+        "tag": "RegulatedAndUnregulatedOperatingRevenue",
+        "period": "CY2024Q1",
+        "sql": "SELECT COUNT(*) AS seeds_present FROM won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2024Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271)",
+        "sql_sha256": "4a73eb37abaa5a15e9afe0d276a73748b3dd437e7363b2a7279707b1b4b76527",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:31:24+0800",
+        "elapsed_ms": 153,
+        "row_count": 1,
+        "columns": [
+          "seeds_present"
+        ],
+        "rows": [
+          [
+            11
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "no_lpad_control.Revenues.CY2025Q1",
+        "group": "cik_no_lpad_control",
+        "tag": "Revenues",
+        "period": "CY2025Q1",
+        "sql": "SELECT COUNT(*) AS matched FROM won.frames_Revenues_CY2025Q1 f JOIN (SELECT cik, name, sic, state FROM won.submission_0001326160 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000092122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000753308 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000004904 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072903 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000065984 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001711269 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001002910 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000811156 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000936340 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000783325 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000352541 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000922224 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001031296 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000788784 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001047862 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072741 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001109357 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000827052 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001004980 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001032208 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000764622 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000784977 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001057877 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001993004 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130464 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000104918 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001021635 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130310 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001692819 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001013871 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000354707 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000066756 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001466593 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001161728 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000755001 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001108426 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000715957 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001868275 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001111711 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001193311 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000100122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000096271) u ON CAST(f.cik AS STRING) = u.cik",
+        "sql_sha256": "b44206f4564a17ffc446e8601f38bde34429f1248595924ed04f57d3feb613c3",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:31:24+0800",
+        "elapsed_ms": 6281,
+        "row_count": 1,
+        "columns": [
+          "matched"
+        ],
+        "rows": [
+          [
+            0
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "seeds_any_tag.CY2025Q1",
+        "group": "cik_any_tag",
+        "period": "CY2025Q1",
+        "sql": "SELECT COUNT(DISTINCT cik) AS seeds_any_tag FROM (SELECT cik FROM won.frames_Revenues_CY2025Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271) UNION ALL SELECT cik FROM won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2025Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271) UNION ALL SELECT cik FROM won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2025Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271)) x",
+        "sql_sha256": "f01ca1319e6b67d3795a28fa1b7757dacdbb8b93b47e1e93d6aaa840a4b5d275",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:31:30+0800",
+        "elapsed_ms": 508,
+        "row_count": 1,
+        "columns": [
+          "seeds_any_tag"
+        ],
+        "rows": [
+          [
+            42
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "seeds_any_tag.CY2024Q1",
+        "group": "cik_any_tag",
+        "period": "CY2024Q1",
+        "sql": "SELECT COUNT(DISTINCT cik) AS seeds_any_tag FROM (SELECT cik FROM won.frames_Revenues_CY2024Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271) UNION ALL SELECT cik FROM won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2024Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271) UNION ALL SELECT cik FROM won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2024Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271)) x",
+        "sql_sha256": "ecde70bacc8db7165a9227743ce1e062088fd04e4b28f3c00586b206e9309e36",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:31:31+0800",
+        "elapsed_ms": 416,
+        "row_count": 1,
+        "columns": [
+          "seeds_any_tag"
+        ],
+        "rows": [
+          [
+            43
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "sic_orphans",
+        "group": "sic_fk_plain_sql",
+        "sql": "SELECT u.cik, u.name, u.sic FROM (SELECT cik, name, sic, state FROM won.submission_0001326160 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000092122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000753308 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000004904 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072903 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000065984 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001711269 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001002910 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000811156 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000936340 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000783325 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000352541 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000922224 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001031296 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000788784 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001047862 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000072741 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001109357 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000827052 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001004980 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001032208 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000764622 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000784977 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001057877 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001993004 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130464 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000104918 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001021635 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001130310 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001692819 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001013871 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000354707 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000066756 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001466593 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001161728 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000755001 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001108426 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000715957 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001868275 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001111711 UNION ALL SELECT cik, name, sic, state FROM won.submission_0001193311 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000100122 UNION ALL SELECT cik, name, sic, state FROM won.submission_0000096271) u LEFT JOIN won.sic_codes r ON r.code = u.sic WHERE r.code IS NULL ORDER BY u.cik",
+        "sql_sha256": "91d528a8f9b09ba3acaf0070f01ae7623c6bc16231ee7f1060b199163b364120",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:31:31+0800",
+        "elapsed_ms": 6834,
+        "row_count": 1,
+        "columns": [
+          "cik",
+          "name",
+          "sic"
+        ],
+        "rows": [
+          [
+            "0001161728",
+            "MGE ENERGY INC",
+            "4900"
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      },
+      {
+        "id": "usl_station_rows",
+        "group": "station_state",
+        "sql": "SELECT id, state, name FROM lightning.metastore.weatherornot.weather_or_not_usl.station ORDER BY id",
+        "sql_sha256": "743da21c6ebc7a94719127aadddb5b193f58f53739d8a8fff76f5084ec3c4dc8",
+        "bound_s": 60,
+        "started_at": "2026-10-24T21:31:38+0800",
+        "elapsed_ms": 44736,
+        "row_count": 57,
+        "columns": [
+          "id",
+          "state",
+          "name"
+        ],
+        "rows": [
+          [
+            "USW00003017",
+            "CO",
+            "DENVER INTL AP"
+          ],
+          [
+            "USW00003927",
+            "TX",
+            "DAL-FTW WSCMO AP"
+          ],
+          [
+            "USW00003940",
+            "MS",
+            "JACKSON INTL AP"
+          ],
+          [
+            "USW00012839",
+            "FL",
+            "MIAMI INTL AP"
+          ],
+          [
+            "USW00012842",
+            "FL",
+            "TAMPA INTL AP"
+          ],
+          [
+            "USW00012916",
+            "LA",
+            "NEW ORLEANS AP"
+          ],
+          [
+            "USW00012960",
+            "TX",
+            "HOUSTON INTERCONTINENTAL AP"
+          ],
+          [
+            "USW00013722",
+            "NC",
+            "RALEIGH AP"
+          ],
+          [
+            "USW00013737",
+            "VA",
+            "NORFOLK INTL AP"
+          ],
+          [
+            "USW00013739",
+            "PA",
+            "PHILA INTL AP"
+          ],
+          [
+            "USW00013740",
+            "VA",
+            "RICHMOND INTL AP"
+          ],
+          [
+            "USW00013781",
+            "DE",
+            "WILMINGTON NEW CASTLE CO AP"
+          ],
+          [
+            "USW00013866",
+            "WV",
+            "CHARLESTON - YEAGER AP"
+          ],
+          [
+            "USW00013874",
+            "GA",
+            "ATLANTA HARTSFIELD-JACKSON INT"
+          ],
+          [
+            "USW00013876",
+            "AL",
+            "BIRMINGHAM AP"
+          ],
+          [
+            "USW00013883",
+            "SC",
+            "COLUMBIA"
+          ],
+          [
+            "USW00013963",
+            "AR",
+            "LITTLE ROCK AP ADAMS FLD"
+          ],
+          [
+            "USW00013967",
+            "OK",
+            "OKLAHOMA CY WILL ROGERS WORLD"
+          ],
+          [
+            "USW00013994",
+            "MO",
+            "ST LOUIS LAMBERT INTL AP"
+          ],
+          [
+            "USW00013996",
+            "KS",
+            "TOPEKA ASOS"
+          ],
+          [
+            "USW00014734",
+            "NJ",
+            "NEWARK LIBERTY INTL AP"
+          ],
+          [
+            "USW00014739",
+            "MA",
+            "BOSTON"
+          ],
+          [
+            "USW00014740",
+            "CT",
+            "HARTFORD-BRADLEY INTL AP"
+          ],
+          [
+            "USW00014745",
+            "NH",
+            "CONCORD ASOS"
+          ],
+          [
+            "USW00014765",
+            "RI",
+            "PROVIDENCE"
+          ],
+          [
+            "USW00014820",
+            "OH",
+            "CLEVELAND"
+          ],
+          [
+            "USW00014821",
+            "OH",
+            "JOHN GLENN INTL AP"
+          ],
+          [
+            "USW00014836",
+            "MI",
+            "LANSING CAPITAL CITY AP"
+          ],
+          [
+            "USW00014837",
+            "WI",
+            "MADISON DANE CO RGNL AP"
+          ],
+          [
+            "USW00014839",
+            "WI",
+            "MILWAUKEE MITCHELL AP"
+          ],
+          [
+            "USW00014842",
+            "IL",
+            "GENERAL WAYNE A DOWNING INTL A"
+          ],
+          [
+            "USW00014913",
+            "MN",
+            "DULUTH"
+          ],
+          [
+            "USW00014922",
+            "MN",
+            "MINNEAPOLIS-ST PAUL INTL AP"
+          ],
+          [
+            "USW00014933",
+            "IA",
+            "DES MOINES INTL AP"
+          ],
+          [
+            "USW00014944",
+            "SD",
+            "SIOUX FALLS"
+          ],
+          [
+            "USW00022521",
+            "HI",
+            "HONOLULU INTL AP"
+          ],
+          [
+            "USW00023050",
+            "NM",
+            "ALBUQUERQUE INTL AP"
+          ],
+          [
+            "USW00023174",
+            "CA",
+            "LOS ANGELES INTL AP"
+          ],
+          [
+            "USW00023183",
+            "AZ",
+            "PHOENIX AP"
+          ],
+          [
+            "USW00023234",
+            "CA",
+            "SAN FRANCISCO INTL AP"
+          ],
+          [
+            "USW00024011",
+            "ND",
+            "BISMARCK"
+          ],
+          [
+            "USW00024018",
+            "WY",
+            "CHEYENNE"
+          ],
+          [
+            "USW00024033",
+            "MT",
+            "BILLINGS INTL AP"
+          ],
+          [
+            "USW00024090",
+            "SD",
+            "RAPID CITY RGNL AP"
+          ],
+          [
+            "USW00024131",
+            "ID",
+            "BOISE AIR TERMINAL"
+          ],
+          [
+            "USW00024229",
+            "OR",
+            "PORTLAND INTL AP"
+          ],
+          [
+            "USW00024233",
+            "WA",
+            "SEATTLE TACOMA AP"
+          ],
+          [
+            "USW00093720",
+            "MD",
+            "SALISBURY-WICOMICO RGNL AP"
+          ],
+          [
+            "USW00093721",
+            "MD",
+            "BALTIMORE-WASHINGTON INTL AP"
+          ],
+          [
+            "USW00093730",
+            "NJ",
+            "ATLANTIC CITY INTL AP"
+          ],
+          [
+            "USW00093817",
+            "IN",
+            "EVANSVILLE RGNL AP"
+          ],
+          [
+            "USW00093819",
+            "IN",
+            "INDIANAPOLIS"
+          ],
+          [
+            "USW00093821",
+            "KY",
+            "LOUISVILLE INTL AP"
+          ],
+          [
+            "USW00094728",
+            "NY",
+            "NY CITY CNTRL PARK"
+          ],
+          [
+            "USW00094823",
+            "PA",
+            "PITTSBURGH ASOS"
+          ],
+          [
+            "USW00094846",
+            "IL",
+            "CHICAGO OHARE INTL AP"
+          ],
+          [
+            "USW00094847",
+            "MI",
+            "DETROIT METRO AP"
+          ]
+        ],
+        "error": null,
+        "timeout": false,
+        "measured": true
+      }
+    ],
+    "results": {
+      "seeds": 43,
+      "cik_lpad": {
+        "Revenues.CY2025Q1": {
+          "tag": "Revenues",
+          "period": "CY2025Q1",
+          "seeds": 43,
+          "lpad_matched": 34,
+          "in_count": 34,
+          "agree": true,
+          "elapsed_ms": 6271
+        },
+        "Revenues.CY2024Q1": {
+          "tag": "Revenues",
+          "period": "CY2024Q1",
+          "seeds": 43,
+          "lpad_matched": 35,
+          "in_count": 35,
+          "agree": true,
+          "elapsed_ms": 6331
+        },
+        "RevenueFromContractWithCustomerExcludingAssessedTax.CY2025Q1": {
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "period": "CY2025Q1",
+          "seeds": 43,
+          "lpad_matched": 21,
+          "in_count": 21,
+          "agree": true,
+          "elapsed_ms": 6165
+        },
+        "RevenueFromContractWithCustomerExcludingAssessedTax.CY2024Q1": {
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "period": "CY2024Q1",
+          "seeds": 43,
+          "lpad_matched": 23,
+          "in_count": 23,
+          "agree": true,
+          "elapsed_ms": 6219
+        },
+        "RegulatedAndUnregulatedOperatingRevenue.CY2025Q1": {
+          "tag": "RegulatedAndUnregulatedOperatingRevenue",
+          "period": "CY2025Q1",
+          "seeds": 43,
+          "lpad_matched": 9,
+          "in_count": 9,
+          "agree": true,
+          "elapsed_ms": 6155
+        },
+        "RegulatedAndUnregulatedOperatingRevenue.CY2024Q1": {
+          "tag": "RegulatedAndUnregulatedOperatingRevenue",
+          "period": "CY2024Q1",
+          "seeds": 43,
+          "lpad_matched": 11,
+          "in_count": 11,
+          "agree": true,
+          "elapsed_ms": 6340
+        }
+      },
+      "cik_no_lpad_control": {
+        "matched": 0,
+        "elapsed_ms": 6281,
+        "measured": true
+      },
+      "cik_any_tag": {
+        "CY2025Q1": {
+          "seeds_with_a_fact": 42,
+          "seeds": 43,
+          "elapsed_ms": 508,
+          "measured": true
+        },
+        "CY2024Q1": {
+          "seeds_with_a_fact": 43,
+          "seeds": 43,
+          "elapsed_ms": 416,
+          "measured": true
+        }
+      },
+      "loc": {
+        "Revenues.CY2025Q1": {
+          "tag": "Revenues",
+          "period": "CY2025Q1",
+          "present": 34,
+          "equal": 34,
+          "different": 0,
+          "missing": 0,
+          "elapsed_ms": 6271
+        },
+        "Revenues.CY2024Q1": {
+          "tag": "Revenues",
+          "period": "CY2024Q1",
+          "present": 35,
+          "equal": 35,
+          "different": 0,
+          "missing": 0,
+          "elapsed_ms": 6331
+        },
+        "RevenueFromContractWithCustomerExcludingAssessedTax.CY2025Q1": {
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "period": "CY2025Q1",
+          "present": 21,
+          "equal": 21,
+          "different": 0,
+          "missing": 0,
+          "elapsed_ms": 6165
+        },
+        "RevenueFromContractWithCustomerExcludingAssessedTax.CY2024Q1": {
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "period": "CY2024Q1",
+          "present": 23,
+          "equal": 23,
+          "different": 0,
+          "missing": 0,
+          "elapsed_ms": 6219
+        },
+        "RegulatedAndUnregulatedOperatingRevenue.CY2025Q1": {
+          "tag": "RegulatedAndUnregulatedOperatingRevenue",
+          "period": "CY2025Q1",
+          "present": 9,
+          "equal": 9,
+          "different": 0,
+          "missing": 0,
+          "elapsed_ms": 6155
+        },
+        "RegulatedAndUnregulatedOperatingRevenue.CY2024Q1": {
+          "tag": "RegulatedAndUnregulatedOperatingRevenue",
+          "period": "CY2024Q1",
+          "present": 11,
+          "equal": 11,
+          "different": 0,
+          "missing": 0,
+          "elapsed_ms": 6340
+        }
+      },
+      "loc_differing_rows": [],
+      "sic": {
+        "measured": true,
+        "seeds": 43,
+        "orphans": [
+          {
+            "cik": "0001161728",
+            "name": "MGE ENERGY INC",
+            "sic": "4900"
+          }
+        ],
+        "joined": 42,
+        "elapsed_ms": 6834,
+        "recorded_run_dq": {
+          "source": "zetaris/README.md, SEC-side verification and DQ (Day 1 onboarding record)",
+          "statement": "RUN DQ sic TABLE lightning.metastore.weatherornot.weather_or_not_usl.utility",
+          "result": {
+            "type": "Foreign Key Constraint",
+            "total": 43,
+            "valid": 42,
+            "invalid": 1
+          },
+          "elapsed_s": 79.1,
+          "invalid_record": {
+            "cik": "0001161728",
+            "name": "MGE ENERGY INC",
+            "ticker": "MGEE",
+            "sic": "4900",
+            "hq_state": "WI"
+          },
+          "invalid_record_statement": "SHOW DQ INVALID RECORD sic TABLE lightning.metastore.weatherornot.weather_or_not_usl.utility",
+          "invalid_record_elapsed_s": 93.3,
+          "note": "SIC 4900 has no row in the company_dns V4 list; MGE Energy is a target-only seed (never a peer)."
+        }
+      },
+      "station": {
+        "seed_stations": 56,
+        "measured": true,
+        "elapsed_ms": 44736,
+        "bound_s": 60,
+        "timeout": false,
+        "error": null,
+        "skipped": false,
+        "usl_rows": 57,
+        "present": 56,
+        "state_equal": 56,
+        "state_different": [],
+        "missing": [],
+        "extra_in_usl": [
+          "USW00013740"
+        ]
+      }
+    },
+    "elapsed_s": 97.6
+  },
+  "peers": {
+    "from_run": "r20261024T204637522f",
+    "target": "0001031296",
+    "utility": "FIRSTENERGY CORP",
+    "period": "CY2025Q1",
+    "count": 39,
+    "by_tag": {
+      "RegulatedAndUnregulatedOperatingRevenue": 4,
+      "Revenues": 32,
+      "RevenueFromContractWithCustomerExcludingAssessedTax": 3
+    },
+    "with_weather": 39,
+    "excluded": [
+      {
+        "cik": "0001057877",
+        "reason": "IDACORP INC: excluded: current period missing (no fact under any of the three tags)"
+      },
+      {
+        "cik": "0001161728",
+        "reason": "MGE ENERGY INC: excluded: SIC 4900 not in 4911, 4931, 4932 (tag RegulatedAndUnregulatedOperatingRevenue)"
+      },
+      {
+        "cik": "0001193311",
+        "reason": "ONCOR ELECTRIC DELIVERY CO LLC: excluded: previous period missing (tag Revenues)"
+      }
+    ],
+    "identical_across_runs": true,
+    "runs": [
+      "r20261024T203050a220",
+      "r20261024T20391416bf",
+      "r20261024T204637522f"
+    ]
+  },
+  "coverage": {
+    "from_run": "r20261024T204637522f",
+    "periods": [
+      "CY2025Q1",
+      "CY2024Q1"
+    ],
+    "stations_in_rows": {
+      "CY2025Q1": 56,
+      "CY2024Q1": 56
+    },
+    "utilities": [
+      {
+        "cik": "0001326160",
+        "name": "Duke Energy CORP",
+        "stations": 9,
+        "present": 9,
+        "coverage": {
+          "CY2025Q1": 0.9888888888888889,
+          "CY2024Q1": 1
+        },
+        "min": 0.9888888888888889,
+        "complete": true
+      },
+      {
+        "cik": "0000092122",
+        "name": "SOUTHERN CO",
+        "stations": 3,
+        "present": 3,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000753308",
+        "name": "NEXTERA ENERGY INC",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000004904",
+        "name": "AMERICAN ELECTRIC POWER CO INC",
+        "stations": 9,
+        "present": 9,
+        "coverage": {
+          "CY2025Q1": 0.9888888888888889,
+          "CY2024Q1": 1
+        },
+        "min": 0.9888888888888889,
+        "complete": true
+      },
+      {
+        "cik": "0000072903",
+        "name": "XCEL ENERGY INC",
+        "stations": 9,
+        "present": 9,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000065984",
+        "name": "ENTERGY CORP /DE/",
+        "stations": 5,
+        "present": 5,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001711269",
+        "name": "Evergy, Inc.",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001002910",
+        "name": "AMEREN CORP",
+        "stations": 3,
+        "present": 3,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000811156",
+        "name": "CMS ENERGY CORP",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 0.9555555555555556,
+          "CY2024Q1": 1
+        },
+        "min": 0.9555555555555556,
+        "complete": true
+      },
+      {
+        "cik": "0000936340",
+        "name": "DTE ENERGY CO",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 0.9555555555555556,
+          "CY2024Q1": 1
+        },
+        "min": 0.9555555555555556,
+        "complete": true
+      },
+      {
+        "cik": "0000783325",
+        "name": "WEC ENERGY GROUP, INC.",
+        "stations": 4,
+        "present": 4,
+        "coverage": {
+          "CY2025Q1": 0.9555555555555556,
+          "CY2024Q1": 1
+        },
+        "min": 0.9555555555555556,
+        "complete": true
+      },
+      {
+        "cik": "0000352541",
+        "name": "ALLIANT ENERGY CORP",
+        "stations": 3,
+        "present": 3,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000922224",
+        "name": "PPL Corp",
+        "stations": 4,
+        "present": 4,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001031296",
+        "name": "FIRSTENERGY CORP",
+        "stations": 9,
+        "present": 9,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000788784",
+        "name": "PUBLIC SERVICE ENTERPRISE GROUP INC",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001047862",
+        "name": "CONSOLIDATED EDISON INC",
+        "stations": 1,
+        "present": 1,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000072741",
+        "name": "EVERSOURCE ENERGY",
+        "stations": 3,
+        "present": 3,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001109357",
+        "name": "EXELON CORP",
+        "stations": 9,
+        "present": 9,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000827052",
+        "name": "EDISON INTERNATIONAL",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001004980",
+        "name": "PG&E Corp",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001032208",
+        "name": "SEMPRA",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000764622",
+        "name": "PINNACLE WEST CAPITAL CORP",
+        "stations": 1,
+        "present": 1,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000784977",
+        "name": "PORTLAND GENERAL ELECTRIC CO /OR/",
+        "stations": 1,
+        "present": 1,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001057877",
+        "name": "IDACORP INC",
+        "stations": 1,
+        "present": 1,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001993004",
+        "name": "NorthWestern Energy Group, Inc.",
+        "stations": 3,
+        "present": 3,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001130464",
+        "name": "BLACK HILLS CORP /SD/",
+        "stations": 4,
+        "present": 4,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000104918",
+        "name": "AVISTA CORP",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001021635",
+        "name": "OGE ENERGY CORP.",
+        "stations": 1,
+        "present": 1,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001130310",
+        "name": "CENTERPOINT ENERGY INC",
+        "stations": 4,
+        "present": 4,
+        "coverage": {
+          "CY2025Q1": 0.9888888888888889,
+          "CY2024Q1": 1
+        },
+        "min": 0.9888888888888889,
+        "complete": true
+      },
+      {
+        "cik": "0001692819",
+        "name": "Vistra Corp.",
+        "stations": 8,
+        "present": 8,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001013871",
+        "name": "NRG ENERGY, INC.",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000354707",
+        "name": "HAWAIIAN ELECTRIC INDUSTRIES INC",
+        "stations": 1,
+        "present": 1,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000066756",
+        "name": "ALLETE INC",
+        "stations": 4,
+        "present": 4,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001466593",
+        "name": "Otter Tail Corp",
+        "stations": 5,
+        "present": 5,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001161728",
+        "name": "MGE ENERGY INC",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000755001",
+        "name": "UNITIL CORP",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001108426",
+        "name": "TXNM ENERGY INC",
+        "stations": 3,
+        "present": 3,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000715957",
+        "name": "DOMINION ENERGY, INC",
+        "stations": 3,
+        "present": 3,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001868275",
+        "name": "Constellation Energy Corp",
+        "stations": 7,
+        "present": 7,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0001111711",
+        "name": "NISOURCE INC.",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 0.9888888888888889,
+          "CY2024Q1": 1
+        },
+        "min": 0.9888888888888889,
+        "complete": true
+      },
+      {
+        "cik": "0001193311",
+        "name": "ONCOR ELECTRIC DELIVERY CO LLC",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000100122",
+        "name": "TUCSON ELECTRIC POWER CO",
+        "stations": 1,
+        "present": 1,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      },
+      {
+        "cik": "0000096271",
+        "name": "TAMPA ELECTRIC CO",
+        "stations": 2,
+        "present": 2,
+        "coverage": {
+          "CY2025Q1": 1,
+          "CY2024Q1": 1
+        },
+        "min": 1,
+        "complete": true
+      }
+    ],
+    "summary": {
+      "utilities": 43,
+      "with_every_station": 43,
+      "min_coverage": 0.9555555555555556,
+      "below_0_9": 0,
+      "not_covered": 0
+    }
+  },
+  "attribution": [
+    {
+      "cik": "0000004904",
+      "utility": "AMERICAN ELECTRIC POWER CO INC",
+      "from_run": "r20261024T203648826a",
+      "runs": [
+        "r20261024T2034350adc",
+        "r20261024T203648826a"
+      ],
+      "identical_across_runs": true,
+      "tag": "Revenues",
+      "g": 0.08709234534492707,
+      "recast": false,
+      "current_accn": "0000004904-25-000061",
+      "previous_original_accn": "0000004904-24-000046",
+      "previous_comparative_accn": "0000004904-25-000061",
+      "delta_w": 0.16861234893913582,
+      "peers": 39,
+      "beta": 0.5287321052010097,
+      "beta_range": {
+        "lo": 0.07462982223736375,
+        "hi": 0.8772494607140022
+      },
+      "theil_sen": 0.40358016588775186,
+      "weather": {
+        "value": 0.0891507622174765,
+        "lo": 0.012583509628352054,
+        "hi": 0.14791509217657808
+      },
+      "industry": {
+        "value": 0.03470915552435659,
+        "lo": -0.01635386944497215,
+        "hi": 0.09021461354150054
+      },
+      "remainder": {
+        "value": -0.03676757239690602,
+        "lo": -0.15103736037315155,
+        "hi": 0.09086270516154717
+      },
+      "bootstrap": {
+        "resamples": 300,
+        "valid": 300,
+        "skipped_zero_variance": 0,
+        "seed": 7
+      },
+      "coverage": 0.9888888888888889,
+      "confidence": "high",
+      "ratio": 1.0236348770307784,
+      "verdict": "supported",
+      "recast_conflicts": 1
+    },
+    {
+      "cik": "0001031296",
+      "utility": "FIRSTENERGY CORP",
+      "from_run": "r20261024T204637522f",
+      "runs": [
+        "r20261024T203050a220",
+        "r20261024T20391416bf",
+        "r20261024T204637522f"
+      ],
+      "identical_across_runs": true,
+      "tag": "Revenues",
+      "g": 0.14542135686035898,
+      "recast": false,
+      "current_accn": "0001031296-25-000017",
+      "previous_original_accn": "0001031296-24-000026",
+      "previous_comparative_accn": "0001031296-25-000017",
+      "delta_w": 0.1618968398838543,
+      "peers": 39,
+      "beta": 0.5065257246036571,
+      "beta_range": {
+        "lo": 0.10121282138746253,
+        "hi": 0.8639498318971774
+      },
+      "theil_sen": 0.3056936800029751,
+      "weather": {
+        "value": 0.08200491413321155,
+        "lo": 0.01638603593835917,
+        "hi": 0.13987074760234017
+      },
+      "industry": {
+        "value": 0.028653842758497555,
+        "lo": -0.018138934895090393,
+        "hi": 0.08719808771518327
+      },
+      "remainder": {
+        "value": 0.034762599968649874,
+        "lo": -0.08164747845716445,
+        "hi": 0.1471742558170902
+      },
+      "bootstrap": {
+        "resamples": 300,
+        "valid": 300,
+        "skipped_zero_variance": 0,
+        "seed": 7
+      },
+      "coverage": 1,
+      "confidence": "high",
+      "ratio": 0.5639124534641556,
+      "verdict": "supported",
+      "recast_conflicts": 0
+    }
+  ],
+  "dq": {
+    "ran_at": "2026-10-24T19:31:39+0800",
+    "rule": "coverage_ok",
+    "table": "lightning.metastore.weatherornot.weather_or_not_usl.weather_quarter",
+    "elapsed_s": 739.3,
+    "ok": true,
+    "run": {
+      "total": 342,
+      "valid": 342,
+      "invalid": 0,
+      "elapsed_s": 557.2,
+      "columns": [
+        "name",
+        "table",
+        "type",
+        "total_record",
+        "valid_record",
+        "invalid_record"
+      ],
+      "row": [
+        "coverage_ok",
+        "weather_quarter",
+        "Custom Data Quality",
+        342,
+        342,
+        0
+      ]
+    },
+    "invalid_rows": [],
+    "invalid_columns": [
+      "station_id",
+      "year",
+      "quarter",
+      "hdd",
+      "cdd",
+      "days_observed",
+      "coverage"
+    ],
+    "statements": [
+      {
+        "template_id": "dq_run_coverage",
+        "sql": "RUN DQ coverage_ok TABLE lightning.metastore.weatherornot.weather_or_not_usl.weather_quarter",
+        "sql_sha256": "381303d9e998841f55b402b1b6ba43ef87762372c2b2f9a1a8d056323264b0e8",
+        "timeout_s": 600,
+        "started_at": "2026-10-24T19:31:39+0800",
+        "elapsed_s": 557.2,
+        "columns": [
+          "name",
+          "table",
+          "type",
+          "total_record",
+          "valid_record",
+          "invalid_record"
+        ],
+        "rows": [
+          [
+            "coverage_ok",
+            "weather_quarter",
+            "Custom Data Quality",
+            342,
+            342,
+            0
+          ]
+        ],
+        "error": null,
+        "row_count": 1
+      },
+      {
+        "template_id": "dq_invalid",
+        "sql": "SHOW DQ INVALID RECORD coverage_ok TABLE lightning.metastore.weatherornot.weather_or_not_usl.weather_quarter",
+        "sql_sha256": "6092b2c0008c9b4accaf163ade2bb2b3f8164a748e38ab351541261a39de7fa6",
+        "timeout_s": 600,
+        "started_at": "2026-10-24T19:40:57+0800",
+        "elapsed_s": 181.7,
+        "columns": [
+          "station_id",
+          "year",
+          "quarter",
+          "hdd",
+          "cdd",
+          "days_observed",
+          "coverage"
+        ],
+        "rows": [],
+        "error": null,
+        "row_count": 0
+      }
+    ],
+    "sic_fk": {
+      "source": "zetaris/README.md, SEC-side verification and DQ (Day 1 onboarding record)",
+      "statement": "RUN DQ sic TABLE lightning.metastore.weatherornot.weather_or_not_usl.utility",
+      "result": {
+        "type": "Foreign Key Constraint",
+        "total": 43,
+        "valid": 42,
+        "invalid": 1
+      },
+      "elapsed_s": 79.1,
+      "invalid_record": {
+        "cik": "0001161728",
+        "name": "MGE ENERGY INC",
+        "ticker": "MGEE",
+        "sic": "4900",
+        "hq_state": "WI"
+      },
+      "invalid_record_statement": "SHOW DQ INVALID RECORD sic TABLE lightning.metastore.weatherornot.weather_or_not_usl.utility",
+      "invalid_record_elapsed_s": 93.3,
+      "note": "SIC 4900 has no row in the company_dns V4 list; MGE Energy is a target-only seed (never a peer)."
+    }
+  },
+  "runs": [
+    {
+      "run_id": "r20261024T203050a220",
+      "cik": "0001031296",
+      "utility": "FIRSTENERGY CORP",
+      "period": "CY2025Q1",
+      "claim": "colder weather",
+      "started_at": "2026-10-24T12:30:50.151Z",
+      "source": "data/runs",
+      "mode": "cold",
+      "chunks": 5,
+      "wall_ms": 84146,
+      "planner_calls": 9,
+      "valid_first_try": 9,
+      "repaired": 0,
+      "fallbacks": 0,
+      "tool_calls": 9,
+      "tool_calls_by_model": 9,
+      "median_tokens_per_s": 140.67830388858278,
+      "memo": {
+        "source": "model",
+        "words": 135,
+        "attempts": 2,
+        "tokens_per_s": 146.8719668456135,
+        "drafts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "words": 68,
+            "unknown_numbers": 0
+          },
+          {
+            "attempt": 2,
+            "ok": true,
+            "words": 135,
+            "unknown_numbers": 0
+          }
+        ]
+      },
+      "evidence": {
+        "records": 20,
+        "complete_fields": 20,
+        "unresolved_object_names": 11,
+        "e_complete": 9,
+        "e_complete_ratio": 0.45,
+        "matches_run_quality": true
+      },
+      "claims": {
+        "total": 19,
+        "with_evidence": 19,
+        "e_cov": 1,
+        "matches_run_quality": true
+      },
+      "skipped_steps": [],
+      "weather_quarter_ms": {
+        "current": 18231,
+        "previous": 18391
+      },
+      "memo_ms": 3192,
+      "verdict": "supported",
+      "confidence": "high",
+      "dq_label": "pass",
+      "recast_conflicts": 0,
+      "cloud_model_calls": 0,
+      "refused_hosts": 0,
+      "model": "nemotron-3-nano:4b",
+      "think": true
+    },
+    {
+      "run_id": "r20261024T2034350adc",
+      "cik": "0000004904",
+      "utility": "AMERICAN ELECTRIC POWER CO INC",
+      "period": "CY2025Q1",
+      "claim": "favorable weather",
+      "started_at": "2026-10-24T12:34:35.825Z",
+      "source": "data/runs",
+      "mode": "cold",
+      "chunks": 5,
+      "wall_ms": 99727,
+      "planner_calls": 9,
+      "valid_first_try": 8,
+      "repaired": 1,
+      "fallbacks": 0,
+      "tool_calls": 9,
+      "tool_calls_by_model": 9,
+      "median_tokens_per_s": 140.56064957761524,
+      "memo": {
+        "source": "template",
+        "words": 243,
+        "attempts": 2,
+        "tokens_per_s": 147.46867387917226,
+        "drafts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "words": 95,
+            "unknown_numbers": 0
+          },
+          {
+            "attempt": 2,
+            "ok": false,
+            "words": 95,
+            "unknown_numbers": 0
+          }
+        ]
+      },
+      "evidence": {
+        "records": 20,
+        "complete_fields": 20,
+        "unresolved_object_names": 11,
+        "e_complete": 9,
+        "e_complete_ratio": 0.45,
+        "matches_run_quality": true
+      },
+      "claims": {
+        "total": 19,
+        "with_evidence": 19,
+        "e_cov": 1,
+        "matches_run_quality": true
+      },
+      "skipped_steps": [],
+      "weather_quarter_ms": {
+        "current": 18681,
+        "previous": 18576
+      },
+      "memo_ms": 6636,
+      "verdict": "supported",
+      "confidence": "high",
+      "dq_label": "pass",
+      "recast_conflicts": 1,
+      "cloud_model_calls": 0,
+      "refused_hosts": 0,
+      "model": "nemotron-3-nano:4b",
+      "think": true
+    },
+    {
+      "run_id": "r20261024T203648826a",
+      "cik": "0000004904",
+      "utility": "AMERICAN ELECTRIC POWER CO INC",
+      "period": "CY2025Q1",
+      "claim": "favorable weather",
+      "started_at": "2026-10-24T12:36:48.574Z",
+      "source": "data/runs",
+      "mode": "warm",
+      "chunks": 4,
+      "wall_ms": 100650,
+      "planner_calls": 8,
+      "valid_first_try": 7,
+      "repaired": 1,
+      "fallbacks": 0,
+      "tool_calls": 8,
+      "tool_calls_by_model": 8,
+      "median_tokens_per_s": 141.19280309403246,
+      "memo": {
+        "source": "template",
+        "words": 243,
+        "attempts": 2,
+        "tokens_per_s": 146.42271016234616,
+        "drafts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "words": 95,
+            "unknown_numbers": 0
+          },
+          {
+            "attempt": 2,
+            "ok": false,
+            "words": 95,
+            "unknown_numbers": 0
+          }
+        ]
+      },
+      "evidence": {
+        "records": 20,
+        "complete_fields": 20,
+        "unresolved_object_names": 0,
+        "e_complete": 20,
+        "e_complete_ratio": 1,
+        "matches_run_quality": true
+      },
+      "claims": {
+        "total": 19,
+        "with_evidence": 19,
+        "e_cov": 1,
+        "matches_run_quality": true
+      },
+      "skipped_steps": [
+        {
+          "item": "tag_chosen",
+          "memoryId": "mem-61"
+        }
+      ],
+      "weather_quarter_ms": {
+        "current": 19234,
+        "previous": 18317
+      },
+      "memo_ms": 2805,
+      "verdict": "supported",
+      "confidence": "high",
+      "dq_label": "pass",
+      "recast_conflicts": 1,
+      "cloud_model_calls": 0,
+      "refused_hosts": 0,
+      "model": "nemotron-3-nano:4b",
+      "think": true
+    },
+    {
+      "run_id": "r20261024T20391416bf",
+      "cik": "0001031296",
+      "utility": "FIRSTENERGY CORP",
+      "period": "CY2025Q1",
+      "claim": "colder weather",
+      "started_at": "2026-10-24T12:39:14.725Z",
+      "source": "data/runs",
+      "mode": "warm",
+      "chunks": 4,
+      "wall_ms": 105501,
+      "planner_calls": 8,
+      "valid_first_try": 7,
+      "repaired": 1,
+      "fallbacks": 0,
+      "tool_calls": 8,
+      "tool_calls_by_model": 8,
+      "median_tokens_per_s": 140.18358451654996,
+      "memo": {
+        "source": "model",
+        "words": 184,
+        "attempts": 1,
+        "tokens_per_s": 148.5487406986825,
+        "drafts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "words": 184,
+            "unknown_numbers": 0
+          }
+        ]
+      },
+      "evidence": {
+        "records": 20,
+        "complete_fields": 20,
+        "unresolved_object_names": 0,
+        "e_complete": 20,
+        "e_complete_ratio": 1,
+        "matches_run_quality": true
+      },
+      "claims": {
+        "total": 19,
+        "with_evidence": 19,
+        "e_cov": 1,
+        "matches_run_quality": true
+      },
+      "skipped_steps": [
+        {
+          "item": "tag_chosen",
+          "memoryId": "mem-49"
+        }
+      ],
+      "weather_quarter_ms": {
+        "current": 18482,
+        "previous": 18368
+      },
+      "memo_ms": 2700,
+      "verdict": "supported",
+      "confidence": "high",
+      "dq_label": "pass",
+      "recast_conflicts": 0,
+      "cloud_model_calls": 0,
+      "refused_hosts": 0,
+      "model": "nemotron-3-nano:4b",
+      "think": true
+    },
+    {
+      "run_id": "r20261024T204637522f",
+      "cik": "0001031296",
+      "utility": "FIRSTENERGY CORP",
+      "period": "CY2025Q1",
+      "claim": "colder weather",
+      "started_at": "2026-10-24T12:46:37.596Z",
+      "source": "data/runs",
+      "mode": "warm",
+      "chunks": 4,
+      "wall_ms": 133226,
+      "planner_calls": 8,
+      "valid_first_try": 5,
+      "repaired": 2,
+      "fallbacks": 1,
+      "tool_calls": 8,
+      "tool_calls_by_model": 7,
+      "median_tokens_per_s": 139.48589699538883,
+      "memo": {
+        "source": "model",
+        "words": 184,
+        "attempts": 1,
+        "tokens_per_s": 148.54598240885466,
+        "drafts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "words": 184,
+            "unknown_numbers": 0
+          }
+        ]
+      },
+      "evidence": {
+        "records": 20,
+        "complete_fields": 20,
+        "unresolved_object_names": 0,
+        "e_complete": 20,
+        "e_complete_ratio": 1,
+        "matches_run_quality": true
+      },
+      "claims": {
+        "total": 19,
+        "with_evidence": 19,
+        "e_cov": 1,
+        "matches_run_quality": true
+      },
+      "skipped_steps": [
+        {
+          "item": "tag_chosen",
+          "memoryId": "mem-49"
+        }
+      ],
+      "weather_quarter_ms": {
+        "current": 18419,
+        "previous": 18293
+      },
+      "memo_ms": 2732,
+      "verdict": "supported",
+      "confidence": "high",
+      "dq_label": "pass",
+      "recast_conflicts": 0,
+      "cloud_model_calls": 0,
+      "refused_hosts": 0,
+      "model": "nemotron-3-nano:4b",
+      "think": true
+    }
+  ],
+  "totals": {
+    "runs": 5,
+    "planner_calls": 42,
+    "valid_first_try": 36,
+    "repaired": 5,
+    "fallbacks": 1,
+    "tool_calls_by_model": 41,
+    "memo_drafts": 8,
+    "memo_drafts_with_unknown_numbers": 0,
+    "model_memos": 3,
+    "template_memos": 2,
+    "evidence_records": 100,
+    "evidence_complete": 78,
+    "claims": 95,
+    "claims_with_evidence": 95,
+    "cloud_model_calls": 0,
+    "refused_hosts": 0
+  },
+  "cold_vs_warm": {
+    "all": {
+      "cold": {
+        "runs": 2,
+        "run_ids": [
+          "r20261024T203050a220",
+          "r20261024T2034350adc"
+        ],
+        "chunks_mean": 5,
+        "wall_ms_mean": 91936.5,
+        "wall_ms_min": 84146,
+        "wall_ms_max": 99727,
+        "planner_calls_mean": 9,
+        "skipped_steps_mean": 0
+      },
+      "warm": {
+        "runs": 3,
+        "run_ids": [
+          "r20261024T203648826a",
+          "r20261024T20391416bf",
+          "r20261024T204637522f"
+        ],
+        "chunks_mean": 4,
+        "wall_ms_mean": 113125.66666666667,
+        "wall_ms_min": 100650,
+        "wall_ms_max": 133226,
+        "planner_calls_mean": 8,
+        "skipped_steps_mean": 1
+      }
+    },
+    "per_cik": {
+      "0001031296": {
+        "utility": "FIRSTENERGY CORP",
+        "cold": {
+          "runs": 1,
+          "run_ids": [
+            "r20261024T203050a220"
+          ],
+          "chunks_mean": 5,
+          "wall_ms_mean": 84146,
+          "wall_ms_min": 84146,
+          "wall_ms_max": 84146,
+          "planner_calls_mean": 9,
+          "skipped_steps_mean": 0
+        },
+        "warm": {
+          "runs": 2,
+          "run_ids": [
+            "r20261024T20391416bf",
+            "r20261024T204637522f"
+          ],
+          "chunks_mean": 4,
+          "wall_ms_mean": 119363.5,
+          "wall_ms_min": 105501,
+          "wall_ms_max": 133226,
+          "planner_calls_mean": 8,
+          "skipped_steps_mean": 1
+        }
+      },
+      "0000004904": {
+        "utility": "AMERICAN ELECTRIC POWER CO INC",
+        "cold": {
+          "runs": 1,
+          "run_ids": [
+            "r20261024T2034350adc"
+          ],
+          "chunks_mean": 5,
+          "wall_ms_mean": 99727,
+          "wall_ms_min": 99727,
+          "wall_ms_max": 99727,
+          "planner_calls_mean": 9,
+          "skipped_steps_mean": 0
+        },
+        "warm": {
+          "runs": 1,
+          "run_ids": [
+            "r20261024T203648826a"
+          ],
+          "chunks_mean": 4,
+          "wall_ms_mean": 100650,
+          "wall_ms_min": 100650,
+          "wall_ms_max": 100650,
+          "planner_calls_mean": 8,
+          "skipped_steps_mean": 1
+        }
+      }
+    }
+  }
+}
