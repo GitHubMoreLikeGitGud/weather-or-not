@@ -62,7 +62,7 @@ Which tag a utility reports its quarterly revenue under differs: Duke Energy and
 ### Timings (JDBC statement time, one connection)
 
 - `CREATE LIGHTNING REST TABLE`: frames 338-1,421 ms (median about 450 ms), companyconcept 328-467 ms, submissions 313-388 ms, company_dns V4 1,484 ms. `CREATE SCHEMASTORE VIEW` 55-80 ms (no source call).
-- `CACHE TABLE` on a view: frames 237-1,304 ms, concept 221-340 ms, submission 327-348 ms, `won.sic_codes` 200 ms; `CACHE TABLE WON_DNS.sic_codes_v4_raw` 566 ms. The whole of `01_won_sec_create.sql` (50 statements, 17 SEC requests for CREATE and 17 for CACHE) ran in under a minute.
+- `CACHE TABLE` on a view: frames 237-1,304 ms, concept 221-340 ms, submission 327-348 ms, `won.sic_codes` 200 ms; `CACHE TABLE WON_DNS.sic_codes_v4_raw` 566 ms. The whole of `01_won_sec_create.sql` (50 statements, 16 SEC requests for CREATE and 16 for CACHE) ran in under a minute.
 - Cached reads: `COUNT(*)` 150-250 ms; a filer lookup 160-230 ms; the LPAD join of a frames view with the four submission views 450-890 ms; the four-way loc agreement query 891 ms. `DESCRIBE` on a raw table 26-37 ms, on a view 97-120 ms.
 - Through the gateway (`POST /sql/template`, 127.0.0.1:8793): 200-370 ms wall for `frames_count`, `frames_fact`, `concept_history` (293 rows), `submission`, `sic`, all with `cache_state: hit`.
 
