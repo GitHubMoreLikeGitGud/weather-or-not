@@ -140,3 +140,49 @@ The demo question once more on the committed tree, with the tag remembered (mem-
 - JSON valid on the first reply: 5 of 8; repaired 2; fallback 1. Call 2.2's first reply named `RegulatedAndUnregulatedOperatingRevenue` as the tag for `get_weather` and was rejected by the host's tag check (the schema error added after the AEP warm run); the repair chose the same tool with the utility's tag. Calls 4.1 and 4.2 returned empty content on the first reply (thinking used the whole 2,048-token output budget), and 4.2's repair reply was empty as well, so the host took the `finalize` step itself. The fallback produced the same verdict and the same memo path as a model-chosen `finalize` would have.
 - Planner tokens 20,263 in / 11,435 out; median 139.5 tok/s; carryover at most 298 tokens; first-call prompts 5,504 against 10,439 estimated (47.3% less). Memo 1,280 in / 360 out, 148.5 tok/s, 2.7 s. `weather_quarter` 18,419 and 18,293 ms. World Model 769 events before and after. Wall 133.2 s: the two repair rounds and the failed repair add about 50 s over the earlier warm run.
 - Across the five runs: 42 planner calls, 36 valid on the first reply, 5 repaired, 1 fallback. Of the six invalid first replies, five were empty content from thinking past `num_predict` (four on `finalize`, one on `not_tested`) and one was the wrong tag; the one fallback was `finalize` after an empty repair reply too. The `finalize` step is where the model runs out of output budget most often.
+
+## Clean re-runs on the changed settings (24 Oct 2026, 21:38 to 21:47 SGT)
+
+The runtime state (H-MEM, World Model, runs, evidence) was reset and the warm-up plus the four questions ran again on the committed code with the three changes listed under Settings: planner output budget 3,072 tokens, the repair after an empty length-cut reply with think off, and the 100 to 250 word memo policy. Every number below is read from `data/runs/<id>/run.json` by a script; the memo column is the kept draft.
+
+| | FE cold | AEP cold | FE warm | AEP warm |
+|---|---|---|---|---|
+| run_id | r20261024T213805fb4e | r20261024T214009cd85 | r20261024T214205a2e5 | r20261024T2145294e73 |
+| Chunks | 5 | 5 | 4 | 4 |
+| Planner calls | 9 | 9 | 8 | 8 |
+| Valid first try | 9 | 7 | 6 | 6 |
+| Repaired | 0 | 2 | 2 | 2 |
+| Repairs run with think off | 0 | 1 | 2 | 1 |
+| Fallback steps | 0 | 0 | 0 | 0 |
+| Tool calls chosen by the model | 9 | 9 | 8 | 8 |
+| Memo (source, words, attempts) | model, 184 words, 1 | model, 176 words, 1 | model, 184 words, 1 | model, 176 words, 1 |
+| Numbers wrong in any memo draft | 0 | 0 | 0 | 0 |
+| Planner tokens in / out (measured) | 15,101 / 5,699 | 20,356 / 8,647 | 17,891 / 9,895 | 19,688 / 8,264 |
+| Median planner tok/s | 140.4 | 139.5 | 139.2 | 139.8 |
+| Memo tok/s | 145.5 | 147.8 | 149.2 | 140.5 |
+| Max carryover (estimated) | 284 | 358 | 298 | 387 |
+| First-call prompts vs full-history estimate | 6,615 / 12,956 | 6,812 / 13,770 | 5,521 / 10,251 | 5,827 / 11,441 |
+| `weather_quarter` current / previous (ms) | 20,005 / 20,959 | 18,308 / 18,576 | 23,938 / 18,804 | 18,212 / 18,564 |
+| Skipped from memory | none | none | tag_chosen (mem-49) | tag_chosen (mem-61) |
+| Wall (ms) | 97,457 | 114,942 | 128,063 | 112,654 |
+| Cloud model calls | 0 | 0 | 0 | 0 |
+
+Across the four: 34 planner calls, 28 valid on the first reply, 6 repaired (4 of the repair rounds ran with think off), 0 fallback steps; 34 tool calls chosen by the model; 4 memo drafts, 4 kept on the first draft, 0 numbers that were not a tool output; 18 chunks; wall 453,116 ms in total (113.3 s mean).
+
+The six repaired calls, from the per-call records:
+
+| Run | Call | First reply | Repair | Repair think | Prompt tokens (first / repair) | Output tokens (both replies) | Wall ms |
+|---|---|---|---|---|---|---|---|
+| AEP cold | 4.1 | `attribute` with the tag `RegulatedAndUnregulatedOperatingRevenue` (not AEP's tag; schema error) | valid `attribute` | on | 1,837 / 4,178 | 952 | 7,132 |
+| AEP cold | 4.2 | empty content, cut at num_predict | valid `not_tested` | off | 1,966 / 3,983 | 3,414 | 24,122 |
+| FE warm | 4.1 | empty content, cut at num_predict | valid `not_tested` | off | 1,597 / 3,245 | 3,367 | 23,661 |
+| FE warm | 4.2 | empty content, cut at num_predict | valid `finalize` | off | 1,695 / 3,441 | 3,358 | 23,771 |
+| AEP warm | 2.1 | `get_revenue` with the tag `RevenueFromContractWithCustomerExcludingAssessedTax` (schema error) | valid `get_revenue` | on | 1,680 / 3,763 | 1,056 | 8,059 |
+| AEP warm | 4.2 | empty content, cut at num_predict | valid `finalize` | off | 1,942 / 3,935 | 3,414 | 24,265 |
+
+What the four runs show, stated plainly:
+
+- The larger budget did not stop the empty replies: four first replies still spent the whole 3,072-token output budget thinking (all on the `not_tested` and `finalize` steps, the same two steps as before). Every one of those four was repaired by the think-off round on its first try, and the deterministic fallback did not run in any of the four runs (in the five earlier runs it ran once, when the think-on repair was empty too). The think-off repair costs about 24 s per occurrence (the cut first reply plus the repair), which is why the warm runs are not faster in wall time.
+- The other two repairs were the tag check (commit 8727309) rejecting a tag that is not the utility's; the repair chose the same tool with the right tag.
+- The memo policy kept every first draft (184, 176, 184, 176 words, every number a tool output); the template memo was not needed. In the five earlier runs the template was used twice and a second draft once.
+- The cards equal the earlier runs' to the printed digit (FE beta 0.5065, weather +8.20%; AEP beta 0.5287, weather +8.92%; 39 peers, supported, high, DQ pass in all four; the AEP recast conflict recorded again, rule R1).
