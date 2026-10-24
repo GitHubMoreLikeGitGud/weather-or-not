@@ -6,12 +6,18 @@ Every number here is measured on the live stack (local Zetaris through the gatew
 
 | Job | Model | think | temperature | seed | num_ctx | num_predict | format |
 |---|---|---|---|---|---|---|---|
-| planner (one step of the chain) | `nemotron-3-nano:4b` (Ollama) | on | 0 | 7 | 8192 | 2048 | JSON schema: thought, action {tool from the dynamic enum, input}, state, done |
+| planner (one step of the chain) | `nemotron-3-nano:4b` (Ollama) | on | 0 | 7 | 8192 | 3072 (2048 in the runs of 24 Oct 20:30 to 20:46 below) | JSON schema: thought, action {tool from the dynamic enum, input}, state, done |
 | memo | `nemotron-3-nano:4b` | off | 0 | 7 | 8192 | 1024 | JSON schema: {memo} |
 
 The model host must be a loopback address; any other host is refused and counted (`telemetry.refused_model_hosts` in every run, 0 in every run below). Cloud model calls: 0.
 
-The planner picks a tool from the tools the host allows at that step; the host runs the tool, records the evidence and gives the model a digest of at most 800 tokens; at most two tool calls per chunk, carryover state at most 800 tokens, at most 10 chunks. An invalid reply gets one repair round; a second invalid reply (or no action while the checklist is open) makes the host take the next checklist step itself ("fallback"). The memo's every number is string-matched against the formatted tool outputs; a draft with any other number, or far outside 150-250 words, is rejected once with the reason, then the template memo is used.
+The planner picks a tool from the tools the host allows at that step; the host runs the tool, records the evidence and gives the model a digest of at most 800 tokens; at most two tool calls per chunk, carryover state at most 800 tokens, at most 10 chunks. An invalid reply gets one repair round; a second invalid reply (or no action while the checklist is open) makes the host take the next checklist step itself ("fallback"). The memo's every number is string-matched against the formatted tool outputs; a draft with any other number is rejected once with the reason, then the template memo is used.
+
+Settings changed after the five runs below (24 Oct, after 20:46), before the clean re-runs recorded at the end of this file:
+
+- Planner `num_predict` 2,048 to 3,072 for every planner step. In the five runs, five of the six invalid first replies were empty content with Ollama `done_reason` `length`: the model spent the whole 2,048-token output budget on thinking and never started the JSON.
+- When a first reply is empty with `done_reason` `length`, the repair round runs with think off: the same schema and the same prompt plus the repair note, so the budget goes to the JSON. A repair after any other error keeps think on. The deterministic fallback stays the last resort. Each planner call records `repair_think_off` and the run summary counts `planner_repairs_think_off`.
+- Memo length policy: a draft whose numbers all match is kept at 100 to 250 words; the template memo is used only below 100 words, above 250 or on a number that is not a tool output. The retry wording that names the missing length and the paragraphs to add stays. In the five runs, four 95-word drafts with every number right were rejected on length alone.
 
 ## FirstEnergy, CY2025Q1 vs CY2024Q1, cold run (run r20261024T203050a220, 24 Oct 2026 20:30 SGT)
 

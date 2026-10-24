@@ -4,7 +4,10 @@
 // happens in both think modes; think on roughly doubles each step, so this switch slows the
 // growth but does not stop it. The RAM guard in ollama.ts is the protection.
 // Starting values carried over from ClearShelf (same author, Apache-2.0); docs/nemotron-bench.md
-// records what this entry measures.
+// records what this entry measures. The planner output budget was raised from 2,048 to 3,072
+// tokens after five live runs in which the model used the whole budget thinking on five
+// planner calls and returned no JSON (D3); the repair round after such an empty reply runs
+// with think off (generator.ts).
 
 export type JobName = "planner" | "memo";
 
@@ -14,7 +17,7 @@ export interface JobSettings {
 }
 
 export const ADOPTED_JOB_SETTINGS: Readonly<Record<JobName, Readonly<JobSettings>>> = {
-  planner: { think: true, num_predict: 2048 },
+  planner: { think: true, num_predict: 3072 },
   memo: { think: false, num_predict: 1024 },
 };
 

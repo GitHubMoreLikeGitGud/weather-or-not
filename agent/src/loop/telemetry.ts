@@ -23,6 +23,8 @@ export interface PlannerCallRecord {
   /** Errors of the first reply, also when the repair round fixed them. */
   first_errors: string[];
   think: boolean;
+  /** The repair round ran with think off because the first reply was empty with done_reason "length" (D3). */
+  repair_think_off: boolean;
   /** The model's action as it chose it (null when it chose none). */
   chosen: { tool: string; input: Record<string, unknown> } | null;
   /** The model's checklist echo differed from the host checklist (the host's wins). */
@@ -101,6 +103,8 @@ export interface TelemetrySummary {
   planner_valid: number;
   planner_valid_first_try: number;
   planner_repaired: number;
+  /** Planner calls whose repair round ran with think off (an empty first reply cut at num_predict), valid or not. */
+  planner_repairs_think_off: number;
   fallback_steps: number;
   tool_calls: number;
   tool_calls_by_model: number;
@@ -237,6 +241,7 @@ export class LoopTelemetry {
       planner_valid: pc.filter((c) => c.valid).length,
       planner_valid_first_try: pc.filter((c) => c.valid_first_try).length,
       planner_repaired: pc.filter((c) => c.valid && !c.valid_first_try).length,
+      planner_repairs_think_off: pc.filter((c) => c.repair_think_off).length,
       fallback_steps: tc.filter((c) => c.source === "fallback").length,
       tool_calls: tc.length,
       tool_calls_by_model: tc.filter((c) => c.source === "model").length,

@@ -6,8 +6,10 @@
 //      planner JSON constrained by a schema.
 //   2. A chosen action is run by the host (tools.ts): the NEEDS_TOOL executor. Its digest
 //      (at most 800 tokens) goes to a second planner call in the same chunk.
-//   3. At most two tool calls per chunk. An invalid reply gets one repair round; if it is
-//      still invalid, or the model picks no action while the checklist is open, the host
+//   3. At most two tool calls per chunk. An invalid reply gets one repair round (the same
+//      schema and prompt plus the repair note; when the first reply was empty because the
+//      model spent the whole output budget thinking, the repair runs with think off); if it
+//      is still invalid, or the model picks no action while the checklist is open, the host
 //      takes the deterministic next step from the checklist ("fallback step").
 //   4. The chunk returns typed marker text: content, one <NEEDS_TOOL .../> per executed
 //      call (for the record), [TASK_COMPLETE] once the checklist is complete, and
@@ -193,6 +195,13 @@ interface PlanResult {
   validFirstTry: boolean;
   firstPromptTokens: number;
   callError: string | null;
+  /** The repair round ran with think off (D3: empty first reply, done_reason "length"). */
+  repairThinkOff: boolean;
+}
+
+/** D3: an empty reply cut at num_predict means the thinking ate the budget; the repair then runs with think off. */
+export function repairWithoutThinking(first: Pick<ChatResult, "content" | "doneReason">, think: boolean): boolean {
+  return think && first.content.trim() === "" && first.doneReason === "length";
 }
 
 export class PlannerSession {
@@ -280,7 +289,7 @@ export class PlannerSession {
   private async plan(messages: ChatMessage[], tools: LoopToolDef[], abortSignal?: AbortSignal): Promise<PlanResult> {
     const ctx = this.ctx;
     if (!this.deps.ollama) {
-      return { output: null, errors: ["no model wired (deterministic run)"], firstErrors: ["no model wired (deterministic run)"], results: [], promptChars: 0, validFirstTry: false, firstPromptTokens: 0, callError: null };
+      return { output: null, errors: ["no model wired (deterministic run)"], firstErrors: ["no model wired (deterministic run)"], results: [], promptChars: 0, validFirstTry: false, firstPromptTokens: 0, callError: null, repairThinkOff: false };
     }
     const ids = this.deps.evidence.all().slice(ctx.evStart).map((e) => e.id);
     const schema = loopPlannerSchema(tools.map((t) => t.name), ids);
@@ -289,11 +298,13 @@ export class PlannerSession {
     let errors: string[] = [];
     let firstErrors: string[] = [];
     let callError: string | null = null;
+    let think = this.think;
+    let repairThinkOff = false;
     const promptChars = messages.reduce((s, m) => s + m.content.length, 0);
     for (let attempt = 1; attempt <= 2; attempt++) {
       let res: ChatResult;
       try {
-        res = await this.deps.ollama.chat({ messages: msgs, schema, think: this.think, options: { num_predict: this.numPredict }, signal: abortSignal });
+        res = await this.deps.ollama.chat({ messages: msgs, schema, think, options: { num_predict: this.numPredict }, signal: abortSignal });
       } catch (e) {
         callError = (e as Error).message.slice(0, 200);
         errors = [`planner call failed: ${callError}`];
@@ -317,18 +328,24 @@ export class PlannerSession {
             else errors.push(...d.checkInput(input, ctx));
           }
           if (errors.length === 0) {
-            return { output: out, errors: [], firstErrors, results, promptChars, validFirstTry: attempt === 1, firstPromptTokens: results[0]!.metrics.promptTokens, callError };
+            return { output: out, errors: [], firstErrors, results, promptChars, validFirstTry: attempt === 1, firstPromptTokens: results[0]!.metrics.promptTokens, callError, repairThinkOff };
           }
         }
       }
-      if (attempt === 1) firstErrors = errors;
+      if (attempt === 1) {
+        firstErrors = errors;
+        if (repairWithoutThinking(res, think)) {
+          think = false;
+          repairThinkOff = true;
+        }
+      }
       msgs = [
         ...messages,
         { role: "assistant", content: res.content.slice(0, 4000) },
         { role: "user", content: `That reply is not valid: ${errors.slice(0, 4).join("; ")}. Reply again with one JSON object that follows the schema and uses only the allowed tools and inputs.` },
       ];
     }
-    return { output: null, errors, firstErrors, results, promptChars, validFirstTry: false, firstPromptTokens: results[0]?.metrics.promptTokens ?? 0, callError };
+    return { output: null, errors, firstErrors, results, promptChars, validFirstTry: false, firstPromptTokens: results[0]?.metrics.promptTokens ?? 0, callError, repairThinkOff };
   }
 
   private async runChunk(referencePrompt: string, abortSignal?: AbortSignal): Promise<string> {
@@ -371,6 +388,7 @@ export class PlannerSession {
             errors: plan.errors,
             first_errors: plan.firstErrors,
             think: this.think,
+            repair_think_off: plan.repairThinkOff,
             chosen: out?.action ? { tool: out.action.tool, input: { ...out.action.input } } : null,
             checklist_echo_altered: echo,
             thought: out?.thought ?? null,
