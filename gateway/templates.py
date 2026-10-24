@@ -9,8 +9,18 @@ registrar plan (REGISTRAR_PLANS) is a short ordered list of registrar templates 
 POST /registrar/<action> runs under an execution contract (gateway/registrar.py), for
 example the frames table + view + cache of a period the agent has not registered yet.
 
-TEMPLATES holds the two connectivity templates only; the Zetaris lane adds the reader
-templates and registrar plans as the WON_* objects come to exist.
+SEC objects (zetaris/sql/01_won_sec_*.sql, 02_won_dns_*.sql, 03_won_frames_runtime_template.sql):
+raw REST tables WON_SEC.frames_<tag>_<period>, WON_SEC.concept_<cik10>_<tag>,
+WON_SEC.submissions_<cik10>, WON_DNS.sic_codes_v4_raw; flattened, cached SchemaStore views
+won.frames_<tag>_<period>, won.concept_<cik10>_<tag>, won.submission_<cik10>, won.sic_codes.
+The User-Agent in a REST statement is the placeholder YOUR_APP_NAME YOUR_CONTACT_EMAIL, filled
+from WON_USER_AGENT on the wire only (gateway/jdbc.py apply_user_agent); it is never a literal
+here or in a committed SQL file.
+
+GHCN and USL (zetaris/sql/04_won_ghcn_*.sql, 05_won_usl_*.sql): weather_quarter computes degree
+days in Lightning SQL over the cached station views won.ghcn_<year>_<element> for a quoted
+station list (the station_list kind, rendered by RENDERERS); usl_describe, dq_invalid and
+dq_run_coverage read the USL lightning.metastore.weatherornot.weather_or_not_usl.
 """
 
 from __future__ import annotations
@@ -25,7 +35,15 @@ PARAM_PATTERNS = {
     "year": re.compile(r"^20\d{2}$"),
     "quarter": re.compile(r"^[1-3]$"),
     "station": re.compile(r"^US[A-Z0-9]{9}$"),
+    "station_list": re.compile(r"^US[A-Z0-9]{9}(,US[A-Z0-9]{9}){0,39}$"),  # 1 to 40 ids, comma-separated
     "element": re.compile(r"^(TMAX|TMIN)$"),
+    "sic": re.compile(r"^\d{4}$"),
+}
+
+# How a validated value is written into the SQL. A kind not listed here is substituted as is;
+# a station_list becomes a quoted IN list ('USW00013740', 'USW00013722').
+RENDERERS = {
+    "station_list": lambda v: ", ".join(f"'{s}'" for s in v.split(",")),
 }
 
 
@@ -64,15 +82,147 @@ def _t(id: str, sql: str, params: dict[str, str], objects: tuple[str, ...], raw:
     return Template(id, " ".join(sql.split()), params, objects, raw, description, role)
 
 
+UA_HEADER = 'HEADER ( user-agent "YOUR_APP_NAME YOUR_CONTACT_EMAIL" )'
+REST_REQUEST_TAIL = f'method "get", response_type "json", http_encoding "URLENCODED" ) {UA_HEADER} BODY ()'
+
+# Object names (one spelling, used by the SQL files, the templates and the cache targets).
+FRAMES_RAW = "WON_SEC.frames_{tag}_{period}"
+FRAMES_VIEW = "won.frames_{tag}_{period}"
+CONCEPT_RAW = "WON_SEC.concept_{cik10}_{tag}"
+CONCEPT_VIEW = "won.concept_{cik10}_{tag}"
+SUBMISSIONS_RAW = "WON_SEC.submissions_{cik10}"
+SUBMISSION_VIEW = "won.submission_{cik10}"
+SIC_RAW = "WON_DNS.sic_codes_v4_raw"
+SIC_VIEW = "won.sic_codes"
+
+FRAMES_COLUMNS = "cik, `entityName`, loc, `start`, `end`, val, accn"
+CONCEPT_COLUMNS = "fy, fp, form, filed, accn, `start`, `end`, val"
+SUBMISSION_COLUMNS = "cik, name, sic, `sicDescription`, state"
+SIC_COLUMNS = "code, description, division, division_desc, major_group, major_group_desc"
+
+_TP = {"tag": "tag", "period": "period"}
+_CT = {"cik10": "cik10", "tag": "tag"}
+_C = {"cik10": "cik10"}
+
+# GHCN (zetaris/sql/04_won_ghcn_*.sql) and the USL (05_won_usl_*.sql).
+USL = "lightning.metastore.weatherornot.weather_or_not_usl"
+GHCN_VIEWS = ("won.ghcn_2025_tmax", "won.ghcn_2025_tmin", "won.ghcn_2024_tmax", "won.ghcn_2024_tmin")  # warm-up order
+# Tmean in F from the two GHCN values in tenths of a degree C, in the evaluation order of
+# agent/src/tools/degreeDays.ts so both paths round identically.
+_TMEAN_F = "(((x.DATA_VALUE + n.DATA_VALUE) / 2.0) / 10.0 * 9.0 / 5.0 + 32)"
+_DAYS_IN_QUARTER = "CASE {quarter} WHEN 1 THEN CASE WHEN {year} % 4 = 0 THEN 91 ELSE 90 END WHEN 2 THEN 91 ELSE 92 END"
+
 TEMPLATES: dict[str, Template] = {
     t.id: t
     for t in [
         _t("select1", "SELECT 1 AS ok", {}, (), (), "Connectivity check."),
         _t("show_databases", "SHOW LIGHTNING DATABASES", {}, (), (), "The Lightning databases the instance holds."),
+        # -- GHCN degree days over the cached station views (zetaris/sql/04_won_ghcn_*.sql) ---------
+        _t(
+            "weather_quarter",
+            f"""SELECT x.ID AS station_id, {{year}} AS year, {{quarter}} AS quarter,
+                SUM(GREATEST(0, 65 - {_TMEAN_F})) AS hdd,
+                SUM(GREATEST(0, {_TMEAN_F} - 65)) AS cdd,
+                COUNT(*) AS days_observed,
+                {_DAYS_IN_QUARTER} AS days_in_quarter,
+                COUNT(*) / CAST({_DAYS_IN_QUARTER} AS DOUBLE) AS coverage
+                FROM won.ghcn_{{year}}_tmax x
+                JOIN won.ghcn_{{year}}_tmin n ON n.ID = x.ID AND n.DATE = x.DATE
+                WHERE x.ID IN ({{station_list}})
+                AND CAST(substr(x.DATE, 5, 2) AS INT) BETWEEN 3 * {{quarter}} - 2 AND 3 * {{quarter}}
+                AND (x.Q_FLAG IS NULL OR x.Q_FLAG = '')
+                AND (n.Q_FLAG IS NULL OR n.Q_FLAG = '')
+                GROUP BY x.ID ORDER BY x.ID""",
+            {"year": "year", "quarter": "quarter", "station_list": "station_list"},
+            ("won.ghcn_{year}_tmax", "won.ghcn_{year}_tmin"), ("won.ghcn_{year}_tmax", "won.ghcn_{year}_tmin"),
+            "HDD, CDD, days observed and coverage per station for one quarter, computed in Lightning SQL over the "
+            "cached station-filtered GHCN views (TMAX joined to TMIN on ID and DATE; quality-flagged days dropped).",
+        ),
+        # -- USL model and data quality (zetaris/sql/05_won_usl_*.sql) -------------------------------
+        _t("usl_describe", "LOAD USL weather_or_not_usl NAMESPACE lightning.metastore.weatherornot", {}, (USL,), (),
+           "The USL model as JSON: tables, columns, keys and descriptions (the planner's map)."),
+        _t("dq_invalid", f"SHOW DQ ALL INVALID TABLE {USL}.weather_quarter", {}, (f"{USL}.weather_quarter",), GHCN_VIEWS,
+           "Every weather_quarter row that fails any DQ rule (coverage_ok, the station foreign key, the primary key)."),
+        _t("dq_run_coverage", f"RUN DQ coverage_ok TABLE {USL}.weather_quarter", {}, (f"{USL}.weather_quarter",), GHCN_VIEWS,
+           "Run the coverage_ok rule: total, valid and invalid counts."),
+        # -- SEC frames: every filer's fact for one tag and one calendar quarter --------------------
+        _t("frames_period", f"SELECT {FRAMES_COLUMNS} FROM {FRAMES_VIEW} ORDER BY cik", _TP, (FRAMES_VIEW,), (FRAMES_VIEW,),
+           "Every fact in one frames period: cik, entityName, loc, start, end, val, accn (the HTTP reply holds the first 200 rows; row_count is the total)."),
+        _t("frames_count", f"SELECT COUNT(*) AS n FROM {FRAMES_VIEW}", _TP, (FRAMES_VIEW,), (FRAMES_VIEW,),
+           "Facts in one frames period (compare with the source response's data length)."),
+        _t("frames_fact", f"SELECT {FRAMES_COLUMNS} FROM {FRAMES_VIEW} WHERE LPAD(CAST(cik AS STRING), 10, '0') = '{{cik10}}'",
+           {**_TP, "cik10": "cik10"}, (FRAMES_VIEW,), (FRAMES_VIEW,),
+           "One filer's fact in a frames period (frames carry cik as an integer; LPAD makes the 10-digit key)."),
+        # -- SEC companyconcept: one filer's full history for one tag ------------------------------
+        _t("concept_history", f"SELECT {CONCEPT_COLUMNS} FROM {CONCEPT_VIEW} ORDER BY `end`, filed, accn", _CT, (CONCEPT_VIEW,), (CONCEPT_VIEW,),
+           "Every USD fact a filer reported for one tag, across filings: fy, fp, form, filed, accn, start, end, val."),
+        # -- SEC submissions: the filer's profile ---------------------------------------------------
+        _t("submission", f"SELECT {SUBMISSION_COLUMNS} FROM {SUBMISSION_VIEW}", _C, (SUBMISSION_VIEW,), (SUBMISSION_VIEW,),
+           "A filer's cik, name, sic, sicDescription and business state (no street fields)."),
+        # -- SIC reference (company_dns V4) ----------------------------------------------------------
+        _t("sic", f"SELECT {SIC_COLUMNS} FROM {SIC_VIEW} WHERE code = '{{code}}'", {"code": "sic"}, (SIC_VIEW,), (SIC_VIEW,),
+           "One SIC code with its description, division (letter) and major group (2-digit)."),
+        # -- registrar templates: only inside a plan (POST /registrar/<action>) ----------------------
+        _t("registrar_frames_table",
+           f'CREATE LIGHTNING REST TABLE frames_{{tag}}_{{period}} FROM WON_SEC REQUEST( '
+           f'endpoint "https://data.sec.gov/api/xbrl/frames/us-gaap/{{tag}}/USD/{{period}}.json", {REST_REQUEST_TAIL}',
+           _TP, (FRAMES_RAW,), (), "One SEC frames period as a raw REST table.", "registrar"),
+        _t("registrar_frames_view",
+           f"CREATE SCHEMASTORE VIEW frames_{{tag}}_{{period}} WITH CONTAINER won AS SELECT f.cik AS cik, f.`entityName` AS `entityName`, "
+           f"f.loc AS loc, f.`start` AS `start`, f.`end` AS `end`, f.val AS val, f.accn AS accn FROM {FRAMES_RAW} LATERAL VIEW explode(data) AS f",
+           _TP, (FRAMES_VIEW,), (FRAMES_RAW,), "The frames period flattened (LATERAL VIEW explode(data)).", "registrar"),
+        _t("registrar_frames_describe", f"DESCRIBE {FRAMES_VIEW}", _TP, (FRAMES_VIEW,), (), "Columns of the frames view."),
+        _t("registrar_frames_cache", f"CACHE TABLE {FRAMES_VIEW}", _TP, (FRAMES_VIEW,), (FRAMES_VIEW,), "Cache the frames view.", "registrar"),
+        _t("registrar_concept_table",
+           f'CREATE LIGHTNING REST TABLE concept_{{cik10}}_{{tag}} FROM WON_SEC REQUEST( '
+           f'endpoint "https://data.sec.gov/api/xbrl/companyconcept/CIK{{cik10}}/us-gaap/{{tag}}.json", {REST_REQUEST_TAIL}',
+           _CT, (CONCEPT_RAW,), (), "One filer's companyconcept history for one tag as a raw REST table.", "registrar"),
+        _t("registrar_concept_view",
+           f"CREATE SCHEMASTORE VIEW concept_{{cik10}}_{{tag}} WITH CONTAINER won AS SELECT f.fy AS fy, f.fp AS fp, f.form AS form, "
+           f"f.filed AS filed, f.accn AS accn, f.`start` AS `start`, f.`end` AS `end`, f.val AS val FROM {CONCEPT_RAW} LATERAL VIEW explode(units.USD) AS f",
+           _CT, (CONCEPT_VIEW,), (CONCEPT_RAW,), "The companyconcept USD facts flattened (LATERAL VIEW explode(units.USD)).", "registrar"),
+        _t("registrar_concept_describe", f"DESCRIBE {CONCEPT_VIEW}", _CT, (CONCEPT_VIEW,), (), "Columns of the concept view."),
+        _t("registrar_concept_cache", f"CACHE TABLE {CONCEPT_VIEW}", _CT, (CONCEPT_VIEW,), (CONCEPT_VIEW,), "Cache the concept view.", "registrar"),
+        _t("registrar_submission_table",
+           f'CREATE LIGHTNING REST TABLE submissions_{{cik10}} FROM WON_SEC REQUEST( '
+           f'endpoint "https://data.sec.gov/submissions/CIK{{cik10}}.json", {REST_REQUEST_TAIL}',
+           _C, (SUBMISSIONS_RAW,), (), "One filer's submissions profile as a raw REST table.", "registrar"),
+        _t("registrar_submission_view",
+           f"CREATE SCHEMASTORE VIEW submission_{{cik10}} WITH CONTAINER won AS SELECT cik AS cik, name AS name, sic AS sic, "
+           f"`sicDescription` AS `sicDescription`, addresses.business.`stateOrCountry` AS state FROM {SUBMISSIONS_RAW}",
+           _C, (SUBMISSION_VIEW,), (SUBMISSIONS_RAW,), "The profile scalars only: cik, name, sic, sicDescription, business state.", "registrar"),
+        _t("registrar_submission_describe", f"DESCRIBE {SUBMISSION_VIEW}", _C, (SUBMISSION_VIEW,), (), "Columns of the submission view."),
+        _t("registrar_submission_cache", f"CACHE TABLE {SUBMISSION_VIEW}", _C, (SUBMISSION_VIEW,), (SUBMISSION_VIEW,), "Cache the submission view.", "registrar"),
     ]
 }
 
-REGISTRAR_PLANS: dict[str, Plan] = {}
+
+def _plan(action: str, params: dict[str, str], prefix: str, description: str) -> Plan:
+    """Raw REST table -> flattened view -> DESCRIBE -> CACHE. The two CREATEs treat "already
+    exists" as done, so re-registering a period the instance already holds only re-caches it."""
+    return Plan(action, params, (Step(f"{prefix}_table", skip_exists=True), Step(f"{prefix}_view", skip_exists=True),
+                                 Step(f"{prefix}_describe"), Step(f"{prefix}_cache", timeout_s=600.0)), description)
+
+
+REGISTRAR_PLANS: dict[str, Plan] = {
+    p.action: p
+    for p in [
+        _plan("register_frames", _TP, "registrar_frames",
+              "Register one SEC frames period (tag, period): raw REST table, flattened view, DESCRIBE, CACHE. One SEC request per CREATE/CACHE."),
+        _plan("register_concept", _CT, "registrar_concept",
+              "Register one filer's companyconcept history (cik10, tag): raw REST table, flattened view, DESCRIBE, CACHE."),
+        _plan("register_submission", _C, "registrar_submission",
+              "Register one filer's submissions profile (cik10): raw REST table, scalar view, DESCRIBE, CACHE."),
+    ]
+}
+
+
+def cache_targets_for(frames: list[tuple[str, str]], concepts: list[tuple[str, str]], submissions: list[str]) -> tuple[str, ...]:
+    """The cached view names the warm-up keeps in the driver, from (tag, period), (cik10, tag) and cik10 lists."""
+    out = [FRAMES_VIEW.format(tag=t, period=p) for t, p in frames]
+    out += [CONCEPT_VIEW.format(cik10=c, tag=t) for c, t in concepts]
+    out += [SUBMISSION_VIEW.format(cik10=c) for c in submissions]
+    return tuple(out + [SIC_VIEW])
 
 
 def validate_param(kind: str, value: object) -> str:
@@ -98,7 +248,7 @@ def render(template_id: str, params: dict | None) -> tuple[Template, str]:
     values = {name: validate_param(kind, params[name]) for name, kind in t.params.items()}
     sql = t.sql
     for name, value in values.items():
-        sql = sql.replace("{" + name + "}", value)
+        sql = sql.replace("{" + name + "}", RENDERERS.get(t.params[name], lambda v: v)(value))
     return t, sql
 
 

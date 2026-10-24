@@ -36,9 +36,20 @@ RETRY_BASE_S = 60.0  # a failed CACHE waits this long before the next try, doubl
 RETRY_MAX_S = 900.0
 TEMPLATE_ROLES = ("reader", "registrar")
 # Objects the warm-up keeps cached in the driver (SchemaStore views and raw WON_* tables the
-# reader templates read). Filled once the Zetaris objects exist; WON_CACHE_TARGETS
-# (comma-separated qualified names) overrides it for a run.
-CACHE_TARGETS: tuple[str, ...] = ()
+# reader templates read). WON_CACHE_TARGETS (comma-separated qualified names) overrides it for
+# a run. SEC: the views of zetaris/sql/01_won_sec_create.sql and 02_won_dns_create.sql (the
+# frames periods of the two comparison quarters for the three revenue tags; companyconcept and
+# submissions of the four Day-0 utilities; the SIC reference). Periods the registrar adds at
+# run time are cached by the plan itself and re-cached here only if listed.
+SEC_TAGS = ("Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "RegulatedAndUnregulatedOperatingRevenue")
+SEC_PERIODS = ("CY2025Q1", "CY2024Q1")
+SEC_UTILITIES = ("0001326160", "0000092122", "0000072903", "0000065984")  # Duke Energy, Southern Co, Xcel Energy, Entergy
+SEC_CONCEPTS = tuple((c, "Revenues") for c in SEC_UTILITIES) + (
+    ("0001326160", "RegulatedAndUnregulatedOperatingRevenue"), ("0000072903", "RegulatedAndUnregulatedOperatingRevenue"))
+CACHE_TARGETS: tuple[str, ...] = templates.cache_targets_for(
+    [(t, p) for t in SEC_TAGS for p in SEC_PERIODS], list(SEC_CONCEPTS), list(SEC_UTILITIES)) + templates.GHCN_VIEWS
+# GHCN: the four station-filtered parquet views of zetaris/sql/04_won_ghcn_create.sql come last
+# (each CACHE scans a 9-file partition on S3, about 40 s; the SEC views take a second each).
 
 
 class TemplateRequest(BaseModel):

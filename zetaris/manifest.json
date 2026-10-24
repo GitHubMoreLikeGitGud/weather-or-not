@@ -1,0 +1,63 @@
+{
+  "_comment": "Weather-or-Not Zetaris objects in onboarding order; each create script has a _select.sql verification pair. Status is from the Day-0 gate runs against Zetaris 2.4.3.1 (local Docker). The user-agent placeholder in REST scripts is replaced from WON_USER_AGENT at run time.",
+  "version": 1,
+  "sources": [
+    {
+      "id": "won_sec",
+      "kind": "rest",
+      "script": "zetaris/sql/01_won_sec_create.sql",
+      "select": "zetaris/sql/01_won_sec_select.sql",
+      "status": "verified",
+      "requires": [],
+      "hosts": [
+        "data.sec.gov"
+      ],
+      "summary": "SEC EDGAR XBRL: frames for the three revenue tags x CY2025Q1, CY2024Q1; companyconcept and submissions for Duke Energy, Southern Co, Xcel Energy, Entergy; container won; every view cached. Counts equal the source responses (2026-10-24)",
+      "objects": {
+        "database": "WON_SEC",
+        "container": "won",
+        "frames": [
+          "won.frames_<tag>_<period>"
+        ],
+        "concept": [
+          "won.concept_<cik10>_<tag>"
+        ],
+        "submission": [
+          "won.submission_<cik10>"
+        ]
+      }
+    },
+    {
+      "id": "won_dns",
+      "kind": "rest",
+      "script": "zetaris/sql/02_won_dns_create.sql",
+      "select": "zetaris/sql/02_won_dns_select.sql",
+      "status": "verified",
+      "requires": [
+        "won_sec"
+      ],
+      "hosts": [
+        "company-dns.mediumroast.io"
+      ],
+      "summary": "company_dns SIC reference V4, 1,005 codes, raw table and view won.sic_codes cached (2026-10-24)",
+      "objects": {
+        "database": "WON_DNS",
+        "raw": "WON_DNS.sic_codes_v4_raw",
+        "view": "won.sic_codes"
+      }
+    },
+    {
+      "id": "won_frames_runtime",
+      "kind": "registrar-template",
+      "script": "zetaris/sql/03_won_frames_runtime_template.sql",
+      "status": "verified",
+      "requires": [
+        "won_sec"
+      ],
+      "hosts": [
+        "data.sec.gov"
+      ],
+      "summary": "Run-time registration of a frames period by the gateway registrar (register_frames; also register_concept, register_submission). Proved with Revenues CY2025Q2 = 1,941 facts (2026-10-24)"
+    }
+  ]
+}

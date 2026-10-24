@@ -199,4 +199,4 @@ def test_registrar_templates_never_run_through_sql_template(setup):
 def test_health_lists_the_registrar_actions(setup):
     client, _, _, _ = setup
     body = client.get("/health").json()
-    assert body["registrar_actions"] == [ACTION] and "registrar_frames_cache" in body["templates"]
+    assert ACTION in body["registrar_actions"] and "registrar_frames_cache" in body["templates"]

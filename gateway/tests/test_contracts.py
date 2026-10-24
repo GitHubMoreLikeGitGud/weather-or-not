@@ -76,7 +76,7 @@ def test_risk_classes_follow_the_plan_registry():
     assert contracts.risk_level("read") == "low"
     assert contracts.risk_level(ACTION) == "medium"
     assert contracts.risk_level("register_off") is None
-    assert contracts.registrar_actions() == (ACTION,)
+    assert ACTION in contracts.registrar_actions() and set(contracts.registrar_actions()) == set(templates.REGISTRAR_PLANS)
 
 
 def test_accepts_a_valid_registrar_contract():

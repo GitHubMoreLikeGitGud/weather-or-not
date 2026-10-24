@@ -82,7 +82,8 @@ def test_health_ok():
     body = r.json()
     assert body["ok"] is True and body["zetaris"]["select1"] == 1 and body["service"] == "weather-or-not-gateway"
     assert FRAMES in body["cache"]["cached_tables"]
-    assert body["templates"] == ["select1", "show_databases"] and body["registrar_actions"] == []
+    assert {"select1", "show_databases", "frames_period", "concept_history", "submission", "sic"} <= set(body["templates"])
+    assert body["registrar_actions"] == sorted(templates.REGISTRAR_PLANS) and "register_frames" in body["registrar_actions"]
 
 
 def test_health_down():
@@ -178,6 +179,15 @@ def test_query_error_on_live_connection_is_not_retried():
     with pytest.raises(ZetarisError):
         gw._execute("reader", "SELECT nope", timeout_s=5)
     assert conn.closed == 0
+
+
+def test_default_cache_targets_are_the_sec_views_and_pass_the_cache_shape():
+    targets = app_module.templates.cache_targets_for(
+        [(t, p) for t in app_module.SEC_TAGS for p in app_module.SEC_PERIODS], list(app_module.SEC_CONCEPTS), list(app_module.SEC_UTILITIES))
+    assert len(targets) == len(set(targets)) == 6 + 6 + 4 + 1
+    assert "won.frames_Revenues_CY2025Q1" in targets and "won.submission_0001326160" in targets and targets[-1] == "won.sic_codes"
+    for name in targets:
+        assert allowlist.check(f"CACHE TABLE {name}", "registrar") == "register"
 
 
 def test_cache_targets_come_from_the_constant_or_the_environment(monkeypatch):
