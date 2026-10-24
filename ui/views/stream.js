@@ -6,11 +6,15 @@ import { esc, evidenceChips, fmtClock, fmtMs, fmtNum, on, stripEvidenceRefs, too
 
 const LIVE_TYPES = ["run_started", "chunk_start", "planner", "tool", "chunk_end", "run_finished", "run_failed"];
 
-/** The row shown while a tool runs; get_weather gets its own words because the two statements take ~18 s each. */
+/**
+ * The row shown while something runs: a tool (get_weather gets its own words because the two
+ * statements take ~18 s each) or, with tool null, the planner call in progress on the model.
+ */
 export function pendingRow(tool, startedAt) {
   const weather = tool === "get_weather";
-  const text = weather ? "Computing degree days in Lightning SQL" : `Running ${toolWord(tool)}`;
-  return `<li class="s s--pending" data-pending="${esc(tool)}" role="status"><span class="s__t">${esc(fmtClock(startedAt))}</span><span class="s__b"><span class="s__spin" aria-hidden="true"></span><span class="s__k">${esc(text)}</span>${weather ? ` <span class="s__m">two <code>weather_quarter</code> statements over the station union, about 18 s each</span>` : ""} <span class="s__m s__elapsed" data-since="${esc(startedAt)}"></span></span></li>`;
+  const text = tool === null ? "Planner call in progress" : weather ? "Computing degree days in Lightning SQL" : `Running ${toolWord(tool)}`;
+  const note = tool === null ? "the model reads the carried state and the last tool result, then names the next step" : weather ? "two <code>weather_quarter</code> statements over the station union, about 18 s each" : "";
+  return `<li class="s s--pending" data-pending="${esc(tool ?? "planner")}" role="status"><span class="s__t">${esc(fmtClock(startedAt))}</span><span class="s__b"><span class="s__spin" aria-hidden="true"></span><span class="s__k">${esc(text)}</span>${note ? ` <span class="s__m">${note}</span>` : ""} <span class="s__m s__elapsed" data-since="${esc(startedAt)}"></span></span></li>`;
 }
 
 function timeCell(at) {
@@ -105,13 +109,17 @@ export function mountStream(listEl, { filter = () => true, keep = 600, onEvent }
       if (!filter(type, d)) return;
       const at = d.at ?? new Date().toISOString();
       const atBottom = listEl.scrollHeight - listEl.scrollTop - listEl.clientHeight < 40;
-      if (type === "tool" || type === "run_finished" || type === "run_failed" || type === "chunk_end") clearPending();
+      clearPending();
       const html = renderStreamEvent(type, d, at);
       if (html) listEl.insertAdjacentHTML("beforeend", html);
-      if (type === "planner" && d.valid !== false && d.tool && d.tool !== "finalize_noop") {
-        clearPending();
-        pending = d.tool;
-        listEl.insertAdjacentHTML("beforeend", pendingRow(d.tool, at));
+      // What runs next: the chosen tool after a planner reply; the next planner call after a tool
+      // result or at a chunk start; nothing once the run is over or a chunk has ended.
+      let next;
+      if (type === "planner" && d.valid !== false && d.tool && d.tool !== "finalize_noop") next = d.tool;
+      else if (type === "tool" || type === "chunk_start" || type === "run_started" || (type === "planner" && d.valid === false)) next = null;
+      if (next !== undefined) {
+        pending = next ?? "planner";
+        listEl.insertAdjacentHTML("beforeend", pendingRow(next, at));
         timer = setInterval(tick, 1000);
       }
       while (listEl.children.length > keep) listEl.firstElementChild.remove();

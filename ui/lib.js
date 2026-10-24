@@ -219,6 +219,21 @@ export function evidenceRecord(id) {
   return knownEvidence.get(id) ?? null;
 }
 
+/** Chips rendered before their records were known (a live run) get their kind once the run is saved. */
+export function refreshChipKinds(root) {
+  for (const b of root.querySelectorAll(".ev[data-ev]")) {
+    const rec = knownEvidence.get(b.getAttribute("data-ev"));
+    if (!rec?.kind || b.getAttribute("data-kind") === rec.kind) continue;
+    b.setAttribute("data-kind", rec.kind);
+    const k = b.querySelector(".ev__k");
+    if (k) k.textContent = EV_KIND_WORD[rec.kind] ?? "Record";
+    const claim = typeof rec.claim === "string" ? rec.claim : "";
+    const title = `Evidence ${evShort(rec.id)}${rec.template_id ? ` (${rec.template_id})` : ""}, ${EV_KIND_LONG[rec.kind] ?? rec.kind}${claim ? `: ${claim.length > 200 ? `${claim.slice(0, 200)}…` : claim}` : ""}`;
+    b.setAttribute("title", title);
+    b.setAttribute("aria-label", title);
+  }
+}
+
 function kindOf(id, hint) {
   return knownEvidence.get(id)?.kind ?? hint ?? null;
 }

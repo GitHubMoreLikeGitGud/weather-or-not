@@ -2,7 +2,7 @@
 // the run from server-sent events, and the saved runs to open. A saved run's own timeline is
 // replayed here when no run is live.
 
-import { api, confidenceChip, esc, fmtMs, fmtNum, fmtTime, renderError, tag, verdictChip } from "../lib.js";
+import { api, confidenceChip, esc, fmtMs, fmtNum, fmtTime, refreshChipKinds, renderError, tag, verdictChip } from "../lib.js";
 import { listRuns, loadRun, pickRunId, setCurrentRun } from "./runs.js";
 import { mountStream, replayRows } from "./stream.js";
 
@@ -189,10 +189,13 @@ export function mount(el, ctx) {
     },
     onEvent: (type, d) => {
       if (type === "run_finished") {
-        status.innerHTML = `Run <code>${esc(d.run_id ?? liveRun)}</code> finished. <a href="#/card/${esc(d.run_id ?? liveRun)}">Open the answer card</a>.`;
+        const finished = d.run_id ?? liveRun;
+        status.innerHTML = `Run <code>${esc(finished)}</code> finished. <a href="#/card/${esc(finished)}">Open the answer card</a>.`;
         ctx.announce("Run finished; the answer card is ready.");
         if (d.run_id) setCurrentRun(d.run_id);
         refreshRuns();
+        // The saved run names each evidence record's kind; the live chips learn it now.
+        if (finished) loadRun(finished).then((r) => r.ok && refreshChipKinds(stream));
         liveRun = null;
       } else if (type === "run_failed") {
         status.textContent = `Run failed: ${d.error ?? ""}`;

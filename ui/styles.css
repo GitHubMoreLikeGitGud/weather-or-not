@@ -430,11 +430,11 @@ table.rows td { max-width: 360px; overflow-wrap: anywhere; }
 /* ---------- telemetry footer ---------- */
 #telemetry { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; min-height: var(--footer-h); background: var(--surface); border-top: 1px solid var(--rule-strong); box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06); }
 .tele { display: flex; flex-wrap: wrap; align-items: stretch; padding: 0 var(--gutter); }
-.tele__item { display: grid; grid-template-rows: auto auto auto; align-content: center; padding: 6px 12px; border-left: 1px solid var(--rule); min-width: 0; }
+.tele__item { display: grid; grid-template-rows: auto auto auto; align-content: center; padding: 6px 8px; border-left: 1px solid var(--rule); min-width: 0; }
 .tele__item:first-child { border-left: 0; padding-left: 0; }
-.tele__k { font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
+.tele__k { font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
 .tele__v { font-family: var(--font-fig); font-weight: 700; font-size: 15px; line-height: 1.2; white-space: nowrap; }
-.tele__n { font-size: 11px; color: var(--ink-3); white-space: nowrap; }
+.tele__n { font-size: 10.5px; color: var(--ink-3); white-space: nowrap; }
 .tele__run { font-size: 12px; font-weight: 600; }
 .bars { display: block; height: 26px; }
 .bars__m { fill: var(--accent); }
