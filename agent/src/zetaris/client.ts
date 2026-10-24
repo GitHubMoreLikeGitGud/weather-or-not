@@ -89,32 +89,62 @@ export const PARAM_PATTERNS = {
   station: /^US[A-Z0-9]{9}$/u,
   station_list: /^US[A-Z0-9]{9}(,US[A-Z0-9]{9}){0,39}$/u,
   element: /^(TMAX|TMIN)$/u,
+  sic: /^\d{4}$/u,
 } as const;
 export type ParamKind = keyof typeof PARAM_PATTERNS;
 
-/** Parameter kinds per reader template id, mirroring gateway/templates.py TEMPLATES. The
- *  templates over the WON_* objects are added together with their gateway entries. */
+/** Parameter kinds per reader template id, mirroring gateway/templates.py TEMPLATES: the
+ *  templates the agent may call through POST /sql/template. The registrar_* step templates
+ *  of gateway/templates.py run only inside a plan (GatewayClient.registrar) and are not
+ *  listed here. agent/test/zetaris-client.test.ts checks this map against the Python file. */
 export const TEMPLATE_PARAMS: Record<string, Record<string, ParamKind>> = {
   select1: {},
   show_databases: {},
-  // GHCN degree days over the cached won.ghcn_<year>_<element> views (zetaris/sql/04_won_ghcn_*.sql).
+  // GHCN degree days over the cached won.ghcn_<year>_<element> views (zetaris/sql/04_won_ghcn_*.sql):
+  // station_id, year, quarter, hdd, cdd, days_observed, days_in_quarter, coverage per station,
+  // about 19 s for any station list (1 to 40 ids), so one call per (year, quarter).
   weather_quarter: { year: "year", quarter: "quarter", station_list: "station_list" },
-  // USL model and data quality (zetaris/sql/05_won_usl_*.sql).
+  // USL model and data quality (zetaris/sql/05_won_usl_*.sql); the two DQ templates take minutes.
   usl_describe: {},
   dq_invalid: {},
   dq_run_coverage: {},
+  // SEC frames (won.frames_<tag>_<period>): cik, entityName, loc, start, end, val, accn.
+  // frames_period holds every filer (the reply carries the first 200 rows; row_count is the total).
+  frames_period: { tag: "tag", period: "period" },
+  frames_count: { tag: "tag", period: "period" },
+  frames_fact: { tag: "tag", period: "period", cik10: "cik10" },
+  // The seed utilities' facts in one frames period (the peer universe in one call; at most one row per seed).
+  frames_seeds: { tag: "tag", period: "period" },
+  // SEC companyconcept (won.concept_<cik10>_<tag>): fy, fp, form, filed, accn, start, end, val.
+  concept_history: { cik10: "cik10", tag: "tag" },
+  // SEC submissions (won.submission_<cik10>): cik, name, sic, sicDescription, state.
+  submission: { cik10: "cik10" },
+  // SIC reference (won.sic_codes): code, description, division, division_desc, major_group, major_group_desc.
+  sic: { code: "sic" },
+  // The governed USL copies (keys, descriptions, DQ): slow reads for the evidence drawer, not the hot path.
+  usl_utility: { cik10: "cik10" },
+  usl_revenue: { cik10: "cik10", period: "period" },
 };
 
-/** Client-side bound per template id where the gateway's own bound is longer than the default
- *  (gateway/templates.py timeout_s): DQ on the USL weather table resolves the filestore sources
- *  again and takes minutes. Other templates use GatewayClientOptions.timeoutMs. */
+/** Client-side bound per template id where the gateway sets its own bound (gateway/templates.py
+ *  timeout_s), always a little longer than the gateway's so the gateway's reply arrives first:
+ *  DQ on the USL weather table resolves the filestore sources again and takes minutes; a USL
+ *  utility read visits every submission view (about 45 s). Other templates use
+ *  GatewayClientOptions.timeoutMs. */
 export const TEMPLATE_TIMEOUT_MS: Record<string, number> = {
   dq_invalid: 630_000,
   dq_run_coverage: 630_000,
+  usl_utility: 150_000,
 };
 
-/** Parameter kinds per registrar action, mirroring gateway/templates.py REGISTRAR_PLANS. */
-export const REGISTRAR_PARAMS: Record<string, Record<string, ParamKind>> = {};
+/** Parameter kinds per registrar action, mirroring gateway/templates.py REGISTRAR_PLANS. Each
+ *  plan runs raw REST table -> flattened view -> DESCRIBE -> CACHE under one signed contract
+ *  (the two CREATEs treat "already exists" as done, so re-registering only re-caches). */
+export const REGISTRAR_PARAMS: Record<string, Record<string, ParamKind>> = {
+  register_frames: { tag: "tag", period: "period" },
+  register_concept: { cik10: "cik10", tag: "tag" },
+  register_submission: { cik10: "cik10" },
+};
 
 export class BadParams extends Error {
   constructor(message: string) {
