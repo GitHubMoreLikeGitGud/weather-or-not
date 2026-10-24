@@ -1,0 +1,86 @@
+{
+  "name": "Weather-or-Not",
+  "tagline": "The utility says it was the weather. Weather-or-Not checks: it splits a US electric utility's revenue change into weather, industry and a company-specific remainder, with ranges, a confidence label, a Not-tested list and the Lightning SQL behind every number.",
+  "track": "Track 2: The Agent That Can Explain Why",
+  "team": "Umar Mohktar, Singapore - solo",
+  "repository": "https://github.com/GitHubMoreLikeGitGud/weather-or-not",
+  "demo_video": "",
+  "licence": "Apache-2.0",
+  "meterless": {
+    "engines": ["hmem", "markovian", "world-model"],
+    "upstream": "https://github.com/Meterless/Meterless at commit 1742dec56a66e58eef9dda2d2b865823758ca8cd; H-MEM, Markovian and World Model vendored unchanged in engines/ (engines/UPSTREAM.md)",
+    "usage": {
+      "hmem": "Vendored reference implementation, unmodified, extended by subclass in agent/src/memory/hmemFacade.ts: facts with Zetaris provenance (zetaris_object, SQL sha256, endpoint, accession number, filing date, licence, retrieval time, latency, cache state, evidence id), deduplicated per fact key and refreshed on reconfirmation with the earlier retrievals kept in a history of at most 5; recast_comparative conflicts (agent/src/memory/recastConflicts.ts) holding both memories and both accession numbers, resolved by rule R1 and overridable by the analyst only through recasts.override under a signed high-risk contract; tag_choice and station_choice facts that persist across runs so a warm run skips the probe step; why(memoryId) with provenance, ledger history and conflicts; source notes seeded at boot from the Zetaris getting-started manifest and its known_to_fail notes",
+      "markovian": "Vendored reference orchestrator, unmodified (agent/src/loop/): one question is one chain with chunkSize 3000, maxChunks 10, carryoverTokens 800; the generator plans each chunk with local Nemotron (one repair round, think off after an empty length-cut reply) and a NEEDS_TOOL executor runs the chosen tool out of ten host tools, at most two per chunk; an 11-item checklist defines completion and the deterministic fallback is the next open item; token numbers are labelled measured (Ollama) or estimated (chars/4)",
+      "world-model": "Vendored reference implementation, unmodified, wrapped in agent/src/world/world.ts: entities utility, state, station, SIC, filing and quarter; relationships serves (valid from the annual report's description), represented_by, peer_of (per period with g, dw and tag), reported_in (per tag, period and accession number, valid from the filing date), recasts, classified_as, observed_in; every write's time is the source record's own date, so re-ingesting the same rows appends nothing (769 events before and after the warm runs)"
+    },
+    "scout_intent": "Partial reimplementation of the spec (no reference engine is vendored), labelled as such (agent/src/contract/): risk classes and HMAC-signed single-use execution contracts expiring within 15 minutes; medium risk for the gateway's registrar plans (verified by the Python gateway in gateway/contracts.py, shared test vector), high risk for override_recast with an analyst approval and a reason (verified by the agent server, refusals logged); an integrity check, not cryptographic-grade security",
+    "conformance": {
+      "hmem": "13/13 on the vendored reference; 13/13 with the Weather-or-Not subclass loaded through the engine's own runner (HMEM_IMPL)",
+      "markovian": "8/8",
+      "world-model": "8/8; idempotency check diff: empty; live re-ingest of the same frames facts appended 0 events (769 before and after)",
+      "run": "24 Oct 2026 in this repository, Node v22.13.1; vendored lock files restored with git checkout -- engines afterwards; full output in docs/conformance.md"
+    }
+  },
+  "zetaris": {
+    "role": "Federated data layer and the only runtime path to data: Lightning REST tables over SEC EDGAR (XBRL frames, companyconcept, submissions) and the company_dns SIC list, a FILESTORE parquet source over NOAA GHCN-Daily on the public bucket, cached SchemaStore views that flatten and station-filter them, and the Unified Semantic Layer weather_or_not_usl (5 tables, PK/FK rules and the custom DQ rule coverage_ok) whose onboarding DQ result gates the verdict; degree days are computed in Lightning SQL over the cached GHCN views; every read is one of 28 named templates behind an allowlist in the gateway (the agent never writes SQL) and the logged SQL text is the citation; the agent registers new frames periods at run time through the registrar under a signed contract",
+    "instance": "local Docker, Zetaris 2.4.3.1, JDBC jdbc:zetaris:lightning@localhost:10000",
+    "where": "zetaris/sql/ (Lightning SQL create/select pairs 01 to 06 and the run-time registration template), zetaris/README.md (verified counts and timings), zetaris/manifest.json, gateway/ (JDBC gateway, templates, allowlist, registrar, SQL runner), scripts/ (warm-up, DQ onboarding, join-map measurement)",
+    "usl": "lightning.metastore.weatherornot.weather_or_not_usl",
+    "usl_tables": ["utility", "sic_code", "station", "weather_quarter", "revenue_quarter"],
+    "usl_rows": {"utility": 43, "sic_code": 1005, "station": 57, "weather_quarter": 342, "revenue_quarter": 133},
+    "lightning_databases": ["WON_SEC", "WON_DNS", "WON_GHCN"],
+    "schemastore_container": "won",
+    "rest_tables": [
+      "WON_SEC.frames_<tag>_<period> (6 at onboarding: Revenues, RevenueFromContractWithCustomerExcludingAssessedTax, RegulatedAndUnregulatedOperatingRevenue x CY2025Q1, CY2024Q1; plus Revenues CY2025Q2 and CY2024Q2 registered at run time through the registrar; cached)",
+      "WON_SEC.concept_<cik10>_<tag> (10, the filers' companyconcept history under the tags each uses; cached)",
+      "WON_SEC.submissions_<cik10> (43, one per seed utility; cik, name, sic, sicDescription, business state only; cached)",
+      "WON_DNS.sic_codes_v4_raw (company_dns V4, 1,005 codes; cached)"
+    ],
+    "filestore_tables": [
+      "WON_GHCN.ghcn_2024_tmax, ghcn_2024_tmin, ghcn_2025_tmax, ghcn_2025_tmin (NOAA GHCN-Daily parquet by_year partitions, 9 files and about 4.3 million rows each; the station-filtered views won.ghcn_<year>_<element> are cached)"
+    ],
+    "dq_rules": {"primary_key": 5, "foreign_key": 3, "custom": ["coverage_ok"]},
+    "dq_measured": "RUN DQ coverage_ok on weather_quarter: 342 total / 342 valid / 0 invalid (557 s; whole onboarding pass 739 s, written to data/dq/latest.json); RUN DQ sic on utility: 43 / 42 / 1 invalid (MGE Energy, SIC 4900 absent from the SIC list); RUN DQ cik on revenue_quarter: PK and FK 133 / 133 / 0; RUN DQ code on sic_code: 1,005 / 1,005 / 0",
+    "least_privilege": "not configured: read templates run on the admin login behind the gateway's reader allowlist; /health reports admin_fallback"
+  },
+  "nvidia": {
+    "model": "nemotron-3-nano:4b via Ollama 0.40.7, local GPU, loopback only",
+    "roles": [
+      "Markovian planner choosing the next tool from the ones the host allows at that step (think on, output budget 3,072 tokens; the repair after an empty length-cut reply runs with think off)",
+      "memo of 100 to 250 words from the tool outputs (think off, output budget 1,024 tokens); every number string-matched against the tool outputs, one retry, then the template memo"
+    ],
+    "decides": false,
+    "computes": false,
+    "settings": "temperature 0, seed 7, num_ctx 8192, JSON schema output validated on the host, one repair round then a labelled deterministic fallback step",
+    "measured": {
+      "planner_tokens_per_s_median_per_run": "139.2 to 140.4 on the four clean runs; 139.5 to 141.2 on the five earlier runs",
+      "memo_tokens_per_s": "140.5 to 149.2",
+      "planner_json_valid_first_try": "64/76 over the nine saved runs; 11 repaired (4 with think off), 1 deterministic fallback; 28/34 on the four clean runs with 0 fallbacks",
+      "memo_drafts": "12 drafts, 0 with a number that is not a tool output; the four clean runs kept their first draft (184, 176, 184, 176 words)",
+      "question_wall_seconds": "97.5 to 128.1 on the four clean runs (84.1 to 133.2 over all nine); the two degree-day statements take 18.2 to 23.9 s each",
+      "carryover_tokens_max_estimated": "284 to 387 against the 800 budget",
+      "model_vram_mib": "not measured in this repository"
+    },
+    "cloud_model_calls": 0,
+    "cloud_model_calls_basis": "by construction: the model client accepts loopback URLs only and counts refused hosts (0 in every run)"
+  },
+  "cursor": "Weather-or-Not was developed in a Cursor workspace with project rules in .cursor/rules and AGENTS.md (Cursor Pro plan, CLI 2026.10.22, model Auto). Cursor Agent ran three headless tasks on 24 Oct 2026, each exit 0 on the first attempt: C1 the degree-day SQL template and its TypeScript reference implementation (122.4 s), C2 the attribution with peer set, OLS and Theil-Sen slopes, seeded bootstrap, confidence labels and claim verdict (198.1 s), C3 the like-for-like revenue layer with recast rule R1 and the frames helpers (163.3 s), each with its vitest suite against known-answer fixtures computed independently of the code. 1,824 of the 1,844 lines in the eight files are Cursor Agent's. Everything else (Zetaris SQL, gateway, agent loop, memory, World Model, server, UI, evaluation, docs) was written outside Cursor Agent. See docs/how-cursor-was-used.md.",
+  "cursor_tasks": {
+    "run_by_cursor_agent": ["C1", "C2", "C3"],
+    "cursor_agent_commits": ["1a8743c", "4d83e2e", "222843d"],
+    "reviewer_commits": ["2b2533b", "1ced57c"],
+    "not_run_by_cursor_agent": [],
+    "details": "docs/how-cursor-was-used.md"
+  },
+  "data_sources": [
+    {"name": "SEC EDGAR XBRL frames, companyconcept and submissions", "licence": "US government work, public domain; SEC fair-access policy (at most 10 requests per second with a declared User-Agent)", "attribution": "U.S. Securities and Exchange Commission, EDGAR", "access": "queried live through Zetaris with the declared User-Agent; never bulk-redistributed; no extracted data committed beyond the numbers cited in docs/eval-report.md and docs/demo-case.md"},
+    {"name": "NOAA GHCN-Daily (parquet, Registry of Open Data on AWS, bucket noaa-ghcn-pds)", "licence": "CC0-1.0; US government work", "attribution": "NOAA National Centers for Environmental Information, Global Historical Climatology Network daily", "access": "through Zetaris only (FILESTORE parquet, anonymous public bucket); seeds/stations.json holds station ids, names and states"},
+    {"name": "company_dns SIC code list", "licence": "Apache-2.0 (the service); the SIC list is the SEC's", "attribution": "company_dns", "access": "through Zetaris only, with an identifying User-Agent"}
+  ],
+  "pre_existing_code": [
+    "Meterless reference engines H-MEM, Markovian and World Model (Apache-2.0), vendored unchanged in engines/",
+    "gateway/jdbc.py, adapted from scripts/zetaris_sql.py in the Zetaris getting-started repository at commit 6a2fbaa (Apache-2.0)",
+    "Scaffolding from ClearShelf, the author's Track 3 entry (Apache-2.0, same author): the gateway pattern (templates, allowlist, registrar, contract check, cache, SQL runner), the agent server and SSE pattern, the Markovian generator and telemetry, the H-MEM facade and World Model wrapper patterns, the evidence store, the contract module, the CLI and config patterns, the UI shell and ui/lib.js; each adapted file says so in its header"
+  ]
+}
