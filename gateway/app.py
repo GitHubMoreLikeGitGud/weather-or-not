@@ -233,7 +233,7 @@ class Gateway:
             return 400, out
         out.update(sql=sql, sql_sha256=sha256(sql), objects=list(t.objects), raw_objects=cache.resolve(t.raw_objects, req.params))
         log = {"source_file": "gateway.template", "template_id": t.id, "role": req.role, "params": req.params,
-               "sql": sql, "sql_sha256": out["sql_sha256"], "timeout_s": QUERY_TIMEOUT_S}
+               "sql": sql, "sql_sha256": out["sql_sha256"], "timeout_s": t.timeout_s or QUERY_TIMEOUT_S}
         try:
             kind = allowlist.check(sql, req.role)
         except allowlist.Refused as e:
@@ -268,7 +268,7 @@ class Gateway:
             return 503, out
         status = 200
         try:
-            res = self._execute(req.role, sql, timeout_s=QUERY_TIMEOUT_S, max_rows=FETCH_LIMIT)
+            res = self._execute(req.role, sql, timeout_s=t.timeout_s or QUERY_TIMEOUT_S, max_rows=FETCH_LIMIT)
             out.update(columns=res.columns, rows=res.rows[:MAX_ROWS], row_count=res.row_count,
                        truncated=res.row_count > MAX_ROWS, elapsed_ms=res.elapsed_ms, executed_at=res.executed_at)
         except QueryTimeout as e:

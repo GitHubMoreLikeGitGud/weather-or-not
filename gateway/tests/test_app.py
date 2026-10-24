@@ -140,6 +140,25 @@ def test_cached_view_template_reports_hit_and_resolved_raw_objects(monkeypatch, 
     assert body["cache_state"] == "miss" and body["cache_detail"] == {"won.frames_Revenues_CY2024Q1": "miss"}
 
 
+def test_a_template_bound_overrides_the_gateway_default(temp_sql_log):
+    class Timed(FakeConn):
+        def __init__(self):
+            super().__init__(rows=[["coverage_ok", "weather_quarter", "Custom Data Quality", 342, 342, 0]])
+            self.timeouts = []
+
+        def execute(self, sql, timeout_s=None, max_rows=None):
+            self.timeouts.append(timeout_s)
+            return super().execute(sql, timeout_s, max_rows)
+
+    conn = Timed()
+    c, _ = client(conn)
+    assert c.post("/sql/template", json={"template_id": "dq_run_coverage"}).status_code == 200
+    assert c.post("/sql/template", json={"template_id": "select1"}).status_code == 200
+    assert conn.timeouts == [templates.DQ_TIMEOUT_S, app_module.QUERY_TIMEOUT_S]
+    logged = [json.loads(line) for line in temp_sql_log.read_text(encoding="utf-8").splitlines()]
+    assert [r["timeout_s"] for r in logged[-2:]] == [templates.DQ_TIMEOUT_S, app_module.QUERY_TIMEOUT_S]
+
+
 def test_template_zetaris_error_is_502():
     conn = FakeConn(fail=ZetarisError("FIELD_NOT_FOUND"))
     c, _ = client(conn)

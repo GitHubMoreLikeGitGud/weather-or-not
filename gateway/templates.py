@@ -60,6 +60,7 @@ class Template:
     raw_objects: tuple[str, ...]  # cached raw tables or views behind it; "{name}" takes the validated parameter
     description: str = ""
     role: str = "reader"  # reader templates run via /sql/template; registrar templates only inside a plan
+    timeout_s: float | None = None  # bounded wait for this template; None = the gateway's default (60 s)
 
 
 @dataclass(frozen=True)
@@ -78,8 +79,14 @@ class Plan:
 
 
 def _t(id: str, sql: str, params: dict[str, str], objects: tuple[str, ...], raw: tuple[str, ...],
-       description: str, role: str = "reader") -> Template:
-    return Template(id, " ".join(sql.split()), params, objects, raw, description, role)
+       description: str, role: str = "reader", timeout_s: float | None = None) -> Template:
+    return Template(id, " ".join(sql.split()), params, objects, raw, description, role, timeout_s)
+
+
+# A read of a USL table activated over the GHCN views, and RUN / SHOW DQ on it, materialise the
+# table from the filestore sources again (live: REGISTER DQ 184 s, RUN DQ coverage_ok 361 s), so
+# the DQ templates get a longer bound than the 60 s default.
+DQ_TIMEOUT_S = 600.0
 
 
 UA_HEADER = 'HEADER ( user-agent "YOUR_APP_NAME YOUR_CONTACT_EMAIL" )'
@@ -141,10 +148,13 @@ TEMPLATES: dict[str, Template] = {
         # -- USL model and data quality (zetaris/sql/05_won_usl_*.sql) -------------------------------
         _t("usl_describe", "LOAD USL weather_or_not_usl NAMESPACE lightning.metastore.weatherornot", {}, (USL,), (),
            "The USL model as JSON: tables, columns, keys and descriptions (the planner's map)."),
-        _t("dq_invalid", f"SHOW DQ ALL INVALID TABLE {USL}.weather_quarter", {}, (f"{USL}.weather_quarter",), GHCN_VIEWS,
-           "Every weather_quarter row that fails any DQ rule (coverage_ok, the station foreign key, the primary key)."),
+        # SHOW DQ ALL INVALID (every rule) materialises the table once per rule and did not return within
+        # 900 s live; the single-rule form returned in 181 s, so the gate reads the coverage rule alone.
+        _t("dq_invalid", f"SHOW DQ INVALID RECORD coverage_ok TABLE {USL}.weather_quarter", {}, (f"{USL}.weather_quarter",), GHCN_VIEWS,
+           "Every weather_quarter row that fails the coverage_ok rule (coverage below 0.9); empty when the gate passes.",
+           timeout_s=DQ_TIMEOUT_S),
         _t("dq_run_coverage", f"RUN DQ coverage_ok TABLE {USL}.weather_quarter", {}, (f"{USL}.weather_quarter",), GHCN_VIEWS,
-           "Run the coverage_ok rule: total, valid and invalid counts."),
+           "Run the coverage_ok rule: total, valid and invalid counts.", timeout_s=DQ_TIMEOUT_S),
         # -- SEC frames: every filer's fact for one tag and one calendar quarter --------------------
         _t("frames_period", f"SELECT {FRAMES_COLUMNS} FROM {FRAMES_VIEW} ORDER BY cik", _TP, (FRAMES_VIEW,), (FRAMES_VIEW,),
            "Every fact in one frames period: cik, entityName, loc, start, end, val, accn (the HTTP reply holds the first 200 rows; row_count is the total)."),

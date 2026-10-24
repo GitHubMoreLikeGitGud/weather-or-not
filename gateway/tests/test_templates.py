@@ -72,12 +72,15 @@ def test_weather_quarter_refuses_an_unquoted_or_injected_station_list():
 
 def test_usl_and_dq_templates_render_to_fixed_reader_statements():
     assert render("usl_describe", {})[1] == "LOAD USL weather_or_not_usl NAMESPACE lightning.metastore.weatherornot"
-    assert render("dq_invalid", {})[1] == f"SHOW DQ ALL INVALID TABLE {USL}.weather_quarter"
+    assert render("dq_invalid", {})[1] == f"SHOW DQ INVALID RECORD coverage_ok TABLE {USL}.weather_quarter"
     assert render("dq_run_coverage", {})[1] == f"RUN DQ coverage_ok TABLE {USL}.weather_quarter"
     for tid in ("usl_describe", "dq_invalid", "dq_run_coverage"):
         t = templates.TEMPLATES[tid]
         assert allowlist.check(t.sql, "reader") == "read" and t.params == {}
     assert templates.TEMPLATES["dq_invalid"].raw_objects == templates.GHCN_VIEWS
+    # DQ on a USL table over the filestore views is slow (minutes); the other templates keep the gateway default.
+    assert templates.TEMPLATES["dq_invalid"].timeout_s == templates.TEMPLATES["dq_run_coverage"].timeout_s == templates.DQ_TIMEOUT_S == 600.0
+    assert templates.TEMPLATES["usl_describe"].timeout_s is None and templates.TEMPLATES["weather_quarter"].timeout_s is None
 
 
 @pytest.mark.parametrize("kind,value,ok", [

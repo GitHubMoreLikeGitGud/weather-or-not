@@ -87,6 +87,7 @@ export const PARAM_PATTERNS = {
   year: /^20\d{2}$/u,
   quarter: /^[1-3]$/u,
   station: /^US[A-Z0-9]{9}$/u,
+  station_list: /^US[A-Z0-9]{9}(,US[A-Z0-9]{9}){0,39}$/u,
   element: /^(TMAX|TMIN)$/u,
 } as const;
 export type ParamKind = keyof typeof PARAM_PATTERNS;
@@ -96,6 +97,20 @@ export type ParamKind = keyof typeof PARAM_PATTERNS;
 export const TEMPLATE_PARAMS: Record<string, Record<string, ParamKind>> = {
   select1: {},
   show_databases: {},
+  // GHCN degree days over the cached won.ghcn_<year>_<element> views (zetaris/sql/04_won_ghcn_*.sql).
+  weather_quarter: { year: "year", quarter: "quarter", station_list: "station_list" },
+  // USL model and data quality (zetaris/sql/05_won_usl_*.sql).
+  usl_describe: {},
+  dq_invalid: {},
+  dq_run_coverage: {},
+};
+
+/** Client-side bound per template id where the gateway's own bound is longer than the default
+ *  (gateway/templates.py timeout_s): DQ on the USL weather table resolves the filestore sources
+ *  again and takes minutes. Other templates use GatewayClientOptions.timeoutMs. */
+export const TEMPLATE_TIMEOUT_MS: Record<string, number> = {
+  dq_invalid: 630_000,
+  dq_run_coverage: 630_000,
 };
 
 /** Parameter kinds per registrar action, mirroring gateway/templates.py REGISTRAR_PLANS. */
@@ -196,7 +211,7 @@ export class GatewayClient {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ template_id: templateId, params, role }),
-        signal: AbortSignal.timeout(this.timeoutMs),
+        signal: AbortSignal.timeout(TEMPLATE_TIMEOUT_MS[templateId] ?? this.timeoutMs),
       });
       const wall = performance.now() - started;
       let body: TemplateResponse;

@@ -58,6 +58,62 @@
         "data.sec.gov"
       ],
       "summary": "Run-time registration of a frames period by the gateway registrar (register_frames; also register_concept, register_submission). Proved with Revenues CY2025Q2 = 1,941 facts (2026-10-24)"
+    },
+    {
+      "id": "won_ghcn",
+      "kind": "filestore-parquet",
+      "script": "zetaris/sql/04_won_ghcn_create.sql",
+      "select": "zetaris/sql/04_won_ghcn_select.sql",
+      "status": "verified",
+      "requires": [],
+      "hosts": [
+        "s3a://noaa-ghcn-pds/"
+      ],
+      "summary": "NOAA GHCN-Daily parquet by_year partitions for 2024 and 2025, TMAX and TMIN; station-filtered views (56 seed stations + USW00013740) cached. Raw count for USW00013740 and the four view counts equal pyarrow; 2025 Q1 degree days equal pyarrow to 0.01 (2026-10-24)",
+      "objects": {
+        "database": "WON_GHCN",
+        "container": "won",
+        "raw": [
+          "WON_GHCN.ghcn_2025_tmax",
+          "WON_GHCN.ghcn_2025_tmin",
+          "WON_GHCN.ghcn_2024_tmax",
+          "WON_GHCN.ghcn_2024_tmin"
+        ],
+        "views": [
+          "won.ghcn_2025_tmax",
+          "won.ghcn_2025_tmin",
+          "won.ghcn_2024_tmax",
+          "won.ghcn_2024_tmin"
+        ]
+      }
+    },
+    {
+      "id": "won_usl",
+      "kind": "usl",
+      "script": "zetaris/sql/05_won_usl_create.sql",
+      "select": "zetaris/sql/05_won_usl_select.sql",
+      "status": "verified",
+      "requires": [
+        "won_ghcn",
+        "won_sec",
+        "won_dns"
+      ],
+      "hosts": [],
+      "summary": "USL weather_or_not_usl in lightning.metastore.weatherornot: sic_code, utility, station, weather_quarter, revenue_quarter with keys and descriptions; station and weather_quarter activated from the GHCN views; DQ rule coverage_ok (2026-10-24)",
+      "objects": {
+        "namespace": "lightning.metastore.weatherornot",
+        "usl": "lightning.metastore.weatherornot.weather_or_not_usl",
+        "tables": [
+          "sic_code",
+          "utility",
+          "station",
+          "weather_quarter",
+          "revenue_quarter"
+        ],
+        "dq": [
+          "coverage_ok"
+        ]
+      }
     }
   ]
 }
