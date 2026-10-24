@@ -2,7 +2,10 @@
 // computed, think off, JSON output. The host checks every number in the draft by string
 // match against the allowed numbers (the formatted tool outputs): a draft with any other
 // number is rejected and the model gets one retry that names the rejected numbers; a
-// second rejection falls back to the deterministic template memo. Nothing here computes.
+// second rejection falls back to the deterministic template memo. Length policy (D2): a
+// draft whose numbers all match is kept at 100 to 250 words; below 100, above 250 or on an
+// unknown number the draft is rejected (the retry asks for the 150-word target), and the
+// template memo is the last resort. Nothing here computes.
 
 import type { ChatResult, OllamaClient } from "./ollama.ts";
 import { fenceUntrusted, loadPrompt } from "./prompts.ts";
@@ -50,7 +53,13 @@ export interface MemoResult {
   model: string;
 }
 
-export const MEMO_WORDS = { min: 150, max: 250, tolerance: 40 } as const;
+/** `min` is the target the model is asked for; `accept_min` is the shortest draft the host keeps. */
+export const MEMO_WORDS = { min: 150, max: 250, accept_min: 100 } as const;
+
+/** D2: a draft is kept when every number matches and it has 100 to 250 words. */
+export function lengthAccepted(words: number): boolean {
+  return words >= MEMO_WORDS.accept_min && words <= MEMO_WORDS.max;
+}
 
 /** Unicode minus and figure dashes read as a plain minus sign. */
 function normaliseSigns(s: string): string {
@@ -139,8 +148,8 @@ export async function writeMemo(ollama: OllamaClient | null, input: MemoInput, o
     const memo = value && typeof value.memo === "string" ? value.memo.trim() : "";
     const unknown = memo ? unknownNumbers(memo, input.allowed) : [];
     const words = wordCount(memo);
-    const lengthOk = words >= MEMO_WORDS.min - MEMO_WORDS.tolerance && words <= MEMO_WORDS.max + MEMO_WORDS.tolerance;
-    if (memo && !lengthOk) schemaErrors.push(`memo: ${words} words, wanted ${MEMO_WORDS.min} to ${MEMO_WORDS.max}`);
+    const lengthOk = lengthAccepted(words);
+    if (memo && !lengthOk) schemaErrors.push(`memo: ${words} words, wanted ${MEMO_WORDS.accept_min} to ${MEMO_WORDS.max}`);
     const ok = parseError === null && schemaErrors.length === 0 && unknown.length === 0;
     attempts.push({ attempt: i, ok, parseError, schemaErrors, unknownNumbers: unknown, wordCount: words, metrics: res.metrics, promptSha256: res.promptSha256, error: null });
     if (ok) return { text: memo, source: "model", attempts, allowed: input.allowed, wordCount: words, model: res.model };

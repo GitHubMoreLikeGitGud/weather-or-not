@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { numberTokens, templateMemo, unknownNumbers, writeMemo, type MemoInput } from "../src/llm/memo.ts";
+import { lengthAccepted, MEMO_WORDS, numberTokens, templateMemo, unknownNumbers, writeMemo, type MemoInput } from "../src/llm/memo.ts";
 import { OllamaClient } from "../src/llm/ollama.ts";
+import { wordCount } from "../src/llm/schemas.ts";
 
 const input: MemoInput = {
   utility: "Target Electric Corp",
@@ -37,6 +38,9 @@ function ollamaWith(contents: string[]): OllamaClient {
 }
 
 const words = (n: number, lead: string) => `${lead} ${Array.from({ length: n }, (_, i) => String.fromCharCode(97 + (i % 26)).repeat(3 + (i % 4))).join(" ")}.`;
+/** A memo of exactly `n` words that opens with `lead` (the lead carries the numbers). */
+const exactWords = (n: number, lead: string) => words(n - wordCount(lead), lead);
+const ALL_MATCH = "Weather accounts for roughly +9.0% [+2.0%, +14.0%] of the +15.0% change in Q1 2025 versus 2024 from 1,000.0 million to 1,150.0 million, consistent with the claim.";
 
 describe("memo number check", () => {
   it("finds every number-like token, with sign and percent sign", () => {
@@ -92,6 +96,64 @@ describe("writeMemo", () => {
     const r = await writeMemo(ollamaWith([JSON.stringify({ memo: words(400, "Long memo at +15.0%.") })]), input, { maxAttempts: 1 });
     expect(r.source).toBe("template");
     expect(r.attempts[0]!.schemaErrors[0]).toMatch(/words/u);
+  });
+
+  describe("length policy (D2): kept at 100 to 250 words when every number matches", () => {
+    it("accepts exactly the band edges and nothing outside them", () => {
+      expect(MEMO_WORDS).toEqual({ min: 150, max: 250, accept_min: 100 });
+      expect(lengthAccepted(99)).toBe(false);
+      expect(lengthAccepted(100)).toBe(true);
+      expect(lengthAccepted(135)).toBe(true);
+      expect(lengthAccepted(250)).toBe(true);
+      expect(lengthAccepted(251)).toBe(false);
+    });
+
+    it("keeps a 100-word first draft and a 250-word first draft", async () => {
+      for (const n of [100, 250]) {
+        const memo = exactWords(n, ALL_MATCH);
+        expect(wordCount(memo)).toBe(n);
+        const r = await writeMemo(ollamaWith([JSON.stringify({ memo })]), input);
+        expect(r.source, `${n} words`).toBe("model");
+        expect(r.attempts).toHaveLength(1);
+        expect(r.wordCount).toBe(n);
+      }
+    });
+
+    it("rejects a 99-word draft, asks for the 150-word target with the paragraphs to add, then keeps a 100-word retry", async () => {
+      const short = exactWords(99, ALL_MATCH);
+      const seen: string[] = [];
+      let i = 0;
+      const replies = [JSON.stringify({ memo: short }), JSON.stringify({ memo: exactWords(100, ALL_MATCH) })];
+      const fetchImpl = (async (_url: string | URL | Request, init?: RequestInit) => {
+        const body = JSON.parse(String(init?.body ?? "{}")) as { messages?: { content: string }[] };
+        seen.push(body.messages?.map((m) => m.content).join("\n") ?? "");
+        return new Response(JSON.stringify(reply(replies[Math.min(i++, replies.length - 1)]!)), { status: 200 });
+      }) as typeof fetch;
+      const r = await writeMemo(new OllamaClient({ baseUrl: "http://127.0.0.1:11434", model: "m", ramGuard: false, fetchImpl }), input);
+      expect(r.source).toBe("model");
+      expect(r.attempts).toHaveLength(2);
+      expect(r.attempts[0]!.ok).toBe(false);
+      expect(r.attempts[0]!.schemaErrors[0]).toBe("memo: 99 words, wanted 100 to 250");
+      expect(r.attempts[0]!.unknownNumbers).toEqual([]);
+      expect(seen[1]).toContain("it had 99 words; write at least 170 words this time, adding a paragraph on the industry-wide part and the remainder with their ranges and one on what was not tested, with the same numbers.");
+      expect(r.attempts[1]!.ok).toBe(true);
+      expect(r.wordCount).toBe(100);
+    });
+
+    it("rejects a 251-word draft and asks for a cut to 250", async () => {
+      const r = await writeMemo(ollamaWith([JSON.stringify({ memo: exactWords(251, ALL_MATCH) })]), input, { maxAttempts: 1 });
+      expect(r.source).toBe("template");
+      expect(r.attempts[0]!.schemaErrors[0]).toBe("memo: 251 words, wanted 100 to 250");
+    });
+
+    it("never keeps a draft with an unknown number, whatever its length", async () => {
+      for (const n of [100, 180, 250]) {
+        const memo = exactWords(n, "Revenue rose 14.5% from 3,287 million, consistent with the claim.");
+        const r = await writeMemo(ollamaWith([JSON.stringify({ memo })]), input, { maxAttempts: 1 });
+        expect(r.source, `${n} words`).toBe("template");
+        expect(r.attempts[0]!.unknownNumbers).toEqual(["14.5%", "3,287"]);
+      }
+    });
   });
 
   it("uses the template when no model is wired", async () => {
