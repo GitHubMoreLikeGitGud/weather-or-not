@@ -102,6 +102,18 @@ Per station and quarter: `TMAX` joined to `TMIN` on `ID` and `DATE`, days with a
 | USW00013740 (Richmond VA), 2025 Q1 | 2022.69 / 22.08 / 90 / 1.0 | 2022.69 / 22.08 / 90 / 1.0 | match to 0.01 |
 | USW00013722 (Raleigh NC), 2025 Q1 | 1538.88 / 28.41 / 90 / 1.0 | 1538.88 / 28.41 / 90 / 1.0 | match to 0.01 |
 
+#### Parity with the TypeScript reference (checked 24 Oct 2026, 19:3x SGT)
+
+Three paths computed USW00013740, 2025 Q1 and agree to the printed precision: the tool's own SQL text, `degreeDaySql({ year: 2025, quarter: 1, stations: ["USW00013740"] })` from `agent/src/tools/degreeDays.ts` (CASE WHEN form, explicit date bounds, `COUNT(*) / 90.0`), run over JDBC with `gateway.run_sql --sql`; the gateway's `weather_quarter` template for the same station and quarter through `POST /sql/template` (GREATEST form, month filter); and `degreeDaysFromDaily()` over the station's 2025 daily rows read from the same parquet files with pyarrow (365 TMAX and 365 TMIN days, none quality-flagged).
+
+| Path | HDD | CDD | days observed | coverage | time |
+|---|---|---|---|---|---|
+| `degreeDaySql` text over JDBC | 2022.69 | 22.08 | 90 | 1.00 | 61.9 s statement (a second filestore query ran at the same time; see below) |
+| `weather_quarter` template through the gateway | 2022.69 | 22.08 | 90 | 1.00 | 22.8 s statement, 30.1 s wall, cache hit, instance under load |
+| `degreeDaysFromDaily` over the pyarrow rows | 2022.69 (2022.6900000000007) | 22.08 (22.079999999999984) | 90 | 1.00 | about 35 s to read the two partitions |
+
+So the BIGINT sum divided by the `2.0` literal is a double in Lightning, `Q_FLAG` arrives null or empty, `COUNT(*) / 90.0` is a real division, and the two SQL forms and the TypeScript arithmetic round the same way. Two filestore queries sent at the same time (one through the gateway, one over JDBC) slowed each other down (61.9 s for the JDBC one; the gateway call hit its 60 s bound and was retried alone): the agent sends its GHCN queries one at a time.
+
 ### Timings (JDBC statement time)
 
 - `CREATE LIGHTNING DATABASE` 158 ms; `CREATE LIGHTNING FILESTORE TABLE` 4.5 to 7.0 s each (partition listing and schema inference); `DESCRIBE` 52 to 133 ms; `CREATE SCHEMASTORE VIEW` 3.0 to 3.1 s each.
