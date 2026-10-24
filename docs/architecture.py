@@ -94,22 +94,22 @@ rect(990, 110, 480, 710, "#9AA3AF", "#FAFAFC", dash=True, r=14)
 
 # Public sources
 text(30, 150, "PUBLIC SOURCES", size=11, weight="bold", fill=SOURCE[2], spacing=1.2)
-box(30, 165, 200, 122, SOURCE, "SEC EDGAR", ["XBRL frames, companyconcept,", "submissions (data.sec.gov)", "US government work; declared", "User-Agent; queried live"])
-box(30, 303, 200, 104, SOURCE, "NOAA GHCN-Daily", ["daily TMAX and TMIN, parquet", "on the AWS Open Data bucket", "US government work"])
-box(30, 423, 200, 104, SOURCE, "company_dns", ["US SIC code list, 1,005 codes", "service under Apache-2.0", "identifying User-Agent"])
+box(30, 165, 224, 122, SOURCE, "SEC EDGAR", ["XBRL frames, companyconcept,", "submissions (data.sec.gov)", "US government work; declared", "User-Agent; queried live"])
+box(30, 303, 224, 104, SOURCE, "NOAA GHCN-Daily", ["daily TMAX and TMIN, parquet", "on the AWS Open Data bucket", "US government work"])
+box(30, 423, 224, 104, SOURCE, "company_dns", ["US SIC code list, 1,005 codes", "service under Apache-2.0", "identifying User-Agent"])
 text(30, 560, "Zetaris is the only", size=13, fill=MUTED, style="italic")
 text(30, 578, "runtime path to them.", size=13, fill=MUTED, style="italic")
 
 # Zetaris
 text(300, 138, "ZETARIS", size=11, weight="bold", fill=ZETARIS[2], spacing=1.2)
 text(300, 160, "Lightning 2.4.3.1, local Docker", size=17, weight="bold")
-box(300, 175, 350, 128, ZETARIS, "REST tables, views cached",
+box(300, 175, 360, 128, ZETARIS, "REST tables, views cached",
     ["WON_SEC.frames_<tag>_<period>: 6 + run-time", "WON_SEC.concept_<cik10>_<tag>: 10", "WON_SEC.submissions_<cik10>: 43 seeds",
      "WON_DNS.sic_codes_v4_raw; views in container won"])
-box(300, 322, 350, 118, ZETARIS, "FILESTORE parquet, views cached",
+box(300, 322, 360, 118, ZETARIS, "FILESTORE parquet, views cached",
     ["WON_GHCN.ghcn_<yyyy>_<tmax|tmin> (2024, 2025)", "9 files per partition, every station worldwide",
      "won.ghcn_* filtered to the 56 seed stations", "!degree days computed here, in Lightning SQL"])
-box(300, 460, 350, 150, ZETARIS, "weather_or_not_usl",
+box(300, 460, 360, 150, ZETARIS, "weather_or_not_usl",
     ["Unified Semantic Layer, 5 tables:", "utility, sic_code, station,", "weather_quarter, revenue_quarter",
      "!PK/FK rules + custom DQ rule coverage_ok", "!RUN DQ at onboarding gates the verdict"])
 text(300, 640, "Every statement is Lightning SQL over JDBC.", size=13, fill=MUTED, style="italic")
@@ -117,21 +117,21 @@ text(300, 658, "The agent never writes SQL; the gateway's", size=13, fill=MUTED,
 text(300, 676, "named templates do, and the SQL text is", size=13, fill=MUTED, style="italic")
 text(300, 694, "the citation behind every number.", size=13, fill=MUTED, style="italic")
 for y in (226, 355, 475):
-    out.append(f'<line x1="230" y1="{y}" x2="256" y2="{y}" stroke="#4A5563" stroke-width="2"/>')
-out.append('<line x1="256" y1="226" x2="256" y2="475" stroke="#4A5563" stroke-width="2"/>')
-arrow([(256, 239), (300, 239)])
-arrow([(256, 381), (300, 381)])
-arrow([(475, 303), (475, 322)])
-arrow([(475, 440), (475, 460)], "ACTIVATE USL TABLE", (490, 454))
+    out.append(f'<line x1="254" y1="{y}" x2="266" y2="{y}" stroke="#4A5563" stroke-width="2"/>')
+out.append('<line x1="266" y1="226" x2="266" y2="475" stroke="#4A5563" stroke-width="2"/>')
+arrow([(266, 239), (300, 239)])
+arrow([(266, 381), (300, 381)])
+arrow([(480, 303), (480, 322)])
+arrow([(480, 440), (480, 460)], "ACTIVATE USL TABLE", (495, 454))
 
 # Gateway
-box(720, 330, 210, 190, CORE, "Zetaris gateway",
+box(720, 330, 220, 190, CORE, "Zetaris gateway",
     ["FastAPI + JDBC, 127.0.0.1:8793", "28 named SQL templates", "reader allowlist; registrar", "plans under a signed", "medium-risk contract",
      "!every statement logged", "!with its sha256"])
-arrow([(650, 420), (720, 420)], "JDBC", (685, 410), both=True, anchor="middle")
-arrow([(930, 420), (1010, 420)], "template id", (970, 392), both=True, anchor="middle")
-text(970, 408, "+ parameters", size=12.5, fill=MUTED, anchor="middle")
-text(970, 444, "rows + SQL", size=12.5, fill=MUTED, anchor="middle")
+arrow([(660, 420), (720, 420)], "JDBC", (690, 410), both=True, anchor="middle")
+arrow([(940, 420), (1010, 420)], "template id", (975, 392), both=True, anchor="middle")
+text(975, 408, "+ parameters", size=12.5, fill=MUTED, anchor="middle")
+text(975, 444, "rows + SQL", size=12.5, fill=MUTED, anchor="middle")
 
 # Agent server
 text(1010, 138, "AGENT SERVER", size=11, weight="bold", fill="#5F6670", spacing=1.2)
@@ -141,7 +141,7 @@ box(1010, 175, 220, 130, METERLESS, "H-MEM", ["facts with Zetaris provenance", "
 box(1240, 175, 220, 130, METERLESS, "World Model", ["utility, state, station, SIC,", "filing, quarter", "serves, peer_of, reported_in", "edges dated by source time"],
     tag="METERLESS")
 box(1010, 345, 450, 150, METERLESS, "Markovian question chain",
-    ["bounded chunks: carried state at most 800 tokens, at most 10 chunks", "planner: Nemotron chooses the next tool; one repair round",
+    ["bounded chunks: at most 10, carried state at most 800 tokens", "planner: Nemotron chooses the next tool; one repair round",
      "NEEDS_TOOL executor runs the ten host tools", "deterministic fallback: the next open checklist item"],
     tag="METERLESS  +  NVIDIA")
 box(1010, 530, 220, 128, NVIDIA, "Nemotron 3 Nano 4B", ["local Ollama, loopback only", "plans steps, writes the memo", "!never computes a number", "!0 cloud model calls"],
@@ -159,8 +159,9 @@ arrow([(1350, 495), (1350, 530)], both=True)
 arrow([(1235, 658), (1235, 690)])
 
 # Analyst
-box(1010, 880, 450, 100, ANALYST, "Analyst UI",
-    ["ask with a live timeline (SSE), answer card with ranges and confidence,", "evidence drawer (the SQL is the citation), memory and why, graph"],
+box(1010, 880, 450, 119, ANALYST, "Analyst UI",
+    ["ask with a live timeline (SSE), the answer card with ranges and", "confidence, the evidence drawer (the SQL is the citation),",
+     "memory and why, graph"],
     tag="ANALYST")
 arrow([(1235, 880), (1235, 805)], both=True)
 text(1247, 850, "override with a reason, re-run", size=12.5, fill=MUTED)

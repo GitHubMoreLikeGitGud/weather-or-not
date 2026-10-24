@@ -51,7 +51,7 @@ From the repository root, in PowerShell:
 
 | Task | File | Scope | Status |
 |---|---|---|---|
-| C1 | [`C1-degree-days.md`](C1-degree-days.md) | degree-day SQL template text, TypeScript reference implementation, utility aggregation, tests against a synthetic 90-day series | done 2026-10-24 (122.4 s, exit 0, 13 tests green), commit `1a8743c`; two reviewer fixes in `2b2533b` (see the run record) |
+| C1 | [`C1-degree-days.md`](C1-degree-days.md) | degree-day SQL template text, TypeScript reference implementation, utility aggregation, tests against synthetic daily series for two made-up stations | done 2026-10-24 (122.4 s, exit 0, 13 tests green), commit `1a8743c`; two reviewer fixes in `2b2533b` (see the run record) |
 | C2 | [`C2-attribution.md`](C2-attribution.md) | peer set, OLS and Theil-Sen slope, seeded bootstrap ranges, three-way split, confidence labels, claim verdict, tests against hand-computed cases | done 2026-10-24 (198.1 s, exit 0, 13 tests green), commit `4d83e2e`; one reviewer fix to the claim thresholds and the fixture in `1ced57c` (see the run record) |
 | C3 | [`C3-recast-and-frames.md`](C3-recast-and-frames.md) | companyconcept history parsing, period matching, recast detection and rule R1, tag probing, frames helpers, tests with a recast fixture | done 2026-10-24 (163.3 s, exit 0, 22 tests green), commit `222843d`; no reviewer change needed (see the run record) |
 
