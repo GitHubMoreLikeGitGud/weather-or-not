@@ -262,7 +262,10 @@ export class GatewayClient {
 }
 
 // ---------- DQ gate ----------
-// TODO(agent loop): the dq_gate tool (SHOW DQ ALL INVALID on the USL for the target utility,
-// then the coverage, SIC-orphan and missing-station rules) goes here once the reader
-// templates exist. The ClearShelf DqGate and write-back DQ check were removed: nothing in
-// this entry writes back to Zetaris.
+// TODO(agent loop): the dq_gate tool goes here. Per question it reads the coverage column the
+// weather_quarter template already returns (the coverage_ok rule, coverage >= 0.9); the USL
+// templates dq_invalid (SHOW DQ INVALID RECORD coverage_ok, about 3 min live) and
+// dq_run_coverage (about 6 min) are onboarding or warm-up checks. SHOW DQ ALL INVALID on the
+// weather table did not return within 900 s on this instance (zetaris/README.md, G6), so it is
+// not a template. The ClearShelf DqGate and write-back DQ check were removed: nothing in this
+// entry writes back to Zetaris.
