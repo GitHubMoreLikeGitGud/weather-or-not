@@ -177,5 +177,5 @@ out.append("</svg>")
 
 if __name__ == "__main__":
     target = Path(__file__).with_name("architecture.svg")
-    target.write_text("\n".join(out) + "\n", encoding="utf-8")
+    target.write_text("\n".join(out) + "\n", encoding="utf-8", newline="\n")
     print(f"wrote {target} ({W}x{H})")
