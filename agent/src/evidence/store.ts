@@ -9,7 +9,7 @@
 import { appendFileSync, mkdirSync } from "node:fs";
 import { randomBytes } from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { REPO_ROOT_URL } from "../config.ts";
+import { DATA_DIR_URL } from "../config.ts";
 import type { TemplateResult } from "../zetaris/client.ts";
 
 export type EvidenceKind = "zetaris_sql" | "dq" | "tool" | "model" | "memory" | "world_model" | "registrar";
@@ -156,7 +156,7 @@ export class EvidenceStore {
   private readonly records: EvidenceRecord[] = [];
 
   /** `dir` null keeps the records in memory only (tests). */
-  constructor(runId = newRunId(), dir: string | null = fileURLToPath(new URL("data/evidence/", REPO_ROOT_URL))) {
+  constructor(runId = newRunId(), dir: string | null = fileURLToPath(new URL("evidence/", DATA_DIR_URL))) {
     this.runId = runId;
     if (dir) {
       mkdirSync(dir, { recursive: true });

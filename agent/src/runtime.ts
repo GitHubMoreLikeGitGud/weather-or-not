@@ -6,7 +6,7 @@
 
 import { appendFileSync, existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { loadConfig, REPO_ROOT_URL } from "./config.ts";
+import { DATA_DIR_URL, loadConfig } from "./config.ts";
 import { issueContract, loadContractSecret } from "./contract/scout.ts";
 import { EvidenceStore } from "./evidence/store.ts";
 import { OllamaClient } from "./llm/ollama.ts";
@@ -19,8 +19,8 @@ import { loadSeeds, type Seeds } from "./seeds.ts";
 import { WeatherWorld } from "./world/world.ts";
 import { GatewayClient, type RegistrarResult } from "./zetaris/client.ts";
 
-export const LOCK_FILE = fileURLToPath(new URL("data/agent.lock", REPO_ROOT_URL));
-export const CONTRACTS_LOG = fileURLToPath(new URL("data/contracts/issued-agent.jsonl", REPO_ROOT_URL));
+export const LOCK_FILE = fileURLToPath(new URL("agent.lock", DATA_DIR_URL));
+export const CONTRACTS_LOG = fileURLToPath(new URL("contracts/issued-agent.jsonl", DATA_DIR_URL));
 
 export interface AgentLock {
   file: string;
@@ -38,7 +38,7 @@ function pidAlive(pid: number): boolean {
 
 /** Takes data/agent.lock; refuses while another live process holds it. */
 export function acquireLock(command: string, file = LOCK_FILE): AgentLock {
-  mkdirSync(fileURLToPath(new URL("data/", REPO_ROOT_URL)), { recursive: true });
+  mkdirSync(fileURLToPath(DATA_DIR_URL), { recursive: true });
   if (existsSync(file)) {
     try {
       const held = JSON.parse(readFileSync(file, "utf8")) as { pid: number; command: string; at: string };
@@ -71,7 +71,7 @@ export function registrarPort(gateway: GatewayClient, user = "won-agent"): Regis
   return {
     async register(action: RegistrarAction, params: Record<string, string>): Promise<RegistrarResult> {
       const contract = issueContract({ action, parameters: params, user, surface: "won-agent" }, loadContractSecret());
-      mkdirSync(fileURLToPath(new URL("data/contracts/", REPO_ROOT_URL)), { recursive: true });
+      mkdirSync(fileURLToPath(new URL("contracts/", DATA_DIR_URL)), { recursive: true });
       appendFileSync(CONTRACTS_LOG, `${JSON.stringify({ contractId: contract.contractId, action, params, issuedAt: contract.issuedAt, expiresAt: contract.expiresAt })}\n`, "utf8");
       return gateway.registrar(action, params, contract as unknown as Record<string, unknown>);
     },

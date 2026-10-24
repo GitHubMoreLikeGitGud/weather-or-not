@@ -5,7 +5,7 @@
 
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { REPO_ROOT_URL } from "../config.ts";
+import { DATA_DIR_URL } from "../config.ts";
 import type { RunResult } from "../loop/investigate.ts";
 
 export interface RunOrigin {
@@ -35,7 +35,7 @@ export interface RunIndex {
 
 export type SavedRun = RunResult & { saved: RunOrigin & { at: string } };
 
-export const RUNS_DIR = fileURLToPath(new URL("data/runs/", REPO_ROOT_URL));
+export const RUNS_DIR = fileURLToPath(new URL("runs/", DATA_DIR_URL));
 
 export class RunStore {
   readonly dir: string | null;

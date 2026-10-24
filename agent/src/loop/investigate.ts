@@ -7,7 +7,7 @@
 
 import { fileURLToPath } from "node:url";
 import { Markovian, type ChunkConfig, type MarkovianRun } from "../../../engines/markovian/reference/src/index.ts";
-import { REPO_ROOT_URL } from "../config.ts";
+import { DATA_DIR_URL } from "../config.ts";
 import { missingFields, type EvidenceRecord } from "../evidence/store.ts";
 import { refusedModelHostAttempts } from "../llm/ollama.ts";
 import type { RecastConflict } from "../memory/recastConflicts.ts";
@@ -24,7 +24,7 @@ import { applyMemory, newQuestionContext, runTool, toolDef, type CardClaim, type
  */
 export const QUESTION_CHUNK_CONFIG: ChunkConfig = { chunkSize: 3000, maxChunks: 10, carryoverTokens: 800, overlapTokens: 0 };
 
-export const DEFAULT_HISTORY_DIR = fileURLToPath(new URL("data/markovian/", REPO_ROOT_URL));
+export const DEFAULT_HISTORY_DIR = fileURLToPath(new URL("markovian/", DATA_DIR_URL));
 
 export interface InvestigateOptions {
   cik: string;

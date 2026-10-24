@@ -13,7 +13,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { estimateTokens } from "../../../engines/markovian/reference/src/index.ts";
-import { REPO_ROOT_URL } from "../config.ts";
+import { DATA_DIR_URL } from "../config.ts";
 import { EvidenceStore, sourceFor, type EvidenceRecord } from "../evidence/store.ts";
 import { writeMemo, type AllowedNumber, type MemoResult } from "../llm/memo.ts";
 import type { OllamaClient } from "../llm/ollama.ts";
@@ -941,7 +941,7 @@ interface DqFile {
   statements?: { template_id?: string; sql?: string; sql_sha256?: string; started_at?: string; elapsed_s?: number; columns?: string[]; rows?: unknown[][]; row_count?: number; error?: string | null }[];
 }
 
-export const DQ_FILE = fileURLToPath(new URL("data/dq/latest.json", REPO_ROOT_URL));
+export const DQ_FILE = fileURLToPath(new URL("dq/latest.json", DATA_DIR_URL));
 
 const dqTool = def("dq_gate", {
   optional: false,

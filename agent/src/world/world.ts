@@ -30,11 +30,11 @@ import {
   type Relationship,
   type WorldEvent,
 } from "../../../engines/world-model/reference/src/index.ts";
-import { REPO_ROOT_URL } from "../config.ts";
+import { DATA_DIR_URL } from "../config.ts";
 import type { StationQuarter } from "../tools/degreeDays.ts";
 
 export const WORLD_NAMESPACE = "weatherornot";
-export const WORLD_DIR = fileURLToPath(new URL("data/world/", REPO_ROOT_URL));
+export const WORLD_DIR = fileURLToPath(new URL("world/", DATA_DIR_URL));
 export const RETRACTED = "retracted";
 
 // ---------------------------------------------------------------- ids

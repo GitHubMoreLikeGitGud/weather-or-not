@@ -26,7 +26,7 @@ import {
   type MemoryType,
   type ProvenanceOrigin,
 } from "../../../engines/hmem/reference/src/index.ts";
-import { REPO_ROOT_URL } from "../config.ts";
+import { DATA_DIR_URL } from "../config.ts";
 import type { EvidenceRecord } from "../evidence/store.ts";
 import type { RevenueTag } from "../tools/frames.ts";
 import { RecastConflictService, type RecastConflict } from "./recastConflicts.ts";
@@ -34,7 +34,7 @@ import { RecastConflictService, type RecastConflict } from "./recastConflicts.ts
 export type { HMEMOptions, LedgerEntry, MemoryRecord } from "../../../engines/hmem/reference/src/index.ts";
 export type { RecastConflict } from "./recastConflicts.ts";
 
-export const HMEM_DIR = fileURLToPath(new URL("data/hmem/", REPO_ROOT_URL));
+export const HMEM_DIR = fileURLToPath(new URL("hmem/", DATA_DIR_URL));
 export const AGENT_ACTOR = "won-agent";
 export const ANALYST = "analyst";
 

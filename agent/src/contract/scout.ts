@@ -13,7 +13,7 @@
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { appendFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { REPO_ROOT_URL } from "../config.ts";
+import { DATA_DIR_URL, REPO_ROOT_URL } from "../config.ts";
 
 export const POLICY_PACK_VERSION = "weather-or-not-scout-subset@1";
 export const CONTRACT_TTL_MS = 15 * 60_000;
@@ -348,7 +348,7 @@ export class ContractVerifier {
   constructor(
     private readonly secret: string,
     readonly name = "agent",
-    dir: string | null = fileURLToPath(new URL("data/contracts/", REPO_ROOT_URL)),
+    dir: string | null = fileURLToPath(new URL("contracts/", DATA_DIR_URL)),
     private readonly clock: () => Date = () => new Date(),
   ) {
     assertSecret(secret);
