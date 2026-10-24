@@ -14,6 +14,7 @@ import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { appendFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { DATA_DIR_URL, REPO_ROOT_URL } from "../config.ts";
+import type { RecastSide } from "../memory/recastConflicts.ts";
 
 export const POLICY_PACK_VERSION = "weather-or-not-scout-subset@1";
 export const CONTRACT_TTL_MS = 15 * 60_000;
@@ -26,7 +27,10 @@ export type RiskLevel = "low" | "medium" | "high";
  * risk. The gateway's registrar plans (gateway/templates.py REGISTRAR_PLANS: a new frames
  * period, a filer's companyconcept history or submissions profile) are medium risk. The
  * analyst's override of a recast resolution (rule R1) is high risk: it needs an analyst
- * approval with a reason and comes from the UI surface only.
+ * approval with a reason and comes from the UI surface only. Its parameters are
+ * `conflict_id` (the rc-... record), `chosen` (own_filing | later_filing) and `reason`
+ * (OVERRIDE_RECAST_PARAMS); `recasts.override()` in memory/recastConflicts.ts is the only
+ * write path and records the contract id.
  */
 export const RISK_CLASSES = {
   read: "low",
@@ -36,6 +40,36 @@ export const RISK_CLASSES = {
   override_recast: "high",
 } as const satisfies Record<string, RiskLevel>;
 export type ContractAction = keyof typeof RISK_CLASSES;
+
+export const RECAST_SIDES = ["own_filing", "later_filing"] as const satisfies readonly RecastSide[];
+export const OVERRIDE_RECAST_PARAMS = ["conflict_id", "chosen", "reason"] as const;
+const CONFLICT_ID = /^rc-[0-9a-f]{12}$/u;
+
+export interface OverrideRecastParams {
+  conflict_id: string;
+  chosen: RecastSide;
+  reason: string;
+}
+
+/** The parameter errors of an override_recast intent (empty when the three parameters are well formed). */
+export function overrideRecastParamErrors(params: Record<string, string>): string[] {
+  const out: string[] = [];
+  for (const k of OVERRIDE_RECAST_PARAMS) if (typeof params[k] !== "string") out.push(`${k} missing`);
+  if (typeof params.conflict_id === "string" && !CONFLICT_ID.test(params.conflict_id)) out.push("conflict_id is not a recast conflict id (rc-<12 hex>)");
+  if (typeof params.chosen === "string" && !(RECAST_SIDES as readonly string[]).includes(params.chosen)) out.push(`chosen must be one of ${RECAST_SIDES.join(" | ")}`);
+  if (typeof params.reason === "string" && params.reason.trim().length === 0) out.push("reason is empty");
+  for (const k of Object.keys(params)) if (!(OVERRIDE_RECAST_PARAMS as readonly string[]).includes(k)) out.push(`unexpected parameter ${k}`);
+  return out;
+}
+
+/** The typed parameters of a verified override_recast contract. */
+export function overrideRecastParams(contract: ExecutionContract): OverrideRecastParams {
+  if (contract.intent.primary !== "override_recast") throw new ContractError(`contract is for ${contract.intent.primary}, not override_recast`);
+  const errors = overrideRecastParamErrors(contract.intent.parameters);
+  if (errors.length) throw new ContractError(`override_recast parameters: ${errors.join("; ")}`);
+  const p = contract.intent.parameters;
+  return { conflict_id: p.conflict_id!, chosen: p.chosen as RecastSide, reason: p.reason!.trim() };
+}
 
 /** The actions the gateway registrar runs (POST /registrar/<action>). */
 export const REGISTRAR_ACTIONS = ["register_frames", "register_concept", "register_submission"] as const satisfies readonly ContractAction[];
@@ -198,6 +232,10 @@ export function issueContract(input: IssueInput, secret: string): ExecutionContr
   for (const [k, v] of Object.entries(input.parameters)) {
     if (typeof v !== "string") throw new ContractError(`parameter ${k} must be a string`);
   }
+  if (input.action === "override_recast") {
+    const errors = overrideRecastParamErrors(input.parameters);
+    if (errors.length) throw new ContractError(`override_recast parameters: ${errors.join("; ")}`);
+  }
   const executor = isRegistrarAction(input.action) ? "registrar" : "agent";
   const unsigned: UnsignedContract = {
     contractId: newContractId(now.getTime()),
@@ -277,7 +315,8 @@ function shapeError(c: Record<string, unknown>): string | null {
  * policy pack, signature, validity window (issuedAt <= now + 60 s skew, now < expiresAt,
  * TTL <= 15 min), action, risk level equal to the action's class, surface, capability,
  * parameters, and for high risk an analyst approval with a reason on the UI surface. The
- * same checks in the same order as gateway/contracts.py verify_contract. One-shot use is
+ * same checks in the same order as gateway/contracts.py verify_contract; the agent adds the
+ * override_recast parameter shape (the gateway never runs that action). One-shot use is
  * checked by ContractVerifier (it needs the ledger).
  */
 export function verifyContract(raw: unknown, expect: Expectation, secret: string, now = new Date()): Verdict {
@@ -312,6 +351,10 @@ export function verifyContract(raw: unknown, expect: Expectation, secret: string
   if (!k.scope.capabilities.includes(expect.action)) return refuse("out_of_scope", `capability ${expect.action} not in the contract scope`);
   for (const [key, value] of Object.entries(expect.params)) {
     if (k.intent.parameters[key] !== value) return refuse("parameter_mismatch", `${key}: contract ${JSON.stringify(k.intent.parameters[key] ?? null)}, request ${JSON.stringify(value)}`);
+  }
+  if (expect.action === "override_recast") {
+    const errors = overrideRecastParamErrors(k.intent.parameters);
+    if (errors.length) return refuse("parameter_mismatch", `override_recast parameters: ${errors.join("; ")}`);
   }
   if (level === "high") {
     if (k.scope.surface !== APPROVAL_SURFACE) return refuse("approval_missing", "high-risk actions come from the analyst UI only");

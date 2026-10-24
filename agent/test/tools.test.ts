@@ -194,6 +194,35 @@ describe("the tool chain on the synthetic question (no model: every step is the 
     expect(r2.memory!.conflicts).toBe(2);
   });
 
+  it("get_revenue honours an analyst override: the overridden conflict's chosen_val replaces R1's value and growth is recomputed (D4)", async () => {
+    const h = harness();
+    const r1 = await run(h);
+    const cur = r1.card.recast_conflicts.find((c) => c.scope === "current_period")!;
+    expect(r1.card.growth!.rev_current).toBe(TARGET_FACTS.current.val);
+    h.hmem.recasts.override(cur.id, { chosen: "later_filing", reason: "the later filing corrected a booking error", by: "analyst", contractId: "c-test-override" });
+    const h2 = harness({ hmem: h.hmem, world: h.world });
+    const r2 = await run(h2);
+    const g = r2.card.growth!;
+    expect(g.rev_current).toBe(TARGET_FACTS.currentLater.val);
+    expect(g.rev_previous).toBe(TARGET_FACTS.prevComparative.val);
+    expect(g.g).toBeCloseTo((TARGET_FACTS.currentLater.val - TARGET_FACTS.prevComparative.val) / TARGET_FACTS.prevComparative.val, 12);
+    const conflict = r2.card.recast_conflicts.find((c) => c.id === cur.id)!;
+    expect(conflict).toMatchObject({ status: "overridden", chosen: "later_filing", chosen_val: TARGET_FACTS.currentLater.val });
+    expect(conflict.override).toMatchObject({ by: "analyst", contract_id: "c-test-override" });
+    const ov = r2.evidence.find((e) => e.details?.tool === "override_recast")!;
+    expect(ov.claim).toContain(cur.id);
+    expect(ov.claim).toContain("c-test-override");
+    expect(ov.details).toMatchObject({ conflict_id: cur.id, chosen: "later_filing", chosen_val: TARGET_FACTS.currentLater.val, growth_rule_r1: r1.card.growth!.g, growth_overridden: g.g });
+    expect(r2.card.claims.some((c) => c.evidenceIds.includes(ov.id))).toBe(true);
+    // The attribution and the memo material follow the overridden growth.
+    expect(r2.evidence.find((e) => e.details?.tool === "attribution")!.claim).toContain(`of g ${((g.g >= 0 ? "+" : "") + (g.g * 100).toFixed(1))}%`);
+    const allowed = (r2.evidence.find((e) => e.details?.tool === "memo")!.details!.allowed as { text: string }[]).map((a) => a.text);
+    expect(allowed).toContain("1,149.0");
+    // The previous-period conflict was not overridden and still follows R1.
+    expect(r2.card.recast_conflicts.find((c) => c.scope === "previous_period")!.status).toBe("resolved_by_rule");
+    expect(h.hmem.recasts.all()).toHaveLength(2);
+  });
+
   it("withholds the verdict when an invalid coverage row names one of the utility's stations", async () => {
     const h = harness({ dq: dqFile([{ station_id: "USW00000002", year: 2024, quarter: 1, coverage: 0.85 }]) });
     const r = await run(h);

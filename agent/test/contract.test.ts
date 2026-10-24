@@ -8,7 +8,11 @@ import {
   ContractVerifier,
   issueContract,
   loadContractSecret,
+  OVERRIDE_RECAST_PARAMS,
+  overrideRecastParamErrors,
+  overrideRecastParams,
   POLICY_PACK_VERSION,
+  RECAST_SIDES,
   REGISTRAR_ACTIONS,
   riskOf,
   signatureFor,
@@ -61,7 +65,7 @@ function frames(now = T0, params: Record<string, string> = PARAMS): ExecutionCon
   return issueContract({ action: "register_frames", parameters: params, user: "won-agent", surface: "won-agent", now }, SECRET);
 }
 
-const OVERRIDE_PARAMS = { cik: "0001326160", period: "CY2025Q1" };
+const OVERRIDE_PARAMS = { conflict_id: "rc-0123456789ab", chosen: "own_filing", reason: "The original filing is the like-for-like base for this period." };
 const expectOverride = { action: "override_recast" as const, params: OVERRIDE_PARAMS };
 
 function override(now = T0, reason = "The original filing is the like-for-like base for this period."): ExecutionContract {
@@ -84,6 +88,28 @@ describe("issue and verify", () => {
     const c = override();
     expect(c.toolPlan).toEqual([{ tool: "agent.override_recast", input: OVERRIDE_PARAMS }]);
     expect(verifyContract(c, expectOverride, SECRET, at(60_000)).ok).toBe(true);
+    expect(overrideRecastParams(c)).toEqual({ conflict_id: "rc-0123456789ab", chosen: "own_filing", reason: OVERRIDE_PARAMS.reason });
+  });
+
+  it("override_recast takes conflict_id, chosen (own_filing | later_filing) and reason, and nothing else (D4)", () => {
+    expect([...OVERRIDE_RECAST_PARAMS]).toEqual(["conflict_id", "chosen", "reason"]);
+    expect([...RECAST_SIDES]).toEqual(["own_filing", "later_filing"]);
+    expect(overrideRecastParamErrors(OVERRIDE_PARAMS)).toEqual([]);
+    expect(overrideRecastParamErrors({ ...OVERRIDE_PARAMS, chosen: "later_filing" })).toEqual([]);
+    expect(overrideRecastParamErrors({ ...OVERRIDE_PARAMS, chosen: "neither" })).toEqual(["chosen must be one of own_filing | later_filing"]);
+    expect(overrideRecastParamErrors({ ...OVERRIDE_PARAMS, conflict_id: "mem-62" })).toEqual(["conflict_id is not a recast conflict id (rc-<12 hex>)"]);
+    expect(overrideRecastParamErrors({ ...OVERRIDE_PARAMS, reason: "   " })).toEqual(["reason is empty"]);
+    expect(overrideRecastParamErrors({ conflict_id: "rc-0123456789ab", chosen: "own_filing" })).toEqual(["reason missing"]);
+    expect(overrideRecastParamErrors({ ...OVERRIDE_PARAMS, cik: "0001326160" })).toEqual(["unexpected parameter cik"]);
+    // Issuing refuses bad parameters; a signed contract with bad parameters is refused on verification.
+    expect(() => issueContract({ action: "override_recast", parameters: { cik: "0001326160", period: "CY2025Q1" }, user: "analyst", surface: "won-ui", approvals: [analystApproval("ok", T0)], now: T0 }, SECRET)).toThrow(/conflict_id missing/);
+    expect(() => issueContract({ action: "override_recast", parameters: { ...OVERRIDE_PARAMS, chosen: "both" }, user: "analyst", surface: "won-ui", approvals: [analystApproval("ok", T0)], now: T0 }, SECRET)).toThrow(/chosen must be one of/);
+    const c = override();
+    const bad = signContract({ ...c, intent: { ...c.intent, parameters: { ...OVERRIDE_PARAMS, chosen: "both" } } } as UnsignedContract, SECRET);
+    expect(verifyContract(bad, { action: "override_recast", params: {} }, SECRET, at(1000))).toMatchObject({ ok: false, code: "parameter_mismatch" });
+    expect(() => overrideRecastParams(bad)).toThrow(/chosen must be one of/);
+    // The registrar vector is untouched by the override parameters.
+    expect(signatureFor(VECTOR, SECRET)).toBe(VECTOR_SIGNATURE);
   });
 
   it("never issues a high-risk contract without an analyst approval with a reason, or off the UI surface", () => {

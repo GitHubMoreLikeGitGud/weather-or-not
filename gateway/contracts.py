@@ -41,9 +41,10 @@ CLOCK_SKEW = timedelta(seconds=60)
 APPROVER = "analyst"
 APPROVAL_SURFACE = "won-ui"
 SURFACES = ("won-ui", "won-agent")
-# Reads are low risk; every registrar plan (templates.REGISTRAR_PLANS) is medium risk. No
-# gateway action is high risk; the approval check stays for parity with the agent side.
-RISK_CLASSES: dict[str, str] = {"read": "low"}
+# Reads are low risk; every registrar plan (templates.REGISTRAR_PLANS) is medium risk. The
+# analyst's override_recast (parameters conflict_id, chosen, reason) is high risk and runs in
+# the agent, never here; it is mirrored so both verifiers class every action of the pack alike.
+RISK_CLASSES: dict[str, str] = {"read": "low", "override_recast": "high"}
 CONTRACTS_DIR = ROOT / "data" / "contracts"
 
 _LONE_SURROGATE = re.compile(r"[\ud800-\udfff]")

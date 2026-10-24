@@ -96,6 +96,28 @@ describe("recast conflicts in H-MEM", () => {
     expect(last.actor).toBe("analyst");
     expect(last.details).toMatchObject({ override: true, reason: "the restatement reclassified a pass-through item" });
     expect(() => h.recasts.override("rc-nope", { chosen: "own_filing", reason: "x" })).toThrow(/no recast conflict/u);
+    expect(() => h.recasts.override(conflict.id, { chosen: "both" as never, reason: "x" })).toThrow(/chosen must be own_filing or later_filing/u);
+  });
+
+  it("records the contract id of the override and keeps it when the same pair is recorded again (D4)", () => {
+    const h = memory();
+    const a = h.addFact({ content: "own", source: "zetaris:x", label: "f", provenance: prov, refs: [], key: "k1" });
+    const b = h.addFact({ content: "later", source: "zetaris:x", label: "f", provenance: prov, refs: [], key: "k2" });
+    const input = { cik: "0000000001", tag: "Revenues", period: "CY2025Q1", scope: "current_period" as const, currentYear: 2025, ownFilingMemory: a.memory.id, laterFilingMemory: b.memory.id, ownFiling: { ...own, val: 5_463_400_000 }, laterFiling: { ...later, val: 5_463_000_000 } };
+    const { conflict } = h.recasts.record(input);
+    const o = h.recasts.override(conflict.id, { chosen: "later_filing", reason: "the later filing corrected a booking error", by: "analyst", contractId: "c-abc-12345678" });
+    expect(o).toMatchObject({ status: "overridden", chosen: "later_filing", chosen_val: 5_463_000_000 });
+    expect(o.override).toMatchObject({ by: "analyst", chosen: "later_filing", reason: "the later filing corrected a booking error", contract_id: "c-abc-12345678" });
+    expect(h.store.get(a.memory.id)!.supersededBy).toBe(b.memory.id);
+    const last = h.ledger.history(a.memory.id).filter((e) => e.action === "conflict_resolved").pop()!;
+    expect(last.actor).toBe("analyst");
+    expect(last.details).toMatchObject({ override: true, contract_id: "c-abc-12345678", chosen_val: 5_463_000_000 });
+    // A later run records the same pair: the override stands.
+    const again = h.recasts.record(input);
+    expect(again.created).toBe(false);
+    expect(again.conflict.status).toBe("overridden");
+    expect(again.conflict.chosen_val).toBe(5_463_000_000);
+    expect(h.why(a.memory.id).lines.join("\n")).toMatch(/overridden by analyst/u);
   });
 
   it("remembers the tag and station choices and logs their reads", () => {

@@ -25,7 +25,7 @@ import type { RecastConflict, RecastValue } from "../memory/recastConflicts.ts";
 import { findUtility, stationsOf, type SeedUtility, type Seeds } from "../seeds.ts";
 import { attribute as attributeFn, peerSet, type Attribution, type Exclusion, type PeerPoint, type RevenueRow } from "../tools/attribution.ts";
 import { stationQuarterFromRow, utilityTdd, utilityWeatherChange, type Quarter, type StationQuarter, type UtilityTdd } from "../tools/degreeDays.ts";
-import { parseFramePeriod, parseFrameRows, REVENUE_TAGS, type FrameRow, type RevenueTag } from "../tools/frames.ts";
+import { growth, parseFramePeriod, parseFrameRows, REVENUE_TAGS, type FrameRow, type RevenueTag } from "../tools/frames.ts";
 import { comparativeFact, currentFact, factsForPeriod, likeForLikeGrowth, type CompanyConcept, type ConceptFact, type LikeForLike, type Period } from "../tools/recast.ts";
 import { periodEnd, type FilingFact, type SourceMeta, type WeatherWorld } from "../world/world.ts";
 import { GatewayClient, GatewayError, rowsAsObjects, type RegistrarResult, type TemplateResult } from "../zetaris/client.ts";
@@ -592,7 +592,7 @@ const revenueTool = def("get_revenue", {
     const concept = conceptFromRows(ctx.cik, tag, rowsAsObjects(res));
     const current: Period = { year: ctx.year, quarter: ctx.quarter };
     const previous: Period = { year: ctx.year - 1, quarter: ctx.quarter };
-    const lfl = likeForLikeGrowth(concept, current);
+    let lfl = likeForLikeGrowth(concept, current);
     ctx.revenue = lfl;
     const ev = deps.evidence.fromTemplate(
       res,
@@ -715,8 +715,32 @@ const revenueTool = def("get_revenue", {
       await deps.world!.ingestFilingFacts({ cik: ctx.cik, tag, period: ctx.period, facts: worldFacts.filter((f) => f.end === cur.end).map(filingFact), meta });
       await deps.world!.ingestFilingFacts({ cik: ctx.cik, tag, period: ctx.prevPeriod, facts: worldFacts.filter((f) => f.end === orig.end).map(filingFact), meta });
     });
+
+    // D4: a conflict the analyst overrode (status "overridden", written only by recasts.override under a
+    // signed override_recast contract) replaces R1's value for its quarter; growth is recomputed.
+    const overridden = ctx.conflicts.filter((c) => c.status === "overridden" && c.override && ((c.scope === "current_period" && c.period === ctx.period) || (c.scope === "previous_period" && c.period === ctx.prevPeriod)));
+    for (const c of overridden) {
+      const before = lfl.growth;
+      lfl = {
+        ...lfl,
+        rev_current: c.scope === "current_period" ? c.chosen_val : lfl.rev_current,
+        rev_previous: c.scope === "previous_period" ? c.chosen_val : lfl.rev_previous,
+      };
+      lfl = { ...lfl, growth: growth(lfl.rev_current, lfl.rev_previous) };
+      const oev = deps.evidence.add({
+        kind: "tool",
+        claim: `Analyst override ${c.id} applied to ${c.period}: ${c.chosen} = ${c.chosen_val} (${c.override!.by}, ${c.override!.at}${c.override!.contract_id ? `, contract ${c.override!.contract_id}` : ""}: "${c.override!.reason}") instead of rule R1's ${c.chosen === "own_filing" ? c.later_filing.val : c.own_filing.val}; like-for-like growth ${pct(before)} -> ${pct(lfl.growth)}`,
+        derived_from: [ev.id, ...c.evidence_ids.filter((e) => e !== ev.id)],
+        details: { tool: "override_recast", conflict_id: c.id, scope: c.scope, period: c.period, chosen: c.chosen, chosen_val: c.chosen_val, by: c.override!.by, at: c.override!.at, contract_id: c.override!.contract_id, reason: c.override!.reason, growth_rule_r1: before, growth_overridden: lfl.growth },
+      });
+      ids.push(oev.id);
+      ctx.card.push({ text: oev.claim, evidenceIds: [oev.id] });
+      lines.push(oev.claim);
+      deps.log?.(`  override ${c.id} applied: ${c.chosen} = ${c.chosen_val}`);
+    }
+    ctx.revenue = lfl;
     ctx.checklist.set("revenue_like_for_like", "done", null, ids);
-    const conflictNote = ctx.conflicts.length ? `; ${ctx.conflicts.length} recast conflict(s) recorded` : rc.comparative ? "; comparative equals original" : "";
+    const conflictNote = ctx.conflicts.length ? `; ${ctx.conflicts.length} recast conflict(s) recorded${overridden.length ? `, ${overridden.length} overridden by the analyst and applied` : ""}` : rc.comparative ? "; comparative equals original" : "";
     return {
       ok: true,
       evidenceIds: ids,

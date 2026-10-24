@@ -179,11 +179,16 @@ export class RecastConflictService {
     this.host.ledger.log(loser, "conflict_resolved", actor, { details: { conflictId: c.id, winner, loser, chosen: c.chosen, chosen_val: c.chosen_val, ...details } });
   }
 
-  /** The analyst's override of a resolution: the other side wins, the ledger records who and why. */
+  /**
+   * The analyst's override of a resolution (the only write path, called by the server under
+   * a verified high-risk override_recast contract whose id is recorded): the chosen side
+   * wins, the ledger records who and why, and get_revenue uses chosen_val on the next run.
+   */
   override(id: string, o: { chosen: RecastSide; reason: string; by?: string; contractId?: string | null }): RecastConflict {
     const c = this.get(id);
     if (!c) throw new Error(`no recast conflict ${id}`);
-    if (!o.reason.trim()) throw new Error("an override needs a reason");
+    if (o.chosen !== "own_filing" && o.chosen !== "later_filing") throw new Error(`chosen must be own_filing or later_filing, got ${String(o.chosen)}`);
+    if (typeof o.reason !== "string" || !o.reason.trim()) throw new Error("an override needs a reason");
     const by = o.by ?? "analyst";
     c.chosen = o.chosen;
     c.chosen_val = o.chosen === "own_filing" ? c.own_filing.val : c.later_filing.val;
