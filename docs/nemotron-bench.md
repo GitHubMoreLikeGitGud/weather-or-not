@@ -114,3 +114,23 @@ The demo question a second time, with the tag remembered (mem-49) and the retry 
 | Cloud model calls | 0 | 0 | 0 | 0 |
 
 The three invalid first replies were all on the `finalize` step and all the same failure: the model used the whole output budget thinking and returned no content. Every tool the model chose was the checklist's next step (34 of 34 calls). The deterministic fallback step, which exists for the case the repair also fails, did not have to run in these four runs.
+
+## FirstEnergy, fifth run (review), warm (run r20261024T204637522f, 20:46 SGT)
+
+The demo question once more on the committed tree, with the tag remembered (mem-49) and the planner-input tag check in force, to see whether the card reproduces and how the fallback path behaves when the repair round fails too.
+
+| Call | Valid first try | Tool chosen | Prompt | Output | tok/s | Wall ms |
+|---|---|---|---|---|---|---|
+| 1.1 | yes | resolve_utility | 1,757 | 560 | 133.5 | 4,529 |
+| 1.2 | yes | get_revenue | 2,181 | 463 | 133.3 | 3,836 |
+| 2.1 | yes | get_peers | 1,560 | 357 | 137.0 | 7,984 |
+| 2.2 | no (2 replies) | get_weather | 4,355 | 1,612 | 145.7 | 11,691 |
+| 3.1 | yes | dq_gate | 1,754 | 659 | 140.9 | 5,033 |
+| 3.2 | yes | attribute | 1,970 | 406 | 138.1 | 3,275 |
+| 4.1 | no (2 replies) | not_tested | 3,245 | 3,282 | 143.0 | 23,078 |
+| 4.2 | no (2 replies, both invalid) | none; the host ran `finalize` itself | 3,441 | 4,096 | 147.0 | 32,092 |
+
+- The card is identical to the cold run (beta 0.506526, weather +8.2005%, every number equal) and the memo text equals the previous warm run's memo byte for byte (184 words, first draft, every number matched): temperature 0 and seed 7 make the chain reproducible when the tool outputs are the same.
+- JSON valid on the first reply: 5 of 8; repaired 2; fallback 1. Call 2.2's first reply named `RegulatedAndUnregulatedOperatingRevenue` as the tag for `get_weather` and was rejected by the host's tag check (the schema error added after the AEP warm run); the repair chose the same tool with the utility's tag. Calls 4.1 and 4.2 returned empty content on the first reply (thinking used the whole 2,048-token output budget), and 4.2's repair reply was empty as well, so the host took the `finalize` step itself. The fallback produced the same verdict and the same memo path as a model-chosen `finalize` would have.
+- Planner tokens 20,263 in / 11,435 out; median 139.5 tok/s; carryover at most 298 tokens; first-call prompts 5,504 against 10,439 estimated (47.3% less). Memo 1,280 in / 360 out, 148.5 tok/s, 2.7 s. `weather_quarter` 18,419 and 18,293 ms. World Model 769 events before and after. Wall 133.2 s: the two repair rounds and the failed repair add about 50 s over the earlier warm run.
+- Across the five runs: 42 planner calls, 36 valid on the first reply, 5 repaired, 1 fallback. Of the six invalid first replies, five were empty content from thinking past `num_predict` (four on `finalize`, one on `not_tested`) and one was the wrong tag; the one fallback was `finalize` after an empty repair reply too. The `finalize` step is where the model runs out of output budget most often.
