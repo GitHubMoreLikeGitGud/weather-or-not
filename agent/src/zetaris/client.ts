@@ -132,12 +132,12 @@ export const TEMPLATE_PARAMS: Record<string, Record<string, ParamKind>> = {
 /** Client-side bound per template id where the gateway sets its own bound (gateway/templates.py
  *  timeout_s), always a little longer than the gateway's so the gateway's reply arrives first:
  *  DQ on the USL weather table resolves the filestore sources again and takes minutes; a USL
- *  utility read visits every submission view (about 45 s). Other templates use
+ *  utility read visits every submission view (45 s to about 2.5 min measured). Other templates use
  *  GatewayClientOptions.timeoutMs. */
 export const TEMPLATE_TIMEOUT_MS: Record<string, number> = {
   dq_invalid: 630_000,
   dq_run_coverage: 630_000,
-  usl_utility: 150_000,
+  usl_utility: 330_000,
 };
 
 /** Parameter kinds per registrar action, mirroring gateway/templates.py REGISTRAR_PLANS. Each

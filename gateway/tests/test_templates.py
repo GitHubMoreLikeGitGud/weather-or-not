@@ -198,7 +198,7 @@ def test_usl_reader_templates_read_the_governed_sec_tables():
     t, sql = render("usl_utility", {"cik10": "0001031296"})
     assert sql == f"SELECT cik, name, ticker, sic, hq_state FROM {USL}.utility WHERE cik = '0001031296'"
     assert t.role == "reader" and allowlist.check(sql, "reader") == "read" and t.objects == (f"{USL}.utility",)
-    assert len(t.raw_objects) == 43 and "won.submission_0001031296" in t.raw_objects and t.timeout_s == 120.0
+    assert len(t.raw_objects) == 43 and "won.submission_0001031296" in t.raw_objects and t.timeout_s == 300.0
     t, sql = render("usl_revenue", {"cik10": "0000004904", "period": "CY2025Q1"})
     assert sql == (f"SELECT cik, xbrl_tag, year, quarter, val, accn, filed, is_comparative FROM {USL}.revenue_quarter "
                    "WHERE cik = '0000004904' AND CONCAT('CY', CAST(year AS STRING), 'Q', CAST(quarter AS STRING)) = 'CY2025Q1' ORDER BY xbrl_tag, accn")

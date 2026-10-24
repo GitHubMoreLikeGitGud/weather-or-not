@@ -221,11 +221,11 @@ TEMPLATES: dict[str, Template] = {
         _t("sic", f"SELECT {SIC_COLUMNS} FROM {SIC_VIEW} WHERE code = '{{code}}'", {"code": "sic"}, (SIC_VIEW,), (SIC_VIEW,),
            "One SIC code with its description, division (letter) and major group (2-digit)."),
         # -- the governed copies in the USL (keys, descriptions, DQ rules) -------------------------
-        # The USL layer visits each of the 43 source views on every read (live 45 s), so this is the governed
+        # The USL layer visits each of the 43 source views on every read (live 45 s on Day 0, 141 s on Day 1), so this is the governed
         # copy for the evidence drawer, not the hot path: submission(cik10) answers the same profile in 0.2 s.
         _t("usl_utility", f"SELECT {UTILITY_COLUMNS} FROM {USL}.utility WHERE cik = '{{cik10}}'", _C, (f"{USL}.utility",), USL_UTILITY_VIEWS,
            "One seed utility from the USL utility table (cik, name, ticker, sic, hq_state; sic is the FK to sic_code). "
-           "Slow (about 45 s): the governed copy, not the hot path.", timeout_s=120.0),
+           "Slow (45 s to about 2.5 min measured): the governed copy, not the hot path.", timeout_s=300.0),
         _t("usl_revenue",
            f"SELECT {REVENUE_COLUMNS} FROM {USL}.revenue_quarter WHERE cik = '{{cik10}}' "
            f"AND CONCAT('CY', CAST(year AS STRING), 'Q', CAST(quarter AS STRING)) = '{{period}}' ORDER BY xbrl_tag, accn",

@@ -191,12 +191,12 @@ Findings while compiling:
 | `SELECT id, state, name FROM ...station ORDER BY id` | 87.7 s (57 rows) |
 | `SELECT COUNT(*) FROM ...sic_code` | 319 ms (1,005) |
 | `SELECT COUNT(*), COUNT(ticker), COUNT(DISTINCT sic) FROM ...utility` | 45.5 s (43 / 40 / 4) |
-| `SELECT ... FROM ...utility WHERE cik = '0001031296'` (the `usl_utility` template) | 45.5 s by JDBC, 51.4 s through the gateway |
+| `SELECT ... FROM ...utility WHERE cik = '0001031296'` (the `usl_utility` template) | 45.5 s by JDBC, 51.4 s through the gateway (Day 0); 141.4 s by JDBC on Day 1 with the instance idle, so the template's bound is 300 s |
 | `SELECT xbrl_tag, year, quarter, COUNT(*) ... FROM ...revenue_quarter GROUP BY ...` | 4.1 s (6 groups, 133 rows) |
 | `SELECT ... FROM ...revenue_quarter WHERE cik = ... AND period` (the `usl_revenue` template) | 2.2 s by JDBC; 4.2 s (FirstEnergy, 1 row) and 2.3 s (AEP, 2 rows) through the gateway |
 | `revenue_quarter` JOIN `utility` LEFT JOIN `sic_code` for two filers | 43.7 s (4 rows) |
 
-Every read of a USL table pays a USL-layer hop per source view: over the filestore views that hop is the 9 s resolution described above (the `station` table answers in 44 to 88 s, `weather_quarter` in minutes), and over cached REST views it is about one second per view (the `utility` table over 43 submission views answers in 45 to 51 s, `revenue_quarter` over 6 frames views in 2 to 4 s). The DQ templates (`dq_run_coverage`, `dq_invalid`) therefore carry a 600 s bound (`Template.timeout_s`, `DQ_TIMEOUT_S`), `usl_utility` 120 s, the other templates keep the gateway default of 60 s, and the agent's client waits up to 630 s for the DQ templates (`TEMPLATE_TIMEOUT_MS`). The fast paths for the agent are the `weather_quarter` template over the views (about 18 s per quarter for any station list), `frames_seeds` (about 0.2 s) and `submission` (about 0.2 s); the USL tables are the governed, DQ-checked copies read for evidence (`usl_revenue` in seconds) or at onboarding.
+Every read of a USL table pays a USL-layer hop per source view: over the filestore views that hop is the 9 s resolution described above (the `station` table answers in 44 to 88 s, `weather_quarter` in minutes), and over cached REST views it is about one second per view (the `utility` table over 43 submission views answers in 45 to 51 s, `revenue_quarter` over 6 frames views in 2 to 4 s). The DQ templates (`dq_run_coverage`, `dq_invalid`) therefore carry a 600 s bound (`Template.timeout_s`, `DQ_TIMEOUT_S`), `usl_utility` 300 s (it took 45 s on Day 0 and 141 s on Day 1), the other templates keep the gateway default of 60 s, and the agent's client waits up to 630 s for the DQ templates (`TEMPLATE_TIMEOUT_MS`). The fast paths for the agent are the `weather_quarter` template over the views (about 18 s per quarter for any station list), `frames_seeds` (about 0.2 s) and `submission` (about 0.2 s); the USL tables are the governed, DQ-checked copies read for evidence (`usl_revenue` in seconds) or at onboarding.
 
 ### Verification (`05_won_usl_select.sql`)
 
@@ -230,7 +230,7 @@ Two statements failed on the first pass and were corrected in the file: an aggre
 | `SHOW DQ INVALID RECORD sic TABLE ...utility` | 1 row: `0001161728 MGE ENERGY INC, MGEE, 4900, WI` (SIC 4900 is not in the company_dns V4 list; MGE Energy is a target-only seed flagged `kept_despite_sic`, never a peer) | 93.3 s |
 | `RUN DQ cik TABLE ...revenue_quarter` (one call evaluated both rules named by the column: the composite PK and the FK `cik` -> `utility.cik`) | Primary Key Constraint 133 / 133 / 0; Foreign Key Constraint 133 / 133 / 0 | 53.8 s |
 | `RUN DQ code TABLE ...sic_code` (PK) | 1,005 / 1,005 / 0 | 0.7 s |
-| `usl_utility` for FirstEnergy | `0001031296, FIRSTENERGY CORP, FE, 4911, OH` | 45.5 s |
+| `usl_utility` for FirstEnergy | `0001031296, FIRSTENERGY CORP, FE, 4911, OH` | 45.5 s (Day 0); 141.4 s on Day 1, same row |
 | `usl_revenue` for FirstEnergy CY2025Q1 | `Revenues, 2025, 1, 3765000000.0, 0001031296-26-000085, filed NULL, is_comparative true` | 2.2 s |
 | `usl_revenue` for AEP CY2025Q1 (through the gateway) | two rows, both from `0000004904-26-000034`: `Revenues` 5,463,000,000 and `RevenueFromContractWithCustomerExcludingAssessedTax` 5,631,000,000 (the 2025 10-Q reported 5,463,400,000 and 5,631,600,000: the live multi-filing conflict, visible in `concept_history`) | 2.3 s |
 | `revenue_quarter` JOIN `utility` LEFT JOIN `sic_code`, FirstEnergy and AEP, `Revenues` | 4 rows: both `Electric Services`; FE 3,287,000,000 (2024 Q1, accn `-25-000017`) and 3,765,000,000 (2025 Q1, `-26-000085`); AEP 5,025,700,000 and 5,463,000,000 | 43.7 s |
@@ -267,6 +267,6 @@ So a question costs two `weather_quarter` calls (current and previous quarter, e
 - Peers: `frames_seeds(tag, period)` once per tag and period (about 0.2 s, at most 43 rows), pooled across the three tags with each filer's first available tag.
 - Weather numbers: one `weather_quarter` call per (year, quarter) with every station the question needs (up to 40 ids, about 18 s), not one call per utility.
 - DQ gate: `dq_run_coverage` (361 s) and `dq_invalid` (181 s) are onboarding or warm-up checks, bounded at 600 s, run by `scripts/dq_onboard.py` into `data/dq/latest.json`; the per-question coverage check uses the `coverage` column the `weather_quarter` template already returns (the same rule, `coverage >= 0.9`).
-- The USL tables are the governed copies (keys, descriptions, DQ): `usl_revenue(cik10, period)` answers in 2 to 4 s and is the evidence-drawer read; `usl_utility(cik10)` takes about 50 s (use `submission(cik10)` on the hot path); `weather_quarter` as a USL table takes about three minutes.
+- The USL tables are the governed copies (keys, descriptions, DQ): `usl_revenue(cik10, period)` answers in 2 to 4 s and is the evidence-drawer read; `usl_utility(cik10)` took 45 s on Day 0 and 141 s on Day 1 (use `submission(cik10)` on the hot path); `weather_quarter` as a USL table takes about three minutes.
 - `revenue_quarter.xbrl_tag` is the tag column (`tag` is a reserved word). `is_comparative` is derived from the accession number's filing year; `filed` is NULL because frames do not carry it (use `concept_history` for filing dates).
 
