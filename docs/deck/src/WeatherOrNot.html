@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1920">
+<title>Weather-or-Not</title>
+<style>
+  @page { size: 1920px 1080px; margin: 0; }
+  :root {
+    --paper: #f4f1ea;
+    --surface: #fffdf8;
+    --surface-2: #f6f2e9;
+    --ink: #1d2b2e;
+    --ink-2: #45565a;
+    --ink-3: #66777b;
+    --rule: #ddd6c8;
+    --rule-strong: #b9b0a0;
+    --accent: #0e6b67;
+    --accent-soft: #dcefeb;
+    --weather: #0e6b67;
+    --industry: #536878;
+    --remainder: #a56a1e;
+    --good: #0e6b67; --good-bg: #d9efe9; --good-edge: #3f9a93;
+    --mid: #8a5a12; --mid-bg: #f7e8c8; --mid-edge: #cf9a3a;
+    --bad: #9b2d2a; --bad-bg: #f6dcda; --bad-edge: #c9605c;
+    --memory: #5b4a7a; --memory-bg: #ece6f4; --memory-edge: #9b8bb8;
+    --model: #35507a; --model-bg: #e3e9f4; --model-edge: #7f93b8;
+    --top-bg: #1f3a3d;
+    --gold: #e8c170;
+    --code-bg: #f0ebe0;
+    --font-display: "Cambria", "Charter", "Georgia", "Times New Roman", serif;
+    --font-body: "Segoe UI Variable Text", "Segoe UI", system-ui, Arial, sans-serif;
+    --font-fig: "Segoe UI Variable Display", "Segoe UI", system-ui, Arial, sans-serif;
+    --font-mono: "Cascadia Mono", "Cascadia Code", Consolas, ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--paper); }
+  body { color: var(--ink); font: 400 22px/1.4 var(--font-body); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  code, .mono { font-family: var(--font-mono); font-size: 0.9em; }
+  b, strong { font-weight: 600; }
+  .tnum { font-variant-numeric: tabular-nums lining-nums; }
+
+  .slide { width: 1920px; height: 1080px; position: relative; overflow: hidden; background: var(--surface); break-after: page; page-break-after: always; }
+  .slide:last-of-type { break-after: auto; page-break-after: auto; }
+  .slide::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 10px; background: var(--top-bg); }
+  .slide::after { content: ""; position: absolute; left: 0; top: 10px; width: 96px; height: 4px; background: var(--gold); }
+  .eyebrow { position: absolute; left: 96px; top: 46px; font: 600 18px/1 var(--font-body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+  .title { position: absolute; left: 96px; right: 96px; top: 76px; margin: 0; font: 600 52px/1.14 var(--font-display); color: var(--ink); letter-spacing: -0.005em; }
+  .body { position: absolute; left: 96px; right: 96px; top: 196px; bottom: 82px; }
+  .foot { position: absolute; left: 96px; right: 96px; bottom: 30px; padding-top: 12px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; gap: 24px; font-size: 15.5px; color: var(--ink-3); }
+  .foot .src { flex: 1; }
+  .foot .pg { font-family: var(--font-fig); font-weight: 600; color: var(--ink-2); white-space: nowrap; }
+
+  .row { display: flex; gap: 40px; }
+  .col { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+  .lead { font-size: 27px; line-height: 1.38; color: var(--ink); margin: 0; }
+  .muted { color: var(--ink-3); }
+  .small { font-size: 18px; line-height: 1.4; }
+  p { margin: 0; }
+  ul.b { margin: 0; padding-left: 26px; }
+  ul.b li { margin: 0 0 10px; }
+  ul.b li::marker { color: var(--accent); }
+  h3 { margin: 0 0 8px; font: 600 25px/1.2 var(--font-display); color: var(--ink); }
+  h4 { margin: 0 0 6px; font: 600 21px/1.25 var(--font-display); color: var(--ink); }
+
+  .card { border: 1px solid var(--rule); border-top: 4px solid var(--accent); border-radius: 6px; padding: 18px 22px; background: var(--surface); }
+  .card p { font-size: 20px; line-height: 1.4; }
+  .card .num { font: 700 20px/1 var(--font-fig); color: var(--accent); margin-right: 8px; }
+  .panel { background: var(--surface-2); border: 1px solid var(--rule); border-radius: 6px; padding: 18px 22px; }
+
+  figure { margin: 0; }
+  .shot { display: block; border: 1px solid var(--rule-strong); border-radius: 6px; box-shadow: 0 2px 12px rgba(29, 43, 46, 0.14); background: #fff; }
+  figcaption { margin-top: 8px; font-size: 15.5px; line-height: 1.35; color: var(--ink-3); }
+
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px; border: 2px solid; border-radius: 999px; font: 700 19px/1.25 var(--font-body); letter-spacing: 0.01em; white-space: nowrap; }
+  .chip--good { color: var(--good); background: var(--good-bg); border-color: var(--good-edge); }
+  .chip--mid { color: var(--mid); background: var(--mid-bg); border-color: var(--mid-edge); }
+  .chip--bad { color: var(--bad); background: var(--bad-bg); border-color: var(--bad-edge); }
+  .chip--memory { color: var(--memory); background: var(--memory-bg); border-color: var(--memory-edge); }
+  .chip--model { color: var(--model); background: var(--model-bg); border-color: var(--model-edge); }
+  .rule { display: inline-block; min-width: 38px; text-align: center; padding: 1px 7px; border-radius: 4px; background: var(--ink); color: #fff; font: 700 17px/1.35 var(--font-fig); }
+
+  table.t { border-collapse: collapse; width: 100%; font-size: 19.5px; }
+  table.t th, table.t td { padding: 7px 12px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+  table.t th { font: 600 16.5px/1.25 var(--font-body); color: var(--ink-2); background: var(--surface-2); letter-spacing: 0.02em; }
+  table.t td.n, table.t th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; font-family: var(--font-fig); }
+  table.t tr.hi td { background: var(--accent-soft); }
+  table.t td code { font-size: 0.86em; }
+
+  .stat { border: 1px solid var(--rule); border-radius: 6px; padding: 16px 20px; background: var(--surface); }
+  .stat .v { font: 700 44px/1.05 var(--font-fig); color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+  .stat .k { margin-top: 6px; font-size: 18px; line-height: 1.35; color: var(--ink-2); }
+  .stat .m { margin-top: 4px; font-size: 15px; color: var(--ink-3); }
+  .stat--weather .v { color: var(--weather); }
+  .stat--industry .v { color: var(--industry); }
+  .stat--remainder .v { color: var(--remainder); }
+
+  /* title slide */
+  .s1 .brand { position: absolute; left: 96px; top: 236px; font: 700 112px/1 var(--font-display); letter-spacing: -0.015em; color: var(--ink); }
+  .s1 .brand span { color: var(--accent); }
+  .s1 .tagline { position: absolute; left: 96px; top: 372px; width: 790px; font: 400 29px/1.36 var(--font-display); color: var(--ink); }
+  .s1 .tagline b { font-weight: 600; }
+  .s1 .meta { position: absolute; left: 96px; top: 572px; width: 790px; }
+  .s1 .meta div { display: flex; gap: 14px; padding: 12px 0; border-top: 1px solid var(--rule); font-size: 19.5px; line-height: 1.38; }
+  .s1 .meta div b { width: 132px; flex: none; font-family: var(--font-fig); color: var(--accent); }
+  .s1 .team { position: absolute; left: 96px; top: 930px; font: 600 24px/1 var(--font-fig); color: var(--ink-2); }
+  .s1 .hero { position: absolute; left: 920px; top: 196px; width: 904px; }
+
+  /* flow band */
+  .flow { display: flex; align-items: stretch; gap: 0; }
+  .flow .step { flex: 1; border: 1px solid var(--rule); border-left: 5px solid var(--accent); background: var(--surface-2); padding: 12px 16px; border-radius: 4px; font-size: 18px; line-height: 1.35; }
+  .flow .step b { display: block; font: 600 20px/1.2 var(--font-display); margin-bottom: 4px; }
+  .flow .arrow { flex: none; width: 34px; display: flex; align-items: center; justify-content: center; color: var(--accent); font: 700 28px/1 var(--font-fig); }
+
+  /* architecture */
+  .arch { position: relative; width: 1728px; height: 780px; }
+  .arch .box { position: absolute; border: 2px solid var(--ink); border-radius: 8px; background: #fff; padding: 14px 18px; }
+  .arch .box h4 { font-size: 23px; margin-bottom: 4px; }
+  .arch .box .sub { font-size: 16.5px; color: var(--ink-3); line-height: 1.35; }
+  .arch .mod { border: 1px solid var(--rule-strong); border-radius: 5px; background: var(--surface-2); padding: 8px 12px; margin-top: 10px; font-size: 16.5px; line-height: 1.35; }
+  .arch .mod b { font-family: var(--font-display); font-size: 18.5px; }
+  .arch .mod .who { float: right; font: 600 13.5px/1.6 var(--font-body); letter-spacing: 0.06em; text-transform: uppercase; color: #fff; background: var(--accent); border-radius: 3px; padding: 0 6px; margin-left: 8px; }
+  .arch .mod .who.nv { background: #3d6b12; }
+  .arch .mod .who.zt { background: #6a2c70; }
+  .arch .mod .who.cs { background: var(--ink-2); }
+  .arch .box.zet { border-color: #6a2c70; }
+  .arch .box.nvd { border-color: #3d6b12; }
+  .arch svg { position: absolute; left: 0; top: 0; pointer-events: none; }
+  .arch .lbl { position: absolute; font: 600 15px/1.25 var(--font-body); color: var(--ink-2); background: #fff; padding: 2px 4px; text-align: center; }
+
+  .kv { display: grid; grid-template-columns: auto 1fr; column-gap: 16px; row-gap: 8px; font-size: 20px; }
+  .kv dt { font: 600 19px/1.4 var(--font-fig); color: var(--ink-2); }
+  .kv dd { margin: 0; }
+
+  .finding { display: flex; gap: 18px; padding: 12px 0; border-top: 1px solid var(--rule); }
+  .finding:first-child { border-top: none; padding-top: 0; }
+  .finding .n { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: #fff; font: 700 21px/40px var(--font-fig); text-align: center; }
+  .finding h4 { font-size: 22px; margin-bottom: 4px; }
+  .finding p { font-size: 19px; line-height: 1.4; color: var(--ink-2); }
+
+  .quote { border-left: 6px solid var(--accent); background: var(--accent-soft); padding: 22px 28px; font-size: 25px; line-height: 1.45; border-radius: 0 6px 6px 0; font-family: var(--font-display); }
+  .lic div { padding: 9px 0; border-top: 1px solid var(--rule); font-size: 18.5px; line-height: 1.4; }
+  .lic div:first-child { border-top: none; }
+  .lic b { font-family: var(--font-fig); }
+
+  /* the three-part split, as on the card */
+  .parts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .part { border-top: 5px solid; padding: 10px 14px 10px; background: var(--surface-2); border-radius: 0 0 6px 6px; }
+  .part--weather { border-color: var(--weather); }
+  .part--industry { border-color: var(--industry); }
+  .part--remainder { border-color: var(--remainder); }
+  .part .name { font: 600 18px/1.2 var(--font-body); }
+  .part--weather .name { color: var(--weather); }
+  .part--industry .name { color: var(--industry); }
+  .part--remainder .name { color: var(--remainder); }
+  .part .val { font: 700 46px/1.1 var(--font-fig); letter-spacing: -0.01em; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .part .rng { font-size: 17px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+  /* the recast figure */
+  .filing { border: 2px solid var(--ink); border-radius: 8px; background: #fff; padding: 14px 18px; }
+  .filing h4 { font-size: 20px; margin-bottom: 4px; }
+  .filing .v { font: 700 40px/1.1 var(--font-fig); font-variant-numeric: tabular-nums; }
+  .filing .acc { font-family: var(--font-mono); font-size: 16px; color: var(--ink-2); }
+  .filing.chosen { border-color: var(--accent); box-shadow: inset 0 5px 0 var(--accent); }
+  .vs { align-self: center; font: 600 18px/1 var(--font-body); color: var(--ink-3); text-align: center; }
+</style>
+</head>
+<body>
+
+<!-- 1. Title -->
+<section class="slide s1">
+  <div class="eyebrow">Open Agent Hackathon 2026 &middot; Track 2: The Agent That Can Explain Why</div>
+  <div class="brand">Weather<span>-or-</span>Not</div>
+  <p class="tagline"><b>The utility says it was the weather. Weather-or-Not checks.</b> It splits a US electric utility's year-on-year revenue change into weather, industry-wide and company-specific parts, each a range, with the Lightning SQL behind every number.</p>
+  <div class="meta">
+    <div><b>Zetaris</b><span>The only data path: SEC EDGAR, NOAA GHCN-Daily parquet and company_dns read through Lightning SQL; degree days computed in SQL; a USL with keys and a data-quality gate; the SQL text is the citation.</span></div>
+    <div><b>Meterless</b><span>H-MEM facts with Zetaris provenance and recast conflicts, a Markovian question chain with a flat carryover, World Model edges with validity dates, Scout-style signed contracts.</span></div>
+    <div><b>NVIDIA</b><span>Nemotron 3 Nano 4B through local Ollama plans each step and writes the memo; it never computes a number. 0 cloud model calls.</span></div>
+  </div>
+  <div class="team">Umar Mohktar, Singapore - solo</div>
+  <figure class="hero">
+    <img class="shot" src="../img/card-fe.png" style="width:904px" alt="Weather-or-Not answer card for FirstEnergy, CY2025Q1: revenue up 14.5%, weather consistent with 8.2% (range 1.6% to 14.0%), claim supported with high confidence">
+    <figcaption>The answer card for FirstEnergy, CY2025Q1 against CY2024Q1, from a saved run of the local Weather-or-Not UI, 24 Oct 2026. Every figure is a button that opens the evidence behind it.</figcaption>
+  </figure>
+  <div class="foot"><span class="src">Data: SEC EDGAR (US government work, public domain; queried live, never redistributed), NOAA GHCN-Daily (CC0-1.0), company_dns SIC list (Apache-2.0 service).</span><span class="pg">1 / 12</span></div>
+</section>
+
+<!-- 2. Problem and users -->
+<section class="slide">
+  <div class="eyebrow">The problem and the users</div>
+  <h2 class="title">"It was the weather" is easy to say and slow to check</h2>
+  <div class="body row">
+    <div class="col" style="width:900px">
+      <div class="card">
+        <h3>The users: anyone handed that sentence who has to decide whether to believe it</h3>
+        <p>A utility credit analyst in earnings season, a state commission staff analyst or consumer advocate preparing for a rate case, a reporter. Each gets a filing that credits the weather and has hours, not days, to test it.</p>
+      </div>
+      <div class="card" style="border-top-color: var(--bad-edge)">
+        <h3>The problem: the claim is public, the check is not</h3>
+        <p>FirstEnergy's Q1 2025 10-Q (accession 0001031296-25-000017) says heating degree days were <b>"15% above the same period of 2024"</b>. Testing that by hand means degree days for dozens of stations, revenue for every peer, and the comparative column of each filing, which is <b>recast</b> between filings, so a naive year-on-year reads the wrong number.</p>
+      </div>
+      <div class="row" style="gap:20px">
+        <div class="stat" style="flex:1"><div class="v">43</div><div class="k">seed utilities whose states and airport stations are curated from public filings</div><div class="m">56 GHCN stations in 43 states</div></div>
+        <div class="stat" style="flex:1"><div class="v">1,937</div><div class="k">filers in one SEC frames period (Revenues, CY2025Q1); the peer set is cut from three such tags</div><div class="m">count equal to the source response</div></div>
+        <div class="stat" style="flex:1"><div class="v">0.4 M</div><div class="k">American Electric Power's own Q1 2025 revenue differs between its 2025 and 2026 10-Qs</div><div class="m">5,463.4 M against 5,463.0 M</div></div>
+      </div>
+      <p class="lead" style="margin-top:6px">Weather-or-Not answers in about two minutes with ranges, a claim verdict, a "Not tested" list, and the SQL behind every number.</p>
+    </div>
+    <figure style="width:788px">
+      <img class="shot" src="../img/card-fe-revenue-weather.png" style="width:788px" alt="The revenue, degree-day and peer-set panels of the FirstEnergy card: both accession numbers, no recast, degree days 2,164 to 2,514, 39 peers">
+      <figcaption>What the analyst sees instead of a sentence: both accession numbers, the like-for-like rule, degree days over the utility's nine stations, and the 39-peer table, each number cited.</figcaption>
+    </figure>
+  </div>
+  <div class="foot"><span class="src">Quote from the FirstEnergy Q1 2025 10-Q, accession 0001031296-25-000017 (SEC EDGAR). Counts from seeds/utilities.json, seeds/stations.json and zetaris/README.md; the restatement from data read through Zetaris (docs/eval-report.md).</span><span class="pg">2 / 12</span></div>
+</section>
+
+<!-- 3. The recast trap -->
+<section class="slide">
+  <div class="eyebrow">The recast trap</div>
+  <h2 class="title">Why a naive year-on-year reads the wrong number, and rule R1</h2>
+  <div class="body row" style="gap:44px">
+    <div class="col" style="width:1000px; gap:16px">
+      <p class="lead">The SEC frames API serves the <b>most recently filed</b> fact for a period. A quarter's value can be restated in a later 10-Q's comparative column, so the number a script reads today is not the number the company reported in its own quarter.</p>
+      <div class="row" style="gap:16px; align-items:stretch">
+        <div class="filing chosen" style="flex:1">
+          <h4>AEP's own Q1 2025 10-Q</h4>
+          <div class="v">5,463.4 M</div>
+          <div class="acc">0000004904-25-000061, filed 2025-05-06</div>
+          <p class="small" style="margin-top:6px"><span class="chip chip--good" style="font-size:16px">in use, rule R1</span></p>
+        </div>
+        <div class="vs">against</div>
+        <div class="filing" style="flex:1">
+          <h4>The Q1 2026 10-Q, comparative column</h4>
+          <div class="v">5,463.0 M</div>
+          <div class="acc">0000004904-26-000034, filed 2026-05-05</div>
+          <p class="small" style="margin-top:6px"><span class="chip chip--memory" style="font-size:16px">recorded as conflict rc-4cd5f8bdf0bd</span></p>
+        </div>
+      </div>
+      <div class="panel">
+        <h4>Rule R1, fixed in advance</h4>
+        <p class="small">Use the current quarter's value as reported in its <b>own</b> filing, and the previous quarter as that same filing restates it (like-for-like). A later restatement is recorded in H-MEM as a <code>recast_comparative</code> conflict with both values and both accession numbers, never applied silently. The analyst can override it with a signed high-risk contract; the override and its reason go into the trust ledger.</p>
+      </div>
+      <div class="row" style="gap:20px">
+        <div class="stat" style="flex:1"><div class="v">128 of 133</div><div class="k">rows of the USL <code>revenue_quarter</code> table are comparatives, not first filings</div><div class="m">what the frames endpoint serves today</div></div>
+        <div class="stat" style="flex:1"><div class="v">+12.2% vs +10.0%</div><div class="k">like-for-like against naive growth on the synthetic recast fixture</div><div class="m">agent/test/fixtures, labelled synthetic</div></div>
+        <div class="stat" style="flex:1"><div class="v">3,287.0 M</div><div class="k">FirstEnergy's CY2024Q1 comparative equals its original: no recast, and the card says so</div><div class="m">0001031296-24-000026 and -25-000017</div></div>
+      </div>
+    </div>
+    <figure style="width:684px">
+      <img class="shot" src="../img/memory-conflict.png" style="width:684px" alt="Memory and why screen for the American Electric Power run: the restatement conflict with both filings, rule R1, the why trace of mem-62 and the analyst override form">
+      <figcaption>The live conflict on the Memory and why screen: own filing against later filing, rule R1, the why trace of memory mem-62 (object, SQL hash, endpoint, licence, retrieval time, ledger) and the signed analyst override.</figcaption>
+    </figure>
+  </div>
+  <div class="foot"><span class="src">Values read through Zetaris from SEC companyconcept (won.concept_0000004904_Revenues), run r20261024T214009cd85; USL counts from zetaris/README.md; the synthetic fixture from agent/test/fixtures.</span><span class="pg">3 / 12</span></div>
+</section>
+
+<!-- 4. The answer card -->
+<section class="slide">
+  <div class="eyebrow">The answer</div>
+  <h2 class="title">FirstEnergy, CY2025Q1: weather is consistent with 8.2 of the 14.5 points</h2>
+  <div class="body row" style="gap:36px">
+    <figure style="width:1060px">
+      <img class="shot" src="../img/card-fe.png" style="width:1060px" alt="The FirstEnergy answer card: verdict sentence, the three-part split with ranges, the claim verdict and the data-quality gate">
+      <figcaption>Run r20261024T213805fb4e (cold, 5 chunks, 97.5 s). The verdict sentence, the split, the claim test and the DQ gate; the telemetry footer below belongs to the same run.</figcaption>
+    </figure>
+    <div class="col" style="flex:1; gap:14px">
+      <div class="parts">
+        <div class="part part--weather"><div class="name">Weather</div><div class="val">+8.2%</div><div class="rng">range +1.6% to +14.0%</div></div>
+        <div class="part part--industry"><div class="name">Industry-wide</div><div class="val">+2.9%</div><div class="rng">range -1.8% to +8.7%</div></div>
+        <div class="part part--remainder"><div class="name">Remainder</div><div class="val">+3.5%</div><div class="rng">range -8.2% to +14.7%</div></div>
+      </div>
+      <p class="small">of a <b>+14.5%</b> like-for-like change (3,765.0 M against 3,287.0 M); ranges are the 10th to 90th percentile of 300 of 300 valid peer resamples, seed 7.</p>
+      <table class="t">
+        <tbody>
+          <tr><td>Claim "colder weather"</td><td class="n"><span class="chip chip--good" style="font-size:17px">supported</span> ratio 0.56</td></tr>
+          <tr><td>Confidence</td><td class="n">high</td></tr>
+          <tr><td>Degree days, 9 stations in 5 states</td><td class="n">2,164 to 2,514, +16.2%</td></tr>
+          <tr><td>Peer sensitivity beta over 39 peers</td><td class="n">0.51 (range 0.10 to 0.86)</td></tr>
+          <tr><td>Theil-Sen cross-check</td><td class="n">0.31</td></tr>
+          <tr><td>Peers by tag; excluded with a reason</td><td class="n">32 + 3 + 4; 3</td></tr>
+          <tr><td>Station coverage; DQ gate</td><td class="n">1.00; pass</td></tr>
+          <tr><td>Memo by the model, numbers string-matched</td><td class="n">184 words, 1 attempt, 0 unknown</td></tr>
+          <tr><td>Not tested, listed on the card</td><td class="n">8 items</td></tr>
+        </tbody>
+      </table>
+      <p class="small muted">The company's own MD&amp;A figure for heating degree days, 15% above the prior-year quarter, sits next to the station-based +16.2%. The wording is "consistent with": a statistical attribution over the peer set, not a causal proof.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="src">Every number from data/runs/r20261024T213805fb4e/run.json as rendered by the UI and tabulated in docs/eval-report.md section 4; identical across the five FirstEnergy runs. MD&amp;A figure: 10-Q accession 0001031296-25-000017.</span><span class="pg">4 / 12</span></div>
+</section>
+
+<!-- 5. Agent workflow -->
+<section class="slide">
+  <div class="eyebrow">Agent workflow</div>
+  <h2 class="title">The model plans and writes; the host runs the tools and computes</h2>
+  <div class="body">
+    <div class="flow">
+      <div class="step"><b>Ask</b>Utility (CIK), quarter, management's claim. The question becomes a Markovian chain: at most 10 chunks, 2 tool calls per chunk, 800 tokens of carried state.</div>
+      <div class="arrow">&rsaquo;</div>
+      <div class="step"><b>Plan</b>Nemotron returns JSON against a schema: a thought, one tool from the allowed set, and its state. One repair round, then the host takes the next checklist step itself.</div>
+      <div class="arrow">&rsaquo;</div>
+      <div class="step"><b>Run the tool</b>Ten host-run tools; each records evidence (SQL text, sha256, rows, object, endpoint, licence, latency, cache state) and returns a digest of at most 800 tokens.</div>
+      <div class="arrow">&rsaquo;</div>
+      <div class="step"><b>Check</b>An 11-item checklist in fallback order; the DQ gate can withhold the verdict; every card claim must cite a recorded evidence id.</div>
+      <div class="arrow">&rsaquo;</div>
+      <div class="step"><b>Write</b>The memo's every number is string-matched against the tool outputs; a draft with any other number is rejected once, then a template memo is used.</div>
+    </div>
+    <div class="row" style="margin-top:22px; gap:36px; align-items:flex-start">
+      <figure style="width:800px">
+        <img class="shot" src="../img/timeline-weather.png" style="width:800px" alt="The investigation timeline replayed from the saved FirstEnergy run: planner plan lines, the get_weather tool with its two SQL citations and the DQ gate, chunk boundaries with carried-state sizes">
+        <figcaption>Run r20261024T213805fb4e replayed in the UI: planner lines are quoted as the model's plan, never as a fact; tool lines carry the facts and their evidence chips; chunk boundaries show the carried state.</figcaption>
+      </figure>
+      <div class="col" style="flex:1; gap:14px">
+        <div class="panel" style="padding:14px 18px">
+          <h4>The ten tools</h4>
+          <p class="small"><code>resolve_utility</code>, <code>probe_revenue_tag</code>, <code>register_frames</code>, <code>get_revenue</code>, <code>get_peers</code>, <code>get_weather</code>, <code>dq_gate</code>, <code>attribute</code>, <code>not_tested</code>, <code>finalize</code>. Degree days run in Lightning SQL; growth, peers, rule R1 and the bootstrap attribution run in deterministic TypeScript.</p>
+        </div>
+        <div class="panel" style="padding:14px 18px">
+          <h4>The checklist</h4>
+          <p class="small">utility_resolved, tag_chosen, revenue_like_for_like, peers_loaded, weather_target, weather_peers, dq_checked, attribution_done, claim_tested, not_tested_listed, memo_written. A warm run skips <code>tag_chosen</code> from memory: 4 chunks instead of 5.</p>
+        </div>
+        <div class="row" style="gap:14px">
+          <div class="stat" style="flex:1"><div class="v">9 / 9</div><div class="k">planner replies valid first try, FirstEnergy cold run</div></div>
+          <div class="stat" style="flex:1"><div class="v">0</div><div class="k">numbers computed by the model</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">Tool and checklist names from agent/src/llm/schemas.ts; chain limits and the memo rule from docs/nemotron-bench.md; planner counts from data/runs/r20261024T213805fb4e/run.json.</span><span class="pg">5 / 12</span></div>
+</section>
+
+<!-- 6. Architecture -->
+<section class="slide">
+  <div class="eyebrow">Architecture</div>
+  <h2 class="title">One machine, one data path: every source read goes through Zetaris</h2>
+  <div class="body">
+    <div class="arch">
+      <svg width="1728" height="780" viewBox="0 0 1728 780" aria-hidden="true">
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d2b2e"/></marker>
+        </defs>
+        <path d="M262 170 L328 170" stroke="#1d2b2e" stroke-width="2.5" fill="none" marker-end="url(#ah)" marker-start="url(#ah)"/>
+        <path d="M634 472 L634 522" stroke="#1d2b2e" stroke-width="2.5" fill="none" marker-end="url(#ah)" marker-start="url(#ah)"/>
+        <path d="M938 250 L1004 250" stroke="#1d2b2e" stroke-width="2.5" fill="none" marker-end="url(#ah)"/>
+        <path d="M1254 250 L1320 250" stroke="#1d2b2e" stroke-width="2.5" fill="none" marker-end="url(#ah)"/>
+      </svg>
+
+      <div class="box" style="left:0; top:40px; width:262px; height:330px">
+        <h4>Analyst UI</h4>
+        <div class="sub">Plain HTML and JS modules, live timeline over SSE, 127.0.0.1:8794 only</div>
+        <div class="mod">Ask, answer card, memory and why, graph, evaluation, telemetry footer</div>
+        <div class="mod">Evidence drawer: the SQL text is the citation</div>
+      </div>
+
+      <div class="box" style="left:330px; top:0; width:608px; height:472px">
+        <h4>Agent server <span class="sub">Node 22 + TypeScript, no runtime dependencies</span></h4>
+        <div class="mod"><span class="who">Meterless</span><b>Markovian chain</b>: bounded chunks; the planner picks the next tool through a NEEDS_TOOL executor; deterministic fallback</div>
+        <div class="mod"><span class="who">Meterless</span><b>H-MEM</b>: facts with Zetaris provenance, tag and station choices, recast conflicts and rule R1, trust ledger, analyst override</div>
+        <div class="mod"><span class="who">Meterless</span><b>World Model</b>: utility, state, station, SIC, filing, quarter; dated serves, reported_in, peer_of, observed_in, recasts edges</div>
+        <div class="mod"><span class="who">Meterless</span><b>Scout subset</b> (partial): risk classes, HMAC-signed single-use contracts, 15-minute expiry</div>
+        <div class="mod"><span class="who cs">Own code</span><b>Ten deterministic tools</b>: degree-day SQL builder, like-for-like growth, peer set, OLS and Theil-Sen, seeded bootstrap, claim verdict, memo number check, evidence store</div>
+      </div>
+
+      <div class="box nvd" style="left:330px; top:524px; width:608px; height:118px">
+        <h4>NVIDIA Nemotron 3 Nano 4B <span class="sub">Ollama on 127.0.0.1:11434</span></h4>
+        <div class="sub" style="font-size:17px">Planner (think on, JSON schema) and memo writer (think off). Loopback only: 0 cloud model calls, 0 refused hosts in every run.</div>
+      </div>
+
+      <div class="box" style="left:1006px; top:100px; width:248px; height:380px">
+        <h4>Zetaris gateway</h4>
+        <div class="sub">Python 3.12, FastAPI, JayDeBeApi; 127.0.0.1:8793</div>
+        <div class="mod">28 named templates: the agent sends a template id and parameters, never SQL; every parameter regex-checked</div>
+        <div class="mod">Allowlist; registrar plans under a signed contract; SQL log with sha256</div>
+      </div>
+
+      <div class="box zet" style="left:1322px; top:0; width:406px; height:642px">
+        <h4>Zetaris Lightning 2.4.3.1</h4>
+        <div class="sub">Local Docker; JDBC on port 10000</div>
+        <div class="mod"><span class="who zt">REST</span><b>WON_SEC</b> 61 tables<br><span class="muted">frames per tag and period, companyconcept per filer, submissions per seed; data.sec.gov with a declared User-Agent</span></div>
+        <div class="mod"><span class="who zt">REST</span><b>WON_DNS</b>.sic_codes_v4_raw<br><span class="muted">company_dns V4, 1,005 SIC codes</span></div>
+        <div class="mod"><span class="who zt">Parquet</span><b>WON_GHCN</b> 4 filestore tables<br><span class="muted">NOAA GHCN-Daily by_year TMAX and TMIN, 2024 and 2025, public S3</span></div>
+        <div class="mod"><span class="who zt">Views</span><b>container won</b>, 66 cached views<br><span class="muted">flattened REST views; station-filtered weather views</span></div>
+        <div class="mod" style="background:#f3ecf4; border-color:#6a2c70"><span class="who zt">USL</span><b>weather_or_not_usl</b><br>5 tables with primary and foreign keys, 9 DQ rules; the coverage_ok result gates every verdict</div>
+      </div>
+
+      <div class="lbl" style="left:262px; top:180px; width:70px">HTTP<br>SSE</div>
+      <div class="lbl" style="left:936px; top:262px; width:72px">template<br>+ params</div>
+      <div class="lbl" style="left:1252px; top:262px; width:72px">Lightning<br>SQL</div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">At runtime the agent never calls SEC EDGAR, NOAA or company_dns directly; only Zetaris does. Ports: UI 8794, gateway 8793, Ollama 11434, Zetaris JDBC 10000. Object counts from zetaris/README.md.</span><span class="pg">6 / 12</span></div>
+</section>
+
+<!-- 7. Tech stack -->
+<section class="slide">
+  <div class="eyebrow">Tech stack</div>
+  <h2 class="title">What it is built from, with the versions that ran</h2>
+  <div class="body row" style="gap:44px">
+    <div style="width:1060px">
+      <table class="t">
+        <thead><tr><th style="width:230px">Layer</th><th>What</th></tr></thead>
+        <tbody>
+          <tr><td>Data platform</td><td><b>Zetaris Lightning 2.4.3.1</b>, local Docker, JDBC <code>localhost:10000</code>; REST tables, Parquet filestore tables, SchemaStore views with CACHE, a USL with PK, FK and a custom DQ rule, LIST / RUN / SHOW DQ</td></tr>
+          <tr><td>Gateway</td><td><b>Python 3.12.0</b>, FastAPI, JayDeBeApi over the Zetaris JDBC driver; 28 named templates, allowlist, registrar plans, execution-contract check; pytest 236 passed, 2 skipped</td></tr>
+          <tr><td>Agent</td><td><b>Node 22.13.1 + TypeScript 7.0.2</b> run with tsx 4.23.15, no runtime dependencies; vitest 5.0.3, 16 files, 199 tests; <code>tsc --noEmit</code> 0 errors</td></tr>
+          <tr><td>Reasoning engines</td><td><b>Meterless</b> H-MEM, Markovian and World Model reference engines, vendored unchanged at upstream commit <code>1742dec5</code> (Apache-2.0); Scout Intent subset reimplemented in <code>agent/src/contract</code> and labelled partial</td></tr>
+          <tr><td>Model</td><td><b>NVIDIA Nemotron 3 Nano 4B</b> (<code>nemotron-3-nano:4b</code>) through Ollama on 127.0.0.1:11434; temperature 0, seed 7, num_ctx 8192, JSON schema output; think on for the planner (output budget 3,072), off for the memo (1,024)</td></tr>
+          <tr><td>UI</td><td>Plain HTML, CSS and ES modules, no build step, served by the agent server; server-sent events for the live timeline; light and dark; keyboard-reachable evidence drawer</td></tr>
+          <tr><td>Sources</td><td>SEC EDGAR frames, companyconcept and submissions; NOAA GHCN-Daily parquet (by_year, TMAX and TMIN); company_dns V4 SIC list. Seeds: 43 utilities, 56 stations, curated from public filings and labelled as such</td></tr>
+          <tr><td>Development</td><td>Developed in Cursor.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col" style="flex:1; gap:16px">
+      <div class="card"><h4>Why a 4B model is enough here</h4><p>The model chooses a tool from a dynamic enum and writes prose. Every number comes from SQL or deterministic TypeScript, so the model's job is small enough for a local 4B model at about 140 tokens per second.</p></div>
+      <div class="card"><h4>Why no runtime dependencies</h4><p>The agent is Node 22 standard library plus the vendored engines; the gateway is the only place with third-party packages. A fresh clone runs <code>npm ci</code>, <code>npm test</code> and the UI's empty state without Zetaris.</p></div>
+      <div class="card"><h4>Shared instance etiquette</h4><p>Only <code>WON_*</code> databases, the <code>won</code> container and the <code>weatherornot</code> namespace are touched; never DROP, GRANT or INVALIDATE CACHE from code; SEC calls at most 10 a second with a declared User-Agent.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">Versions from agent/package.json, engines/UPSTREAM.md, docs/nemotron-bench.md and the fresh-clone check of 24 Oct 2026 (Node, npm, Python, test counts).</span><span class="pg">7 / 12</span></div>
+</section>
+
+<!-- 8. Zetaris -->
+<section class="slide">
+  <div class="eyebrow">How Zetaris is used</div>
+  <h2 class="title">Zetaris: data harness, degree-day engine, data-quality gate and citation</h2>
+  <div class="body row" style="gap:40px">
+    <div class="col" style="width:1080px; gap:8px">
+      <div class="finding"><div class="n">1</div><div><h4>Objects per source, counted against the source</h4><p><b>WON_SEC</b> (REST): 8 frames tables, 10 companyconcept tables, 43 submissions profiles; every count equals the source response (frames Revenues CY2025Q1: 1,937 = 1,937). <b>WON_DNS</b>: 1,005 SIC codes. <b>WON_GHCN</b> (Parquet on public S3): 4 partitions of 4.31 to 4.37 million rows each, station-filtered views cached at 264 to 269 KB.</p></div></div>
+      <div class="finding"><div class="n">2</div><div><h4>Degree days computed in Lightning SQL</h4><p>One <code>weather_quarter</code> statement per quarter joins TMAX to TMIN over all 56 stations, drops days with a quality flag, and returns HDD, CDD, days observed and coverage in 18 to 24 s. Parity checked three ways on one station-quarter: 2022.69 HDD / 22.08 CDD from the tool's SQL, the template and the TypeScript reference.</p></div></div>
+      <div class="finding"><div class="n">3</div><div><h4>The USL is the contract; its DQ rules are the gate</h4><p><code>weather_or_not_usl</code>: 5 tables (sic_code 1,005 rows, utility 43, station 57, weather_quarter 342, revenue_quarter 133), 5 primary keys, 3 foreign keys, custom rule <code>coverage_ok</code>. RUN DQ: 342 of 342 station-quarters valid; the utility FK rule found <b>1 invalid row</b>, MGE Energy under SIC 4900, which company_dns does not list: a real orphan, shown on the card whenever MGE is the target.</p></div></div>
+      <div class="finding"><div class="n">4</div><div><h4>The SQL text is the citation; the agent never writes SQL</h4><p>28 named templates behind an allowlist; a frames period the agent needs is registered at run time under a signed contract (table, view, DESCRIBE, CACHE in 1.08 s; count 2,018 = source). Every card number opens the statement that produced it, with its sha256, object, endpoint, licence, retrieval time and cache state.</p></div></div>
+      <div class="finding"><div class="n">5</div><div><h4>Join map, measured in Lightning SQL</h4><p>Frames <code>cik</code> joins the submissions profile only through LPAD (34, 35, 21, 23, 9 and 11 matches across the six tag-periods, equal to the integer IN counts; 0 without LPAD); frames <code>loc</code> equals the business-address state in every row; 56 of 56 stations carry the seed file's state.</p></div></div>
+    </div>
+    <figure style="width:608px">
+      <img class="shot" src="../img/drawer-sql.png" style="width:608px" alt="The evidence drawer open on the degree-day statement: the Lightning SQL text with its sha256, the weather_quarter template parameters, the Zetaris objects, the S3 endpoint and the NOAA licence">
+      <figcaption>Evidence record 11 of the FirstEnergy run: the degree-day Lightning SQL for 2025 Q1 over 56 stations (19,962 ms, cache hit), its sha256, the template parameters, the Zetaris objects, the endpoint and the licence.</figcaption>
+    </figure>
+  </div>
+  <div class="foot"><span class="src">Counts and timings from zetaris/README.md and docs/eval-report.md (sections 1 and 5). Reads use the admin login behind the gateway's read-only allowlist; no least-privilege reader yet.</span><span class="pg">8 / 12</span></div>
+</section>
+
+<!-- 9. Meterless -->
+<section class="slide">
+  <div class="eyebrow">How Meterless is used</div>
+  <h2 class="title">Meterless engines hold the memory, bound the reasoning, date the world</h2>
+  <div class="body row" style="gap:36px">
+    <div class="col" style="width:940px; gap:12px">
+      <div class="card"><h4>H-MEM: provenance, conflicts and the why trace</h4><p>Vendored reference, subclassed. Every fact carries Zetaris provenance (object, SQL sha256, endpoint, accession, filing date, licence, retrieval time, latency, cache state, evidence id); a reconfirmed fact refreshes it and keeps the history: 70 facts after two questions, 16 provenance entries, 0 placeholders. The AEP restatement is conflict <code>rc-4cd5f8bdf0bd</code> (mem-62 against mem-65, rule R1); <code>why mem-62</code> prints the fact, provenance, evidence, conflict and ledger (create, conflict_detected, update).</p></div>
+      <div class="card"><h4>Markovian: a flat carryover instead of a growing history</h4><p>Vendored reference generator. The carried state stayed at or below 284 tokens (estimated) against the 800 budget; measured first-call prompts stayed between 1,421 and 1,644 tokens per chunk while a full-history prompt (estimated, chars/4) would have grown to 3,742: 6,615 against 12,956 over the run, 48.9% less.</p></div>
+      <div class="card"><h4>World Model: what we knew, and since when</h4><p>Vendored reference. 239 nodes (91 filings, 56 stations, 43 states, 43 utilities, 4 SIC codes, 2 quarters), 526 edges: <code>serves</code> valid from 2024-01-01 on the FY2024 10-K text, <code>reported_in</code> from the filing date, <code>peer_of</code> per period with g and dw, <code>observed_in</code> with HDD, CDD and coverage, one <code>recasts</code> edge. 769 events before and after the warm run: re-ingesting appends nothing.</p></div>
+      <div class="card"><h4>Scout subset: signed, single-use contracts (partial)</h4><p>Reimplemented from the spec. Registrar actions are medium risk; the analyst's <code>override_recast</code> is high risk. Contracts are HMAC-signed, expire after 15 minutes, and a replayed one is refused; the applied override recomputed growth with 5,463.0 M and the ledger records who, when and why.</p></div>
+    </div>
+    <div class="col" style="flex:1; gap:14px">
+      <div class="panel" style="padding:14px 18px 8px; background:#fff">
+        <h4 style="margin-bottom:2px">Prompt tokens per chunk, FirstEnergy cold run</h4>
+        <div class="small muted">Measured: Ollama prompt_eval_count of each chunk's first planner call. Estimated: full history, chars/4.</div>
+        <svg id="chunk-chart" width="748" height="230" role="img" aria-label="Markovian prompt per chunk stays between 1,421 and 1,644 tokens while the estimated full-history prompt grows to 3,742"></svg>
+      </div>
+      <figure>
+        <img class="shot" src="../img/graph.png" style="width:560px" alt="The Graph screen: World Model counts, FirstEnergy's neighbourhood with serves edges valid from 2024-01-01, and the source-time timeline">
+        <figcaption style="width:560px">The Graph screen: World Model counts, FirstEnergy's neighbourhood with each edge's validity date, and the source-time timeline (406 entries).</figcaption>
+      </figure>
+    </div>
+  </div>
+  <div class="foot"><span class="src">Conformance in this repo: H-MEM 13/13 (reference and facade), Markovian 8/8, World Model 8/8, idempotency diff empty (docs/conformance.md). Upstream 1742dec5, Apache-2.0, unchanged.</span><span class="pg">9 / 12</span></div>
+</section>
+
+<!-- 10. NVIDIA Nemotron, measured -->
+<section class="slide">
+  <div class="eyebrow">Where NVIDIA contributes, measured</div>
+  <h2 class="title">Nemotron 3 Nano 4B runs every model call locally, and it is measured</h2>
+  <div class="body">
+    <div class="row" style="gap:20px">
+      <div class="stat" style="flex:1"><div class="v">139 to 140 tok/s</div><div class="k">median planner speed per run; memo 140 to 149 tok/s</div><div class="m">Ollama eval counters, four clean runs</div></div>
+      <div class="stat" style="flex:1"><div class="v">28 / 34</div><div class="k">planner replies valid JSON on the first try; 6 repaired, 4 of them with think off; 0 fallbacks</div><div class="m">four clean runs, 24 Oct 2026</div></div>
+      <div class="stat" style="flex:1"><div class="v">4 / 4</div><div class="k">memos kept on the first draft (184, 176, 184, 176 words), 0 numbers that were not a tool output</div><div class="m">string-matched by the host</div></div>
+      <div class="stat" style="flex:1"><div class="v">0</div><div class="k">cloud model calls; 0 refused hosts: the client accepts loopback URLs only</div><div class="m">counted in every run</div></div>
+    </div>
+    <div class="row" style="margin-top:20px; gap:36px; align-items:flex-start">
+      <div style="width:1060px">
+        <h4>Per run; settings: temperature 0, seed 7, num_ctx 8192, planner output budget 3,072 with think on, memo 1,024 with think off</h4>
+        <table class="t" style="font-size:18.5px">
+          <thead><tr><th>Run</th><th class="n">Chunks</th><th class="n">Planner calls</th><th class="n">Valid first try</th><th class="n">Repaired (think off)</th><th class="n">Fallback</th><th class="n">Degree-day SQL</th><th class="n">Wall</th></tr></thead>
+          <tbody>
+            <tr><td style="white-space:nowrap">FirstEnergy, cold</td><td class="n">5</td><td class="n">9</td><td class="n">9</td><td class="n">0 (0)</td><td class="n">0</td><td class="n">20.0 s + 21.0 s</td><td class="n">97.5 s</td></tr>
+            <tr><td style="white-space:nowrap">AEP, cold</td><td class="n">5</td><td class="n">9</td><td class="n">7</td><td class="n">2 (1)</td><td class="n">0</td><td class="n">18.3 s + 18.6 s</td><td class="n">114.9 s</td></tr>
+            <tr><td style="white-space:nowrap">FirstEnergy, warm</td><td class="n">4</td><td class="n">8</td><td class="n">6</td><td class="n">2 (2)</td><td class="n">0</td><td class="n">23.9 s + 18.8 s</td><td class="n">128.1 s</td></tr>
+            <tr><td style="white-space:nowrap">AEP, warm</td><td class="n">4</td><td class="n">8</td><td class="n">6</td><td class="n">2 (1)</td><td class="n">0</td><td class="n">18.2 s + 18.6 s</td><td class="n">112.7 s</td></tr>
+            <tr class="hi"><td style="white-space:nowrap">All nine saved runs</td><td class="n">40</td><td class="n">76</td><td class="n">64</td><td class="n">11 (4)</td><td class="n">1</td><td class="n">18.2 to 23.9 s each</td><td class="n">84.1 to 133.2 s</td></tr>
+          </tbody>
+        </table>
+        <p class="small muted" style="margin-top:8px">The nine include five earlier runs on a 2,048-token planner budget, where the one deterministic fallback occurred (finalize, after an empty repair reply).</p>
+      </div>
+      <div class="col" style="flex:1; gap:14px">
+        <div class="panel" style="padding:14px 18px">
+          <h4>Stated plainly</h4>
+          <p class="small">The invalid first replies were empty: the model spent the whole output budget thinking on the <code>not_tested</code> and <code>finalize</code> steps. The repair round with think off fixed each one in about 24 s, which is why a warm run is not faster in wall time although it skips a chunk. A verifier's two further live runs through the API saw 16 planner calls, 11 valid first try, 4 repaired and 1 deterministic fallback; the fallback produced the same card.</p>
+        </div>
+        <div class="panel" style="padding:14px 18px">
+          <h4>Right on the tool, reproducible on the numbers</h4>
+          <p class="small">The tool it chose was the checklist's next step in every planner call of the four clean runs; two wrong tag inputs were caught by the host's schema check. Temperature 0 and seed 7: the FirstEnergy card is identical across its five runs (beta 0.5065, weather +8.20%) and two warm-run memos matched byte for byte.</p>
+        </div>
+      </div>
+    </div>
+    <figure style="margin-top:16px">
+      <img class="shot" src="../img/telemetry-footer.png" style="width:1728px" alt="The telemetry footer: nemotron-3-nano:4b with think on, 9 planner calls, 0 fallback steps, prompt per chunk 49% below the naive estimate, 140 tokens per second, 0 cloud model calls, 0 refused hosts">
+      <figcaption>The UI's telemetry footer for the FirstEnergy run: model, planner validity, fallback steps, measured against naive prompt tokens per chunk, tokens per second, cloud model calls and refused hosts.</figcaption>
+    </figure>
+  </div>
+  <div class="foot"><span class="src">All figures from docs/nemotron-bench.md (settings, clean re-runs) and docs/eval-report.md sections 6 and 7; the verifier's runs from the Day-2 verification record. Token counts are Ollama's; the full-history baseline is estimated at chars/4 and labelled so.</span><span class="pg">10 / 12</span></div>
+</section>
+
+<!-- 11. What is unique, and the evaluation -->
+<section class="slide">
+  <div class="eyebrow">What is unique, and how it was measured</div>
+  <h2 class="title">An explanation you can audit: like-for-like, gated, cited and dated</h2>
+  <div class="body row" style="gap:36px">
+    <div class="col" style="width:600px; gap:12px">
+      <div class="card"><h4>Like-for-like revenue</h4><p>The comparative column is recast between filings; rule R1 reads each quarter from its own filing and records a restatement as a conflict, never a silent overwrite.</p></div>
+      <div class="card"><h4>Peers pooled across three XBRL tags</h4><p>Each filer under its first available revenue tag (32 + 3 + 4 peers); every exclusion named with its reason on the card.</p></div>
+      <div class="card"><h4>Degree days in Lightning SQL, flagged days dropped</h4><p>Computed where the parquet is cached, over the whole station union in one statement per quarter; coverage reported per station.</p></div>
+      <div class="card"><h4>A DQ gate from the USL</h4><p>The <code>coverage_ok</code> result and the SIC foreign key can withhold a verdict; the MGE Energy orphan is the live example.</p></div>
+      <div class="card"><h4>Memory with a why trace, edges with dates, a flat carryover</h4><p>H-MEM provenance and conflicts, World Model validity dates, Markovian chunks; the model plans and writes but never computes a number.</p></div>
+    </div>
+    <div class="col" style="flex:1; gap:12px">
+      <table class="t" style="font-size:19px">
+        <thead><tr><th>Measured on 24 Oct 2026</th><th class="n">Result</th></tr></thead>
+        <tbody>
+          <tr><td>Card claims with evidence (E-cov), nine runs</td><td class="n"><b>171 / 171</b></td></tr>
+          <tr><td>Evidence records with every field (E-complete); 20 / 20 in every run since the provenance refresh</td><td class="n">158 / 180</td></tr>
+          <tr><td>Memo drafts with a number that is not a tool output</td><td class="n"><b>0 of 12</b></td></tr>
+          <tr><td>Cards identical across runs: FirstEnergy; American Electric Power</td><td class="n">5 of 5; 4 of 4</td></tr>
+          <tr><td>Bootstrap resamples valid, seed 7; degree-day parity of SQL against the TypeScript reference</td><td class="n">300 / 300; equal to 0.01</td></tr>
+          <tr><td>DQ coverage_ok (total / valid / invalid); utility SIC foreign key</td><td class="n">342 / 342 / 0; 43 / 42 / 1</td></tr>
+          <tr><td>Join map: LPAD join counts equal the integer IN counts; the no-LPAD control</td><td class="n">6 of 6; 0</td></tr>
+          <tr class="hi"><td>Numbers in a memo computed by the model; cloud model calls across every run</td><td class="n"><b>0; 0</b></td></tr>
+          <tr><td>Agent tests (16 files); gateway tests</td><td class="n">199 / 199; 236 passed, 2 skipped</td></tr>
+        </tbody>
+      </table>
+      <p class="small muted">E-complete's 22 misses are the 11 placeholder object names in each of the two earliest runs, recorded before the provenance refresh landed; they are reported, not hidden.</p>
+      <figure>
+        <img class="shot" src="../img/eval-totals.png" style="width:100%" alt="The Evaluation screen's totals over every run: 9 runs, 76 planner calls, 1 fallback step, 75 tool calls, 12 memo drafts, 158 of 180 evidence records complete, 171 of 171 claims with evidence, 0 cloud model calls, 0 refused hosts">
+        <figcaption>The Evaluation screen renders docs/eval-report.json: the totals over the nine saved runs, nothing estimated in a measured figure's place.</figcaption>
+      </figure>
+    </div>
+  </div>
+  <div class="foot"><span class="src">docs/eval-report.md (sections 1 to 7, generated by agent/src/eval/run.ts from the run files, the DQ file and the join-map statements), zetaris/README.md (parity), the fresh-clone test run of 24 Oct 2026.</span><span class="pg">11 / 12</span></div>
+</section>
+
+<!-- 12. Future enhancements, data and licences -->
+<section class="slide">
+  <div class="eyebrow">Limits, future enhancements, credits</div>
+  <h2 class="title">What it does not do yet, and what the data owes to whom</h2>
+  <div class="body row" style="gap:48px">
+    <div class="col" style="width:1000px; gap:14px">
+      <h3>Limits, stated on every card</h3>
+      <div class="finding"><div class="n" style="background:var(--mid-edge)">!</div><div><h4>Revenue is a proxy</h4><p>Fuel-cost pass-through, rate cases, data-centre load growth and mergers are not read from the filings; they stay in the "Not tested" list with the fourth quarter, weather normals and the simplified service territories.</p></div></div>
+      <div class="finding"><div class="n" style="background:var(--mid-edge)">!</div><div><h4>About two minutes a question, and a USL that reads slowly</h4><p>The two degree-day statements take 18 to 24 s each; the USL's governed copies answer in seconds (revenue) to minutes (weather), so the gate reads an onboarding DQ file and the card states its time.</p></div></div>
+      <div class="finding"><div class="n" style="background:var(--mid-edge)">!</div><div><h4>Demo identity and admin reads</h4><p>The analyst is a local demo identity; Zetaris reads run on the admin login behind the read-only allowlist.</p></div></div>
+      <h3 style="margin-top:6px">Future enhancements</h3>
+      <div class="row" style="gap:14px">
+        <div class="card" style="flex:1"><h4>Weather normals and more seasons</h4><p>Ten-year normals from the same GHCN partitions, and the fourth quarter from full-year facts minus three quarters.</p></div>
+        <div class="card" style="flex:1"><h4>Read the other explanations</h4><p>Rate-case and fuel-clause facts from the filings, so the remainder is explained instead of listed as not tested.</p></div>
+        <div class="card" style="flex:1"><h4>Least privilege and a faster gate</h4><p>A reader-only Zetaris login, and the USL weather table materialised once so RUN DQ can run per question.</p></div>
+      </div>
+    </div>
+    <div class="col lic" style="flex:1; gap:0">
+      <h3 style="margin-bottom:6px">Data and licences</h3>
+      <div><b>SEC EDGAR</b> frames, companyconcept and submissions: US government work, public domain; queried live through Zetaris with a declared User-Agent at most 10 requests a second, never bulk-redistributed; no extracted facts in the repository beyond the cited numbers.</div>
+      <div><b>NOAA GHCN-Daily</b> parquet on the AWS Open Data bucket: CC0-1.0; cite NOAA NCEI.</div>
+      <div><b>company_dns</b> V4: Apache-2.0 service carrying the SEC's SIC list.</div>
+      <div><b>Meterless</b> H-MEM, Markovian and World Model reference engines: Apache-2.0, vendored unchanged.</div>
+      <div><b>Zetaris</b> getting-started SQL helper, adapted for the gateway: Apache-2.0.</div>
+      <div><b>NVIDIA Nemotron</b> 3 Nano 4B: weights pulled through Ollama, not redistributed.</div>
+      <div><b>Weather-or-Not</b>: Apache-2.0. The gateway, UI shell, server pattern, loop and evidence store build on the same author's earlier scaffolding, declared as pre-existing code. No personal data.</div>
+      <div style="margin-top:12px; font: 600 24px/1.3 var(--font-fig); color: var(--ink)">Umar Mohktar, Singapore - solo</div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">Open Agent Hackathon 2026, Track 2: The Agent That Can Explain Why. Decision support, not investment advice: the split is a statistical attribution over the peer set.</span><span class="pg">12 / 12</span></div>
+</section>
+
+<script>
+(function () {
+  // Prompt tokens per chunk of run r20261024T213805fb4e (data/runs/<id>/run.json, chart[]):
+  // markovian_prompt_tokens_measured and naive_prompt_tokens_estimated.
+  var measured = [1421, 1574, 1627, 1644, 1504];
+  var naive = [1274, 1987, 2657, 3296, 3742];
+  var svg = document.getElementById("chunk-chart");
+  var W = 748, H = 230, L = 64, R = 214, T = 14, B = 40;
+  var pw = W - L - R, ph = H - T - B, yMax = 4000;
+  var x = function (i) { return L + (i * pw) / 4; };
+  var y = function (v) { return T + ph - (v / yMax) * ph; };
+  var ns = "http://www.w3.org/2000/svg";
+  var font = "Segoe UI, sans-serif";
+  function el(tag, attrs, text) { var e = document.createElementNS(ns, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; svg.appendChild(e); return e; }
+  [0, 1000, 2000, 3000, 4000].forEach(function (v) {
+    el("line", { x1: L, x2: L + pw, y1: y(v), y2: y(v), stroke: "#e6e0d3", "stroke-width": 1 });
+    el("text", { x: L - 10, y: y(v) + 5, "text-anchor": "end", "font-size": 15, fill: "#66777b", "font-family": font }, v.toLocaleString("en-GB"));
+  });
+  el("line", { x1: L, x2: L + pw, y1: y(0), y2: y(0), stroke: "#b9b0a0", "stroke-width": 1.5 });
+  for (var i = 0; i < 5; i++) el("text", { x: x(i), y: T + ph + 22, "text-anchor": "middle", "font-size": 15, fill: "#66777b", "font-family": font }, String(i + 1));
+  el("text", { x: L + pw / 2, y: H - 4, "text-anchor": "middle", "font-size": 15, fill: "#66777b", "font-family": font }, "chunk");
+  function path(vals) { return vals.map(function (v, i) { return (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1); }).join(" "); }
+  el("path", { d: path(naive), fill: "none", stroke: "#66777b", "stroke-width": 3, "stroke-dasharray": "9 6" });
+  el("path", { d: path(measured), fill: "none", stroke: "#0e6b67", "stroke-width": 3 });
+  measured.forEach(function (v, i) { el("circle", { cx: x(i), cy: y(v), r: 4.5, fill: "#0e6b67", stroke: "#fff", "stroke-width": 2 }); });
+  naive.forEach(function (v, i) { el("circle", { cx: x(i), cy: y(v), r: 4.5, fill: "#fff", stroke: "#66777b", "stroke-width": 2 }); });
+  var lx = x(4) + 14;
+  el("text", { x: lx, y: y(3742) + 5, "font-size": 16, fill: "#1d2b2e", "font-family": font, "font-weight": 600 }, "3,742 full history");
+  el("text", { x: lx, y: y(3742) + 25, "font-size": 15, fill: "#66777b", "font-family": font }, "estimated, chars/4");
+  el("text", { x: lx, y: y(1504) + 5, "font-size": 16, fill: "#1d2b2e", "font-family": font, "font-weight": 600 }, "1,504 Markovian");
+  el("text", { x: lx, y: y(1504) + 25, "font-size": 15, fill: "#66777b", "font-family": font }, "measured prompt");
+  el("text", { x: lx, y: y(1504) + 50, "font-size": 14, fill: "#66777b", "font-family": font }, "carryover at most 284");
+  el("text", { x: lx, y: y(1504) + 68, "font-size": 14, fill: "#66777b", "font-family": font }, "tokens against 800");
+})();
+</script>
+</body>
+</html>
