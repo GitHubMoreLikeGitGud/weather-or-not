@@ -6,8 +6,8 @@ The deterministic tools (degree days, attribution, like-for-like revenue) are th
 
 ## File naming
 
-- One file per task: `Cn-<short-slug>.md`, for example `C3-lexicon-and-verifiers.md`.
-- `n` is the task number from the build plan (C1 to C8). Numbers are never reused; a task that needs a second pass gets a new section in the same file, not a new number.
+- One file per task: `Cn-<short-slug>.md`, for example `C1-degree-days.md`.
+- `n` is the task number from the build plan (C1 to C5). Numbers are never reused; a task that needs a second pass gets a new section in the same file, not a new number.
 - This `README.md` describes the convention and is not a task.
 
 ## Sections in a task file
@@ -16,10 +16,10 @@ Every task file uses these headings, in this order:
 
 1. **Goal.** One or two sentences: what exists when the task is done.
 2. **Workspace.** The folder Cursor Agent runs in. Usually the repository root; a task that works in another folder says so here.
-3. **Read first.** The files to read before starting: `AGENTS.md`, the relevant `.cursor/rules/*.mdc`, and any sample data or guides.
+3. **Read first.** The files to read before starting: the relevant `.cursor/rules/*.mdc` (and `AGENTS.md` once it exists), and any sample data or guides.
 4. **Inputs.** Sample responses, contracts, schemas or fixtures the task builds from, with their paths.
 5. **Deliverables.** The exact paths to create or change. Anything not listed is out of bounds.
-6. **Constraints.** Task-specific rules on top of `AGENTS.md` (for example "read-only", "no new dependencies", "never edit `engines/`").
+6. **Constraints.** Task-specific rules on top of the project rules (for example "read-only", "no new dependencies", "never edit `engines/`").
 7. **Checks.** The commands that must pass, such as `cd agent && npx vitest run <filter>` and `npx tsc --noEmit -p tsconfig.tools.json`, or `.venv/Scripts/python -m pytest gateway/tests`. The task is done when they are green. Tests are never weakened or skipped to get there. While the repository still carries suites inherited from the sister project that do not run here, checks are scoped to the task's own files.
 8. **Out of scope.** What the task must not do.
 9. **Commit.** The commit message to use: `Cn: <task> (Cursor Agent)`.
