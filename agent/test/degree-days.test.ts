@@ -177,6 +177,21 @@ describe("stationQuarterFromRow", () => {
       }),
     ).toThrow();
   });
+
+  it("throws on a null column instead of reading it as 0", () => {
+    expect(() =>
+      stationQuarterFromRow({
+        station_id: "USW00099001",
+        year: 2025,
+        quarter: 1,
+        hdd: null,
+        cdd: 2,
+        days_observed: 5,
+        days_in_quarter: 90,
+        coverage: 5 / 90,
+      }),
+    ).toThrow(/hdd/);
+  });
 });
 
 describe("degreeDaySql", () => {

@@ -8,7 +8,8 @@ const STATION_RE = /^[A-Z0-9]{11}$/;
 const TABLE_RE = /^[A-Za-z_][A-Za-z0-9_]*\.[A-Za-z_][A-Za-z0-9_]*$/;
 
 export function tenthsCToF(tenths: number): number {
-  return (tenths / 10) * (9 / 5) + 32;
+  // Same evaluation order as the SQL expression, so both paths round identically.
+  return tenths / 10 * 9 / 5 + 32;
 }
 
 function isQuarter(q: number): q is Quarter {
@@ -194,7 +195,7 @@ const STATION_COLUMNS = [
 export function stationQuarterFromRow(row: Record<string, unknown>): StationQuarter {
   const out: Record<string, unknown> = {};
   for (const col of STATION_COLUMNS) {
-    if (!(col in row) || row[col] === undefined) {
+    if (!(col in row) || row[col] === undefined || row[col] === null) {
       throw new Error(`missing column: ${col}`);
     }
     if (col === "station_id") {
