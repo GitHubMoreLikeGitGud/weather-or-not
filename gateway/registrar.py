@@ -92,10 +92,14 @@ class Registrar:
                 t = templates.TEMPLATES.get(step.template_id)
                 if t is None:
                     return 500, {**out, "error": f"plan {plan.action} names an unknown template {step.template_id}", "code": "bad_plan"}
-                _, sql = templates.render(t.id, {k: params[k] for k in t.params})
-                # The User-Agent placeholder is filled on the wire only; the log and the reply keep the placeholder.
-                wire = apply_user_agent(sql)
-                kind = allowlist.check(wire, "registrar")
+                try:
+                    _, sql = templates.render(t.id, {k: params[k] for k in t.params})
+                    # The User-Agent placeholder is filled on the wire only; the log and the reply keep the placeholder.
+                    wire = apply_user_agent(sql)
+                    kind = allowlist.check(wire, "registrar")
+                except (KeyError, templates.BadParams, allowlist.Refused, ZetarisError) as e:
+                    # A plan or environment error, found before anything is sent: the contract stays unspent.
+                    return 500, {**out, "error": f"plan {plan.action} step {t.id} cannot run: {e}", "code": "bad_plan"}
                 entry = {"source_file": "gateway.registrar", "role": "registrar", "action": plan.action, "template_id": t.id,
                          "sql": sql, "sql_sha256": sha256(sql), "timeout_s": step.timeout_s}
                 event: dict = {"template_id": t.id, "kind": kind, "sql": sql, "sql_sha256": entry["sql_sha256"], "objects": list(t.objects)}

@@ -185,6 +185,29 @@ def test_a_failing_first_step_without_skip_exists_sends_nothing_else(setup):
     assert r.status_code == 502 and len(sent(conn)) == 1
 
 
+def test_a_step_that_cannot_be_rendered_or_allowlisted_is_a_plan_error_that_sends_nothing(setup, monkeypatch):
+    client, conn, _, _ = setup
+    c = contract(ACTION, P)
+    bad_host = Template("registrar_frames_table",
+                        'CREATE LIGHTNING REST TABLE frames_{tag}_{period} FROM WON_SEC REQUEST( endpoint "https://example.org/{period}.json" ) '
+                        'HEADER ( user-agent "YOUR_APP_NAME YOUR_CONTACT_EMAIL" ) BODY ()',
+                        {"tag": "tag", "period": "period"}, ("WON_SEC.frames_{tag}_{period}",), (), "host outside the allowlist", "registrar")
+    monkeypatch.setitem(templates.TEMPLATES, bad_host.id, bad_host)
+    r = client.post(f"/registrar/{ACTION}", json={**P, "contract": c})
+    assert r.status_code == 500 and r.json()["code"] == "bad_plan" and "not allowlisted" in r.json()["error"]
+    assert r.json()["steps"] == [] and conn.sql == []
+    # Without the declared User-Agent no SEC statement is built at all.
+    monkeypatch.setitem(templates.TEMPLATES, FRAMES_TEMPLATES[0].id, FRAMES_TEMPLATES[0])
+    monkeypatch.delenv("WON_USER_AGENT")
+    r = client.post(f"/registrar/{ACTION}", json={**P, "contract": c})
+    assert r.status_code == 500 and r.json()["code"] == "bad_plan" and "WON_USER_AGENT" in r.json()["error"]
+    assert conn.sql == []
+    # Nothing was sent, so the same contract still runs the plan once the fault is fixed.
+    monkeypatch.setenv("WON_USER_AGENT", UA)
+    r = client.post(f"/registrar/{ACTION}", json={**P, "contract": c})
+    assert r.status_code == 200 and len(conn.sql) == 4
+
+
 def test_registrar_templates_never_run_through_sql_template(setup):
     client, conn, _, _ = setup
     r = client.post("/sql/template", json={"template_id": "registrar_frames_cache", "params": P, "role": "registrar"})
