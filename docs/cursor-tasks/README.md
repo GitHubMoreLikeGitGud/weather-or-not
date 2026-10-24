@@ -49,8 +49,8 @@ From the repository root, in PowerShell:
 
 | Task | File | Scope | Status |
 |---|---|---|---|
-| C1 | C1-degree-days.md | degree-day SQL template text, TypeScript reference implementation, utility aggregation, tests against a synthetic 90-day series | written 2026-10-24; run record to follow |
-| C2 | C2-attribution.md | peer set, OLS and Theil-Sen slope, seeded bootstrap ranges, three-way split, confidence labels, claim verdict, tests against hand-computed cases | written 2026-10-24; run record to follow |
-| C3 | C3-recast-and-frames.md | companyconcept history parsing, period matching, recast detection and rule R1, tag probing, frames helpers, tests with a recast fixture | written 2026-10-24; run record to follow |
+| C1 | C1-degree-days.md | degree-day SQL template text, TypeScript reference implementation, utility aggregation, tests against a synthetic 90-day series | done 2026-10-24 (122 s, exit 0, 13 tests green); two small reviewer fixes in a separate commit (see the run record) |
+| C2 | C2-attribution.md | peer set, OLS and Theil-Sen slope, seeded bootstrap ranges, three-way split, confidence labels, claim verdict, tests against hand-computed cases | done 2026-10-24 (198 s, exit 0, 13 tests green); one reviewer fix to the claim thresholds and the fixture in a separate commit (see the run record) |
+| C3 | C3-recast-and-frames.md | companyconcept history parsing, period matching, recast detection and rule R1, tag probing, frames helpers, tests with a recast fixture | done 2026-10-24 (163 s, exit 0, 22 tests green); no reviewer change needed (see the run record) |
 | C4 | C4-sql-static-checks.md | gateway tests and static checks on the `zetaris/sql` pairs | not written yet |
 | C5 | C5-answer-card.md | answer card rendering from a saved run | not written yet (only if time allows) |

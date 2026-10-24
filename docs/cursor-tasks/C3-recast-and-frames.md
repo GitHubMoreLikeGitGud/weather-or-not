@@ -127,3 +127,9 @@ Fetching from SEC (runs through Lightning REST tables), the H-MEM conflict recor
 Do not run `git commit`; leave the changes in the working tree. The reviewer commits them, by explicit path, as:
 
 `C3: like-for-like revenue with recast rule R1 and frames helpers (Cursor Agent)`
+
+## Run record (2026-10-24)
+
+Cursor Agent CLI 2026.10.22, model `Auto`, headless, workspace = this repository. The run wrote all four deliverables (`frames.ts` 134 lines, `recast.ts` 242 lines, `frames.test.ts` 161 lines, `recast.test.ts` 171 lines; 22 tests), ran the checks green and left the changes uncommitted as asked. Wall time 163.3 s, exit code 0. Committed unchanged as `222843d`.
+
+Review against the method: the tag order and slugs, the period id and table naming, CIK padding, `loc` parsing, the period-matching windows (80 to 100 days and 350 to 380 days, end within 15 days of the period close, `start` required, `frame` ignored), the original / comparative / current selection with the stated tie-breaks, rule R1 with both facts kept, and like-for-like growth are as specified; the fixture's recast, the unchanged comparatives, the excluded 6- and 9-month facts and the growth of 0.12244897959183673 all reproduce. Checks re-run by the reviewer: 22 passed, `tsc` clean. No reviewer change was needed.

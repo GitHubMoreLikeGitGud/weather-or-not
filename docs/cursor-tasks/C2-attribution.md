@@ -121,3 +121,11 @@ Fetching revenue or weather numbers (they come from Lightning SQL through the ga
 Do not run `git commit`; leave the changes in the working tree. The reviewer commits them, by explicit path, as:
 
 `C2: attribution with seeded bootstrap, confidence labels and claim verdict (Cursor Agent)`
+
+## Run record (2026-10-24)
+
+Cursor Agent CLI 2026.10.22, model `Auto`, headless, workspace = this repository. The run wrote both deliverables (`attribution.ts` 309 lines, `attribution.test.ts` 238 lines, 13 tests), ran the two checks green and left the changes uncommitted as asked. Wall time 198.1 s, exit code 0. Committed unchanged as `4d83e2e`.
+
+Review against the method: the PRNG is the required form and reproduces the fixture's first five values exactly; OLS, Theil-Sen, the peer-set exclusions and their wording, the resampling order, the zero-variance skip, the type-7 percentiles, the remainder range, the confidence rules and the three-way split are as specified; both fixture cases reproduce to 1e-9. Checks re-run by the reviewer: 13 passed, `tsc` clean.
+
+Reviewer change, in a separate commit (`1ced57c`): `claimVerdict` compared the ratio to the thresholds with a 1e-15 allowance, added because the fixture's boundary case `0.02 / 0.10` is 0.19999999999999998 in floating point. That was a defect in the fixture, not in the reading of the rule: the thresholds are now compared exactly and the fixture's boundary cases use ratios that are exact in binary floating point (0.25 / 0.5 and 0.2 / 1.0); `make_fixtures.py` was edited and the fixtures regenerated (only `attribution.json` changed). After the review: 13 passed, `tsc` clean.

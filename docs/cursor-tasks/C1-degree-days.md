@@ -124,3 +124,11 @@ The gateway template that runs this SQL (another lane copies the statement into 
 ## Commit
 
 `C1: degree days SQL template and reference implementation (Cursor Agent)`
+
+## Run record (2026-10-24)
+
+Cursor Agent CLI 2026.10.22, model `Auto`, headless, workspace = this repository. The run wrote both deliverables (`degreeDays.ts` 288 lines, `degree-days.test.ts` 286 lines, 13 tests), ran the two checks green, and committed by itself with the message above plus an automatic co-author trailer. Wall time 122.4 s, exit code 0. The commit staged exactly the two deliverables. The reviewer amended the message to the plain form the repository uses (commit `1a8743c`, tree unchanged); from C2 on the prompt says not to commit.
+
+Review against the method: the conversion, the leap-aware day counts, the SQL shape (CASE WHEN, both quality-flag filters, inner join on station and date, coverage over the calendar day count, eight output columns, no semicolon), the input validation and the utility aggregation are as specified; every fixture series and the utility block reproduce. Checks re-run by the reviewer: 13 passed, `tsc` clean.
+
+Reviewer changes, in a separate commit (`2b2533b`): `tenthsCToF` evaluates in the same left-to-right order as the SQL expression (the two paths differed in the last binary digits only); `stationQuarterFromRow` treats a `null` result column as missing instead of reading it as 0, with a test. After the review: 14 passed, `tsc` clean.
