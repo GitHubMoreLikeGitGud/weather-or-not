@@ -216,8 +216,11 @@ describe("the tool chain on the synthetic question (no model: every step is the 
     expect(r2.card.claims.some((c) => c.evidenceIds.includes(ov.id))).toBe(true);
     // The attribution and the memo material follow the overridden growth.
     expect(r2.evidence.find((e) => e.details?.tool === "attribution")!.claim).toContain(`of g ${((g.g >= 0 ? "+" : "") + (g.g * 100).toFixed(1))}%`);
-    const allowed = (r2.evidence.find((e) => e.details?.tool === "memo")!.details!.allowed as { text: string }[]).map((a) => a.text);
+    const memoDetails = r2.evidence.find((e) => e.details?.tool === "memo")!.details!;
+    const allowed = (memoDetails.allowed as { text: string }[]).map((a) => a.text);
     expect(allowed).toContain("1,149.0");
+    // The conflict finding names R1's value and the analyst's value, not the overridden value twice.
+    expect((memoDetails.findings as string[]).find((f) => f.includes("overridden by the analyst"))).toContain("rule R1 keeps 1,150.0 million, overridden by the analyst to 1,149.0 million");
     // The previous-period conflict was not overridden and still follows R1.
     expect(r2.card.recast_conflicts.find((c) => c.scope === "previous_period")!.status).toBe("resolved_by_rule");
     expect(h.hmem.recasts.all()).toHaveLength(2);

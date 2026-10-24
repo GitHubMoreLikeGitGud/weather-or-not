@@ -1150,7 +1150,8 @@ export function memoMaterial(ctx: QuestionContext): { allowed: AllowedNumber[]; 
   for (const c of ctx.conflicts) {
     add("value in own filing, millions", millions(c.own_filing.val));
     add("value in later filing, millions", millions(c.later_filing.val));
-    findings.push(`A recast conflict is on record for ${c.period}: ${millions(c.own_filing.val)} million in the quarter's own filing against ${millions(c.later_filing.val)} million in a later filing; rule R1 keeps ${millions(c.chosen_val)} million${c.override ? `, overridden by the analyst to ${millions(c.chosen_val)} million` : ""}.`);
+    const r1Val = c.override ? (c.chosen === "own_filing" ? c.later_filing.val : c.own_filing.val) : c.chosen_val;
+    findings.push(`A recast conflict is on record for ${c.period}: ${millions(c.own_filing.val)} million in the quarter's own filing against ${millions(c.later_filing.val)} million in a later filing; rule R1 keeps ${millions(r1Val)} million${c.override ? `, overridden by the analyst to ${millions(c.chosen_val)} million` : ""}.`);
   }
   const w = ctx.weather;
   if (w && u) {
