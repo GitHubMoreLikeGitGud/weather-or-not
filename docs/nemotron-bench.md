@@ -68,7 +68,7 @@ Wall 99.7 s. 5 chunks, 9 planner calls, 9 tool calls, all chosen by the model. T
 | 5.1 | no (2 replies) | finalize | 3,485 | 2,631 | 133.5 | 18,917 |
 
 - JSON valid on the first reply: 8 of 9. Call 5.1's first reply was empty content: the model spent the whole 2,048-token output budget in its thinking and produced no JSON (Ollama `done_reason` length). The repair round (the same prompt plus the error) produced a valid reply that chose `finalize`. No fallback step was needed.
-- Planner tokens over the run: 17,915 in / 6,522 out (measured); median 140.6 tok/s. Carryover at most 371 tokens (estimated). First-call prompts 6,829 against a 13,440 full-history estimate (49.2% less).
+- Planner tokens over the run: 17,915 in / 6,522 out (measured); median 140.6 tok/s. Carryover at most 371 tokens (estimated). First-call prompts 6,829 against a 13,440 full-history estimate (49.2% less; both estimated, chars/4).
 - Memo: both drafts were 95 words with every number matching a tool output; both were rejected for length (150 to 250 wanted) and the template memo (243 words) was used. The retry prompt has since been changed to name the missing length and the paragraphs to add; the next runs measure whether that helps.
 - Tool latencies (ms): submission 226, frames_fact 186, concept_window 241, frames_seeds 193-264, weather_quarter 18,681 and 18,576, attribute 241, memo 6,636 (two drafts).
 
@@ -78,7 +78,7 @@ The same question a second time, with the revenue tag remembered from the first 
 
 - 4 chunks instead of 5: the `probe_revenue_tag` step was skipped (`skipped_steps` = tag_chosen); 8 planner calls, 8 tool calls, all chosen by the model; 7 of 8 valid first try, 1 repair (call 4.2, again an all-thinking first reply cut at num_predict, then a valid `finalize`).
 - Wall 100.7 s: the two degree-day statements (19.2 and 18.3 s) and the repair round (18.9 s) dominate, so the saved probe (0.2 s of SQL and one planner call of about 4 s) does not show in the wall time.
-- Planner tokens 17,982 in / 7,230 out; median 141.2 tok/s; carryover at most 404 tokens; first-call prompts 5,775 against 10,868 estimated (46.9% less).
+- Planner tokens 17,982 in / 7,230 out; median 141.2 tok/s; carryover at most 404 tokens; first-call prompts 5,775 against 10,868 (46.9% less; both estimated, chars/4).
 - The World Model received the same rows again and appended no event (769 events before and after): the reference idempotency property on live data. H-MEM reconfirmed the facts it already held (12 memories touched, 7 of them from the first run) and kept the one recast conflict.
 - One planner input was wrong although harmless: call 3.2 chose `attribute` with a `tag` of `RevenueFromContractWithCustomerExcludingAssessedTax` (AEP's tag is `Revenues`); the tool takes no input and ignored it. The host now rejects a `tag` that is not the utility's tag for every tool, which would have cost a repair round here.
 - Memo: again two 95-word drafts, numbers all matching, rejected for length; template memo.
@@ -101,7 +101,7 @@ The demo question a second time, with the tag remembered (mem-49) and the retry 
 - 4 chunks instead of 5 (the probe step skipped); 8 planner calls, 7 valid first try, 1 repair (call 4.2: all-thinking first reply cut at num_predict, then a valid `finalize`); 8 tool calls chosen by the model; 0 fallback. The attribution is identical to the cold run (beta 0.506526, weather +8.2005%).
 - Memo: kept on the first draft, 184 words, every number matching a tool output; 1,280 tokens in / 360 out, 148.5 tok/s, 2.4 s. The draft follows the findings closely and carries a few hyphen-space artefacts ("degree- day") from the model's output; the numbers are untouched.
 - Wall 105.5 s: the two degree-day statements 18.5 and 18.4 s, the repair round 20.5 s, the other planner calls 3.3 to 10.5 s.
-- Planner tokens 16,207 in / 7,592 out; median 140.2 tok/s; carryover at most 298 tokens; first-call prompts 5,504 against 10,086 estimated (45.4% less). World Model: 769 events before and after (nothing appended).
+- Planner tokens 16,207 in / 7,592 out; median 140.2 tok/s; carryover at most 298 tokens; first-call prompts 5,504 against 10,086 (45.4% less; both estimated, chars/4). World Model: 769 events before and after (nothing appended).
 
 ## Across the four runs
 
@@ -138,7 +138,7 @@ The demo question once more on the committed tree, with the tag remembered (mem-
 
 - The card is identical to the cold run (beta 0.506526, weather +8.2005%, every number equal) and the memo text equals the previous warm run's memo byte for byte (184 words, first draft, every number matched): temperature 0 and seed 7 make the chain reproducible when the tool outputs are the same.
 - JSON valid on the first reply: 5 of 8; repaired 2; fallback 1. Call 2.2's first reply named `RegulatedAndUnregulatedOperatingRevenue` as the tag for `get_weather` and was rejected by the host's tag check (the schema error added after the AEP warm run); the repair chose the same tool with the utility's tag. Calls 4.1 and 4.2 returned empty content on the first reply (thinking used the whole 2,048-token output budget), and 4.2's repair reply was empty as well, so the host took the `finalize` step itself. The fallback produced the same verdict and the same memo path as a model-chosen `finalize` would have.
-- Planner tokens 20,263 in / 11,435 out; median 139.5 tok/s; carryover at most 298 tokens; first-call prompts 5,504 against 10,439 estimated (47.3% less). Memo 1,280 in / 360 out, 148.5 tok/s, 2.7 s. `weather_quarter` 18,419 and 18,293 ms. World Model 769 events before and after. Wall 133.2 s: the two repair rounds and the failed repair add about 50 s over the earlier warm run.
+- Planner tokens 20,263 in / 11,435 out; median 139.5 tok/s; carryover at most 298 tokens; first-call prompts 5,504 against 10,439 (47.3% less; both estimated, chars/4). Memo 1,280 in / 360 out, 148.5 tok/s, 2.7 s. `weather_quarter` 18,419 and 18,293 ms. World Model 769 events before and after. Wall 133.2 s: the two repair rounds and the failed repair add about 50 s over the earlier warm run.
 - Across the five runs: 42 planner calls, 36 valid on the first reply, 5 repaired, 1 fallback. Of the six invalid first replies, five were empty content from thinking past `num_predict` (four on `finalize`, one on `not_tested`) and one was the wrong tag; the one fallback was `finalize` after an empty repair reply too. The `finalize` step is where the model runs out of output budget most often.
 
 ## Clean re-runs on the changed settings (24 Oct 2026, 21:38 to 21:47 SGT)
@@ -161,11 +161,13 @@ The runtime state (H-MEM, World Model, runs, evidence) was reset and the warm-up
 | Median planner tok/s | 140.4 | 139.5 | 139.2 | 139.8 |
 | Memo tok/s | 145.5 | 147.8 | 149.2 | 140.5 |
 | Max carryover (estimated) | 284 | 358 | 298 | 387 |
-| First-call prompts vs full-history estimate | 6,615 / 12,956 | 6,812 / 13,770 | 5,521 / 10,251 | 5,827 / 11,441 |
+| First-call prompts (estimated, chars/4) vs full-history estimate | 6,615 / 12,956 | 6,812 / 13,770 | 5,521 / 10,251 | 5,827 / 11,441 |
 | `weather_quarter` current / previous (ms) | 20,005 / 20,959 | 18,308 / 18,576 | 23,938 / 18,804 | 18,212 / 18,564 |
 | Skipped from memory | none | none | tag_chosen (mem-49) | tag_chosen (mem-61) |
 | Wall (ms) | 97,457 | 114,942 | 128,063 | 112,654 |
 | Cloud model calls | 0 | 0 | 0 | 0 |
+
+Both sides of the first-call prompt row are chars/4 estimates. Measured by Ollama, the first prompts of the demo run (`r20261024T213805fb4e`, saved in `docs/sample-run/`) sum to 7,770 tokens (1,421, 1,574, 1,627, 1,644 and 1,504), 40% below its 12,956-token full-history estimate; estimate against estimate the saving is 48.9%.
 
 Across the four: 34 planner calls, 28 valid on the first reply, 6 repaired (4 of the repair rounds ran with think off), 0 fallback steps; 34 tool calls chosen by the model; 4 memo drafts, 4 kept on the first draft, 0 numbers that were not a tool output; 18 chunks; wall 453,116 ms in total (113.3 s mean).
 
