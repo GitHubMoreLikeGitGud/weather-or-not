@@ -1,0 +1,884 @@
+{
+  "source": "docs/sample-run/r20261024T213805fb4e.json",
+  "run_id": "r20261024T213805fb4e",
+  "utility": "FIRSTENERGY CORP",
+  "method": "attribute() from agent/src/tools/attribution.ts (OLS slope, 300 bootstrap resamples, seed 7, 10th to 90th percentile) on the saved g and dw of the target and its peers; no model, no gateway",
+  "target": {
+    "g": 0.145421,
+    "dw": 0.161897
+  },
+  "full": {
+    "peers": 39,
+    "beta": 0.506526,
+    "beta_range": [
+      0.101213,
+      0.86395
+    ],
+    "weather": 0.082005,
+    "weather_range": [
+      0.016386,
+      0.139871
+    ],
+    "ratio": 0.563912,
+    "verdict": "supported",
+    "confidence": "high",
+    "equals_saved_card": true,
+    "weather_range_share_of_change": [
+      0.11268,
+      0.961831
+    ]
+  },
+  "leave_one_out": {
+    "runs": 39,
+    "verdicts": {
+      "supported": 35,
+      "partly supported": 4
+    },
+    "confidence": {
+      "high": 37,
+      "medium": 2
+    },
+    "ratio_min": 0.315911,
+    "ratio_max": 0.712055,
+    "beta_min": 0.283762,
+    "beta_max": 0.639592,
+    "changed": [
+      {
+        "dropped": "EDISON INTERNATIONAL",
+        "cik": "0000827052",
+        "peers": 38,
+        "beta": 0.417506,
+        "beta_range": [
+          0.007153,
+          0.828662
+        ],
+        "weather": 0.067593,
+        "weather_range": [
+          0.001158,
+          0.134158
+        ],
+        "ratio": 0.464807,
+        "verdict": "partly supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "PORTLAND GENERAL ELECTRIC CO /OR/",
+        "cik": "0000784977",
+        "peers": 38,
+        "beta": 0.468442,
+        "beta_range": [
+          -0.004159,
+          0.916673
+        ],
+        "weather": 0.075839,
+        "weather_range": [
+          -0.000673,
+          0.148406
+        ],
+        "ratio": 0.521514,
+        "verdict": "supported",
+        "confidence": "medium"
+      },
+      {
+        "dropped": "Vistra Corp.",
+        "cik": "0001692819",
+        "peers": 38,
+        "beta": 0.435682,
+        "beta_range": [
+          0.017439,
+          0.817801
+        ],
+        "weather": 0.070535,
+        "weather_range": [
+          0.002823,
+          0.132399
+        ],
+        "ratio": 0.485042,
+        "verdict": "partly supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "NISOURCE INC.",
+        "cik": "0001111711",
+        "peers": 38,
+        "beta": 0.438814,
+        "beta_range": [
+          0.02413,
+          0.80564
+        ],
+        "weather": 0.071043,
+        "weather_range": [
+          0.003907,
+          0.130431
+        ],
+        "ratio": 0.488529,
+        "verdict": "partly supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "TUCSON ELECTRIC POWER CO",
+        "cik": "0000100122",
+        "peers": 38,
+        "beta": 0.283762,
+        "beta_range": [
+          -0.06869,
+          0.612625
+        ],
+        "weather": 0.04594,
+        "weather_range": [
+          -0.011121,
+          0.099182
+        ],
+        "ratio": 0.315911,
+        "verdict": "partly supported",
+        "confidence": "medium"
+      }
+    ],
+    "all": [
+      {
+        "dropped": "Duke Energy CORP",
+        "cik": "0001326160",
+        "peers": 38,
+        "beta": 0.521244,
+        "beta_range": [
+          0.105556,
+          0.9324
+        ],
+        "weather": 0.084388,
+        "weather_range": [
+          0.017089,
+          0.150953
+        ],
+        "ratio": 0.580298,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "SOUTHERN CO",
+        "cik": "0000092122",
+        "peers": 38,
+        "beta": 0.501541,
+        "beta_range": [
+          0.085097,
+          0.915947
+        ],
+        "weather": 0.081198,
+        "weather_range": [
+          0.013777,
+          0.148289
+        ],
+        "ratio": 0.558363,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "NEXTERA ENERGY INC",
+        "cik": "0000753308",
+        "peers": 38,
+        "beta": 0.52336,
+        "beta_range": [
+          0.066984,
+          0.935321
+        ],
+        "weather": 0.08473,
+        "weather_range": [
+          0.010845,
+          0.151426
+        ],
+        "ratio": 0.582654,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "AMERICAN ELECTRIC POWER CO INC",
+        "cik": "0000004904",
+        "peers": 38,
+        "beta": 0.518688,
+        "beta_range": [
+          0.086301,
+          0.935161
+        ],
+        "weather": 0.083974,
+        "weather_range": [
+          0.013972,
+          0.1514
+        ],
+        "ratio": 0.577452,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "XCEL ENERGY INC",
+        "cik": "0000072903",
+        "peers": 38,
+        "beta": 0.50908,
+        "beta_range": [
+          0.081532,
+          0.914186
+        ],
+        "weather": 0.082418,
+        "weather_range": [
+          0.0132,
+          0.148004
+        ],
+        "ratio": 0.566756,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "ENTERGY CORP /DE/",
+        "cik": "0000065984",
+        "peers": 38,
+        "beta": 0.558743,
+        "beta_range": [
+          0.127609,
+          0.974129
+        ],
+        "weather": 0.090459,
+        "weather_range": [
+          0.020659,
+          0.157708
+        ],
+        "ratio": 0.622045,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "Evergy, Inc.",
+        "cik": "0001711269",
+        "peers": 38,
+        "beta": 0.619199,
+        "beta_range": [
+          0.194499,
+          1.044858
+        ],
+        "weather": 0.100246,
+        "weather_range": [
+          0.031489,
+          0.169159
+        ],
+        "ratio": 0.689351,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "AMEREN CORP",
+        "cik": "0001002910",
+        "peers": 38,
+        "beta": 0.491169,
+        "beta_range": [
+          0.05889,
+          0.906649
+        ],
+        "weather": 0.079519,
+        "weather_range": [
+          0.009534,
+          0.146784
+        ],
+        "ratio": 0.546815,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "CMS ENERGY CORP",
+        "cik": "0000811156",
+        "peers": 38,
+        "beta": 0.51017,
+        "beta_range": [
+          0.090476,
+          0.91222
+        ],
+        "weather": 0.082595,
+        "weather_range": [
+          0.014648,
+          0.147686
+        ],
+        "ratio": 0.567969,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "DTE ENERGY CO",
+        "cik": "0000936340",
+        "peers": 38,
+        "beta": 0.533948,
+        "beta_range": [
+          0.142097,
+          0.918544
+        ],
+        "weather": 0.086445,
+        "weather_range": [
+          0.023005,
+          0.148709
+        ],
+        "ratio": 0.594442,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "WEC ENERGY GROUP, INC.",
+        "cik": "0000783325",
+        "peers": 38,
+        "beta": 0.495521,
+        "beta_range": [
+          0.088963,
+          0.887365
+        ],
+        "weather": 0.080223,
+        "weather_range": [
+          0.014403,
+          0.143662
+        ],
+        "ratio": 0.551661,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "ALLIANT ENERGY CORP",
+        "cik": "0000352541",
+        "peers": 38,
+        "beta": 0.514573,
+        "beta_range": [
+          0.102575,
+          0.915457
+        ],
+        "weather": 0.083308,
+        "weather_range": [
+          0.016607,
+          0.14821
+        ],
+        "ratio": 0.572871,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "PPL Corp",
+        "cik": "0000922224",
+        "peers": 38,
+        "beta": 0.509087,
+        "beta_range": [
+          0.104283,
+          0.90323
+        ],
+        "weather": 0.08242,
+        "weather_range": [
+          0.016883,
+          0.14623
+        ],
+        "ratio": 0.566764,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "PUBLIC SERVICE ENTERPRISE GROUP INC",
+        "cik": "0000788784",
+        "peers": 38,
+        "beta": 0.510462,
+        "beta_range": [
+          0.107337,
+          0.898715
+        ],
+        "weather": 0.082642,
+        "weather_range": [
+          0.017378,
+          0.145499
+        ],
+        "ratio": 0.568295,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "CONSOLIDATED EDISON INC",
+        "cik": "0001047862",
+        "peers": 38,
+        "beta": 0.503661,
+        "beta_range": [
+          0.096316,
+          0.898091
+        ],
+        "weather": 0.081541,
+        "weather_range": [
+          0.015593,
+          0.145398
+        ],
+        "ratio": 0.560723,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "EVERSOURCE ENERGY",
+        "cik": "0000072741",
+        "peers": 38,
+        "beta": 0.522213,
+        "beta_range": [
+          0.131159,
+          0.915175
+        ],
+        "weather": 0.084545,
+        "weather_range": [
+          0.021234,
+          0.148164
+        ],
+        "ratio": 0.581377,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "EXELON CORP",
+        "cik": "0001109357",
+        "peers": 38,
+        "beta": 0.505348,
+        "beta_range": [
+          0.11602,
+          0.910027
+        ],
+        "weather": 0.081814,
+        "weather_range": [
+          0.018783,
+          0.14733
+        ],
+        "ratio": 0.562602,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "EDISON INTERNATIONAL",
+        "cik": "0000827052",
+        "peers": 38,
+        "beta": 0.417506,
+        "beta_range": [
+          0.007153,
+          0.828662
+        ],
+        "weather": 0.067593,
+        "weather_range": [
+          0.001158,
+          0.134158
+        ],
+        "ratio": 0.464807,
+        "verdict": "partly supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "PG&E Corp",
+        "cik": "0001004980",
+        "peers": 38,
+        "beta": 0.485844,
+        "beta_range": [
+          0.053539,
+          0.924895
+        ],
+        "weather": 0.078657,
+        "weather_range": [
+          0.008668,
+          0.149738
+        ],
+        "ratio": 0.540887,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "SEMPRA",
+        "cik": "0001032208",
+        "peers": 38,
+        "beta": 0.465931,
+        "beta_range": [
+          0.046364,
+          0.911487
+        ],
+        "weather": 0.075433,
+        "weather_range": [
+          0.007506,
+          0.147567
+        ],
+        "ratio": 0.518719,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "PINNACLE WEST CAPITAL CORP",
+        "cik": "0000764622",
+        "peers": 38,
+        "beta": 0.55113,
+        "beta_range": [
+          0.103057,
+          0.986522
+        ],
+        "weather": 0.089226,
+        "weather_range": [
+          0.016685,
+          0.159715
+        ],
+        "ratio": 0.61357,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "PORTLAND GENERAL ELECTRIC CO /OR/",
+        "cik": "0000784977",
+        "peers": 38,
+        "beta": 0.468442,
+        "beta_range": [
+          -0.004159,
+          0.916673
+        ],
+        "weather": 0.075839,
+        "weather_range": [
+          -0.000673,
+          0.148406
+        ],
+        "ratio": 0.521514,
+        "verdict": "supported",
+        "confidence": "medium"
+      },
+      {
+        "dropped": "NorthWestern Energy Group, Inc.",
+        "cik": "0001993004",
+        "peers": 38,
+        "beta": 0.495158,
+        "beta_range": [
+          0.058608,
+          0.885951
+        ],
+        "weather": 0.080165,
+        "weather_range": [
+          0.009488,
+          0.143433
+        ],
+        "ratio": 0.551257,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "BLACK HILLS CORP /SD/",
+        "cik": "0001130464",
+        "peers": 38,
+        "beta": 0.518085,
+        "beta_range": [
+          0.073593,
+          0.904767
+        ],
+        "weather": 0.083876,
+        "weather_range": [
+          0.011914,
+          0.146479
+        ],
+        "ratio": 0.576781,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "AVISTA CORP",
+        "cik": "0000104918",
+        "peers": 38,
+        "beta": 0.48513,
+        "beta_range": [
+          0.03504,
+          0.873469
+        ],
+        "weather": 0.078541,
+        "weather_range": [
+          0.005673,
+          0.141412
+        ],
+        "ratio": 0.540092,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "OGE ENERGY CORP.",
+        "cik": "0001021635",
+        "peers": 38,
+        "beta": 0.508502,
+        "beta_range": [
+          0.100194,
+          0.888955
+        ],
+        "weather": 0.082325,
+        "weather_range": [
+          0.016221,
+          0.143919
+        ],
+        "ratio": 0.566112,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "CENTERPOINT ENERGY INC",
+        "cik": "0001130310",
+        "peers": 38,
+        "beta": 0.507865,
+        "beta_range": [
+          0.081819,
+          0.907511
+        ],
+        "weather": 0.082222,
+        "weather_range": [
+          0.013246,
+          0.146923
+        ],
+        "ratio": 0.565404,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "Vistra Corp.",
+        "cik": "0001692819",
+        "peers": 38,
+        "beta": 0.435682,
+        "beta_range": [
+          0.017439,
+          0.817801
+        ],
+        "weather": 0.070535,
+        "weather_range": [
+          0.002823,
+          0.132399
+        ],
+        "ratio": 0.485042,
+        "verdict": "partly supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "NRG ENERGY, INC.",
+        "cik": "0001013871",
+        "peers": 38,
+        "beta": 0.490178,
+        "beta_range": [
+          0.063139,
+          0.897868
+        ],
+        "weather": 0.079358,
+        "weather_range": [
+          0.010222,
+          0.145362
+        ],
+        "ratio": 0.545713,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "HAWAIIAN ELECTRIC INDUSTRIES INC",
+        "cik": "0000354707",
+        "peers": 38,
+        "beta": 0.639592,
+        "beta_range": [
+          0.224286,
+          0.978802
+        ],
+        "weather": 0.103548,
+        "weather_range": [
+          0.036311,
+          0.158465
+        ],
+        "ratio": 0.712055,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "ALLETE INC",
+        "cik": "0000066756",
+        "peers": 38,
+        "beta": 0.565516,
+        "beta_range": [
+          0.140836,
+          0.920163
+        ],
+        "weather": 0.091555,
+        "weather_range": [
+          0.022801,
+          0.148972
+        ],
+        "ratio": 0.629586,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "Otter Tail Corp",
+        "cik": "0001466593",
+        "peers": 38,
+        "beta": 0.528949,
+        "beta_range": [
+          0.132062,
+          0.868985
+        ],
+        "weather": 0.085635,
+        "weather_range": [
+          0.02138,
+          0.140686
+        ],
+        "ratio": 0.588877,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "UNITIL CORP",
+        "cik": "0000755001",
+        "peers": 38,
+        "beta": 0.501007,
+        "beta_range": [
+          0.083274,
+          0.851312
+        ],
+        "weather": 0.081111,
+        "weather_range": [
+          0.013482,
+          0.137825
+        ],
+        "ratio": 0.557768,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "TXNM ENERGY INC",
+        "cik": "0001108426",
+        "peers": 38,
+        "beta": 0.519924,
+        "beta_range": [
+          0.095969,
+          0.865882
+        ],
+        "weather": 0.084174,
+        "weather_range": [
+          0.015537,
+          0.140184
+        ],
+        "ratio": 0.578828,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "DOMINION ENERGY, INC",
+        "cik": "0000715957",
+        "peers": 38,
+        "beta": 0.503497,
+        "beta_range": [
+          0.085988,
+          0.847497
+        ],
+        "weather": 0.081515,
+        "weather_range": [
+          0.013921,
+          0.137207
+        ],
+        "ratio": 0.56054,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "Constellation Energy Corp",
+        "cik": "0001868275",
+        "peers": 38,
+        "beta": 0.511017,
+        "beta_range": [
+          0.088897,
+          0.862943
+        ],
+        "weather": 0.082732,
+        "weather_range": [
+          0.014392,
+          0.139708
+        ],
+        "ratio": 0.568912,
+        "verdict": "supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "NISOURCE INC.",
+        "cik": "0001111711",
+        "peers": 38,
+        "beta": 0.438814,
+        "beta_range": [
+          0.02413,
+          0.80564
+        ],
+        "weather": 0.071043,
+        "weather_range": [
+          0.003907,
+          0.130431
+        ],
+        "ratio": 0.488529,
+        "verdict": "partly supported",
+        "confidence": "high"
+      },
+      {
+        "dropped": "TUCSON ELECTRIC POWER CO",
+        "cik": "0000100122",
+        "peers": 38,
+        "beta": 0.283762,
+        "beta_range": [
+          -0.06869,
+          0.612625
+        ],
+        "weather": 0.04594,
+        "weather_range": [
+          -0.011121,
+          0.099182
+        ],
+        "ratio": 0.315911,
+        "verdict": "partly supported",
+        "confidence": "medium"
+      },
+      {
+        "dropped": "TAMPA ELECTRIC CO",
+        "cik": "0000096271",
+        "peers": 38,
+        "beta": 0.575573,
+        "beta_range": [
+          0.180861,
+          0.908311
+        ],
+        "weather": 0.093183,
+        "weather_range": [
+          0.029281,
+          0.147053
+        ],
+        "ratio": 0.640782,
+        "verdict": "supported",
+        "confidence": "high"
+      }
+    ]
+  },
+  "peer_groups": [
+    {
+      "label": "without Vistra, NRG and Constellation",
+      "dropped": [
+        "Vistra Corp.",
+        "NRG ENERGY, INC.",
+        "Constellation Energy Corp"
+      ],
+      "peers": 36,
+      "beta": 0.414657,
+      "beta_range": [
+        0.023264,
+        0.820265
+      ],
+      "weather": 0.067132,
+      "weather_range": [
+        0.003766,
+        0.132798
+      ],
+      "ratio": 0.461635,
+      "verdict": "partly supported",
+      "confidence": "high"
+    }
+  ],
+  "degree_days_over_the_utility_stations": {
+    "stations": 9,
+    "hdd": [
+      2163.95,
+      2508.753333
+    ],
+    "hdd_change": 0.15934,
+    "cdd": [
+      0,
+      5.533333
+    ],
+    "hdd_plus_cdd_change": 0.161897,
+    "card_delta_w": 0.161897,
+    "periods": [
+      "CY2024Q1",
+      "CY2025Q1"
+    ]
+  }
+}
