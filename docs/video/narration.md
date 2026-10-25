@@ -2,6 +2,12 @@
 
 Spoken by a synthetic text-to-speech voice. Times are the start of each line in `weather-or-not-demo.mp4`; the burned-in captions and `weather-or-not-demo.srt` use the same text. Numbers are read from `docs/eval-report.md`, `docs/demo-case.md` or from the screen at that moment.
 
+Where the video says more than the code does (the lines below stay as spoken, so they match the audio and the captions):
+
+- **2:02.6** "the coverage_ok rule on weather_quarter gates every verdict": the gate reads that rule's onboarding result (`data/dq/latest.json`) and re-applies coverage at least 0.9 to the question's own stations; no DQ statement runs per question.
+- **3:22.8** "0 memo numbers from the model": what is measured is 0 of 12 memo drafts with a number that is not a tool output.
+- **Telemetry footer, 96 tokens/s:** the live run was recorded while a headless browser took screenshots of the page on the same machine; the 139.2 to 140.4 tokens/s in the README are the medians of the four clean runs, recorded without capture.
+
 **0:00.6** Weather-or-Not. The utility says it was the weather. Weather-or-Not checks.
 
 **0:05.6** A solo entry from Singapore.

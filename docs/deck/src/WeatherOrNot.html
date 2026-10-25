@@ -321,7 +321,7 @@
         </div>
         <div class="row" style="gap:14px">
           <div class="stat" style="flex:1"><div class="v">9 / 9</div><div class="k">planner replies valid first try, FirstEnergy cold run</div></div>
-          <div class="stat" style="flex:1"><div class="v">0</div><div class="k">numbers computed by the model</div></div>
+          <div class="stat" style="flex:1"><div class="v">0 of 12</div><div class="k">memo drafts with a number that is not a tool output</div></div>
         </div>
       </div>
     </div>
@@ -380,7 +380,7 @@
         <div class="mod"><span class="who zt">REST</span><b>WON_DNS</b>.sic_codes_v4_raw<br><span class="muted">company_dns V4, 1,005 SIC codes</span></div>
         <div class="mod"><span class="who zt">Parquet</span><b>WON_GHCN</b> 4 filestore tables<br><span class="muted">NOAA GHCN-Daily by_year TMAX and TMIN, 2024 and 2025, public S3</span></div>
         <div class="mod"><span class="who zt">Views</span><b>container won</b>, 66 cached views<br><span class="muted">flattened REST views; station-filtered weather views</span></div>
-        <div class="mod" style="background:#f3ecf4; border-color:#6a2c70"><span class="who zt">USL</span><b>weather_or_not_usl</b><br>5 tables with primary and foreign keys, 9 DQ rules; the coverage_ok result gates every verdict</div>
+        <div class="mod" style="background:#f3ecf4; border-color:#6a2c70"><span class="who zt">USL</span><b>weather_or_not_usl</b><br>5 tables with primary and foreign keys, 9 DQ rules; its onboarding coverage_ok result and the question's own coverage gate the verdict</div>
       </div>
 
       <div class="lbl" style="left:262px; top:180px; width:70px">HTTP<br>SSE</div>
@@ -428,8 +428,8 @@
     <div class="col" style="width:1080px; gap:8px">
       <div class="finding"><div class="n">1</div><div><h4>Objects per source, counted against the source</h4><p><b>WON_SEC</b> (REST): 8 frames tables, 10 companyconcept tables, 43 submissions profiles; every count equals the source response (frames Revenues CY2025Q1: 1,937 = 1,937). <b>WON_DNS</b>: 1,005 SIC codes. <b>WON_GHCN</b> (Parquet on public S3): 4 partitions of 4.31 to 4.37 million rows each, station-filtered views cached at 264 to 269 KB.</p></div></div>
       <div class="finding"><div class="n">2</div><div><h4>Degree days computed in Lightning SQL</h4><p>One <code>weather_quarter</code> statement per quarter joins TMAX to TMIN over all 56 stations, drops days with a quality flag, and returns HDD, CDD, days observed and coverage in 18 to 24 s. Parity checked three ways on one station-quarter: 2022.69 HDD / 22.08 CDD from the tool's SQL, the template and the TypeScript reference.</p></div></div>
-      <div class="finding"><div class="n">3</div><div><h4>The USL is the contract; its DQ rules are the gate</h4><p><code>weather_or_not_usl</code>: 5 tables (sic_code 1,005 rows, utility 43, station 57, weather_quarter 342, revenue_quarter 133), 5 primary keys, 3 foreign keys, custom rule <code>coverage_ok</code>. RUN DQ: 342 of 342 station-quarters valid; the utility FK rule found <b>1 invalid row</b>, MGE Energy under SIC 4900, which company_dns does not list: a real orphan, shown on the card whenever MGE is the target.</p></div></div>
-      <div class="finding"><div class="n">4</div><div><h4>The SQL text is the citation; the agent never writes SQL</h4><p>28 named templates behind an allowlist; a frames period the agent needs is registered at run time under a signed contract (table, view, DESCRIBE, CACHE in 1.08 s; count 2,018 = source). Every card number opens the statement that produced it, with its sha256, object, endpoint, licence, retrieval time and cache state.</p></div></div>
+      <div class="finding"><div class="n">3</div><div><h4>The USL is the governed copy; its coverage_ok result is the gate</h4><p><code>weather_or_not_usl</code>: 5 tables (sic_code 1,005 rows, utility 43, station 57, weather_quarter 342, revenue_quarter 133), 5 primary keys, 3 foreign keys, custom rule <code>coverage_ok</code>. RUN DQ: 342 of 342 station-quarters valid; the utility FK rule found <b>1 invalid row</b>, MGE Energy under SIC 4900, which company_dns does not list: a real orphan found at onboarding; the peer filter excludes MGE by SIC code.</p></div></div>
+      <div class="finding"><div class="n">4</div><div><h4>The SQL text is the citation; the agent never writes SQL</h4><p>28 named templates behind an allowlist; a new frames period is registered at run time through the gateway's registrar under a signed contract (measured on an operator call: table, view, DESCRIBE, CACHE in 1.08 s; count 2,018 = source). Every card number opens the statement that produced it, with its sha256, object, endpoint, licence, retrieval time and cache state.</p></div></div>
       <div class="finding"><div class="n">5</div><div><h4>Join map, measured in Lightning SQL</h4><p>Frames <code>cik</code> joins the submissions profile only through LPAD (34, 35, 21, 23, 9 and 11 matches across the six tag-periods, equal to the integer IN counts; 0 without LPAD); frames <code>loc</code> equals the business-address state in every row; 56 of 56 stations carry the seed file's state.</p></div></div>
     </div>
     <figure style="width:608px">
@@ -520,7 +520,7 @@
       <div class="card"><h4>Like-for-like revenue</h4><p>The comparative column is recast between filings; rule R1 reads each quarter from its own filing and records a restatement as a conflict, never a silent overwrite.</p></div>
       <div class="card"><h4>Peers pooled across three XBRL tags</h4><p>Each filer under its first available revenue tag (32 + 3 + 4 peers); every exclusion named with its reason on the card.</p></div>
       <div class="card"><h4>Degree days in Lightning SQL, flagged days dropped</h4><p>Computed where the parquet is cached, over the whole station union in one statement per quarter; coverage reported per station.</p></div>
-      <div class="card"><h4>A DQ gate from the USL</h4><p>The <code>coverage_ok</code> result and the SIC foreign key can withhold a verdict; the MGE Energy orphan is the live example.</p></div>
+      <div class="card"><h4>A DQ gate from the USL</h4><p>The <code>coverage_ok</code> result from onboarding and the question's own station coverage can withhold a verdict. The SIC key's one orphan, MGE Energy (SIC 4900), is a real data finding.</p></div>
       <div class="card"><h4>Memory with a why trace, edges with dates, a flat carryover</h4><p>H-MEM provenance and conflicts, World Model validity dates, Markovian chunks; the model plans and writes but never computes a number.</p></div>
     </div>
     <div class="col" style="flex:1; gap:12px">
@@ -534,7 +534,7 @@
           <tr><td>Bootstrap resamples valid, seed 7; degree-day parity of SQL against the TypeScript reference</td><td class="n">300 / 300; equal to 0.01</td></tr>
           <tr><td>DQ coverage_ok (total / valid / invalid); utility SIC foreign key</td><td class="n">342 / 342 / 0; 43 / 42 / 1</td></tr>
           <tr><td>Join map: LPAD join counts equal the integer IN counts; the no-LPAD control</td><td class="n">6 of 6; 0</td></tr>
-          <tr class="hi"><td>Numbers in a memo computed by the model; cloud model calls across every run</td><td class="n"><b>0; 0</b></td></tr>
+          <tr class="hi"><td>Cloud model calls and refused hosts across every run</td><td class="n"><b>0; 0</b></td></tr>
           <tr><td>Agent tests (16 files); gateway tests</td><td class="n">199 / 199; 236 passed, 2 skipped</td></tr>
         </tbody>
       </table>
