@@ -119,7 +119,7 @@ The demo question a second time, with the tag remembered (mem-49) and the retry 
 | Wall | 84.1 s | 99.7 s | 100.7 s | 105.5 s |
 | Cloud model calls | 0 | 0 | 0 | 0 |
 
-The three invalid first replies were all on the `finalize` step and all the same failure: the model used the whole output budget thinking and returned no content. Every tool the model chose was the checklist's next step (34 of 34 calls). The deterministic fallback step, which exists for the case the repair also fails, did not have to run in these four runs.
+The three invalid first replies were all on the `finalize` step and all the same failure: the model used the whole output budget thinking and returned no content. Every tool the model chose was the checklist's next step (34 of 34 calls on these four first-settings runs; the four clean re-runs below give 33 of 34, see "Pick = the checklist's next step, run by run"). The deterministic fallback step, which exists for the case the repair also fails, did not have to run in these four runs.
 
 ## FirstEnergy, fifth run (review), warm (run r20261024T204637522f, 20:46 SGT)
 
@@ -235,3 +235,56 @@ What it shows, stated plainly:
 - **VRAM.** Peak whole-card memory was 7,111 to 7,145 MiB with think on and 6,918 to 6,981 MiB with think off, against 3,747 to 3,765 MiB with no model: the 4B model at context 8192 took about 3,170 to 3,400 MiB above the desktop level at its peak on this card. In every run with a model, the card's memory also fell to the desktop level once, for about 1.5 to 2 s, and came back: the model was unloaded and reloaded mid-run. The agent's host-RAM guard unloads the model when less than 2,048 MiB of host RAM is free (2,433 to 5,664 MiB was free at the start of these runs), which is the likely cause; its events are not written to the run file, so it is not confirmed.
 - **Speed.** Median planner speed per run was 143.9 to 150.5 tok/s with think on and 147.2 to 152.3 with think off on 25 Oct, against 139.2 to 140.4 on the clean runs of 24 Oct, which stay the figures quoted elsewhere.
 - **Not changed.** The shipped planner setting stays think on, because the code and the saved runs are frozen for judging. On this evidence think off would be the better default for this checklist; that is reported here rather than switched two days before the deadline.
+
+## Pick = the checklist's next step, run by run (recount from the run files, 25 Oct 2026)
+
+Counted from each saved run's timeline: a model pick "equals the checklist" when the tool it chose is the first not-yet-run step in the fallback order of `agent/src/loop/checklist.ts` (`resolve_utility`, `probe_revenue_tag`, `get_revenue`, `get_peers`, `get_weather`, `dq_gate`, `attribute`, `not_tested`, `finalize`; a warm run skips the tag probe from memory). Fallback steps are not model picks.
+
+| Run set | Run | Utility | Model picks | Equal to the checklist | Exception |
+|---|---|---|---|---|---|
+| First settings, 24 Oct | `r20261024T203050a220` | FirstEnergy, cold | 9 | 9 | |
+| | `r20261024T2034350adc` | AEP, cold | 9 | 9 | |
+| | `r20261024T203648826a` | AEP, warm | 8 | 8 | |
+| | `r20261024T20391416bf` | FirstEnergy, warm | 8 | 8 | |
+| | `r20261024T204637522f` | FirstEnergy, warm (review) | 7 | 7 | |
+| **Clean re-runs, 24 Oct** | `r20261024T213805fb4e` | FirstEnergy, cold (the README demo run) | 9 | 9 | |
+| | `r20261024T214009cd85` | AEP, cold | 9 | 9 | |
+| | `r20261024T214205a2e5` | FirstEnergy, warm | 8 | 8 | |
+| | `r20261024T2145294e73` | AEP, warm | 8 | 7 | `get_peers` before `get_revenue` |
+| Four other utilities, 25 Oct | `r20261025T115028c6c5` | Southern Co | 9 | 8 | `attribute` before `dq_gate` |
+| | `r20261025T11524841a9` | Duke Energy | 9 | 9 | |
+| | `r20261025T11542503bf` | Xcel Energy | 9 | 9 | |
+| | `r20261025T1155534448` | Entergy | 9 | 8 | `get_peers` before `get_revenue` |
+| Ablation, think on, 25 Oct | `r20261025T1158279a6a` | FirstEnergy, cold | 9 | 9 | |
+| | `r20261025T1200096856` | AEP, cold | 9 | 9 | |
+| | `r20261025T120204f6fe` | FirstEnergy, warm | 8 | 8 | |
+| | `r20261025T120341bd7e` | AEP, warm | 7 | 5 | `get_peers` before `get_revenue`; `not_tested` before `get_weather` |
+| Ablation, think off, 25 Oct | `r20261025T1205387bc9` | FirstEnergy, cold | 9 | 8 | `get_peers` before `get_revenue` |
+| | `r20261025T12065254de` | AEP, cold | 9 | 8 | `get_peers` before `get_revenue` |
+| | `r20261025T1208115888` | FirstEnergy, warm | 8 | 7 | `get_peers` before `get_revenue` |
+| | `r20261025T1209241992` | AEP, warm | 8 | 7 | `get_peers` before `get_revenue` |
+
+Totals: first settings 41 of 41 (34 of 34 over the first four); **clean re-runs 33 of 34** (the figure the README, the deck and the video quote); four other utilities 34 of 36; ablation think on 31 of 33, think off 30 of 34. Every exception is a step the host allowed at that point; the cards of the same question are identical across the run sets ("the same 12 cards to the printed digit" in the ablation above).
+
+## The memo: Nemotron's measured job (25 Oct 2026)
+
+The ablation above shows the numbers and the verdict do not depend on the model: with no model the deterministic fallback takes the checklist's steps and the cards are identical. What the model adds is the memo, and that is what is measured:
+
+- **Numbers.** Every number in a draft must match a host-formatted tool output (string match at write time, `agent/src/llm/memo.ts`): 0 numbers outside the tool outputs in every saved draft (12 drafts over the nine evaluation runs; the four clean runs kept their first draft).
+- **Verdict.** The draft must state the card's verdict and no other: 8 of the 9 evaluation-run memos pass (the ninth, from the first settings, says only "consistent with the claim"); 4 of 4 with think on and 4 of 4 with think off in the ablation; on the four other utilities, 2 of 4 runs fell back to the template memo because both drafts left out the verdict.
+- **Labels (new, offline).** `agent/src/eval/memoBinding.ts` checks that each label a memo names (the like-for-like change, the degree-day change, the peer sensitivity, the weather part, the industry part, the remainder) is followed in the same sentence by the card's own value for that label, as the host formats it. Over every saved run with a memo (the nine evaluation runs, the four other utilities and the twelve ablation runs: 25 memos, 17 written by the model and 8 template memos):
+
+```
+npx tsx src/eval/memoBinding.ts <runs dir> ...
+memos 25; every named label bound to its own value in 25
+  like-for-like change: match 25, mismatch 0, absent 0
+  degree-day change: match 25, mismatch 0, absent 0
+  peer sensitivity (beta): match 25, mismatch 0, absent 0
+  weather part: match 22, mismatch 0, absent 3
+  industry part: match 23, mismatch 0, absent 2
+  remainder: match 25, mismatch 0, absent 0
+```
+
+  "Absent" means the memo did not name that label with one of the listed words (three model memos say the weather "accounts for" the change instead); it is not a failure. The check runs on the saved run files, which stay local (`data/` is gitignored); on the committed sample run (`docs/sample-run/`, revenue levels masked) it is asserted in `agent/test/memo-binding.test.ts`, together with a memo whose industry and remainder figures are swapped, which it rejects.
+
+**Which setting the evidence favours.** Think off: 72.5 s against 103.2 s per question, 27 of 34 JSON-valid first replies either way, 0 fallbacks against 1, the same cards and 4 of 4 model memos kept. The shipped planner setting stays think on only because the code and the saved runs were frozen for judging; `--think off` on the command line, or `WON_THINK=off` for every job, selects it.
