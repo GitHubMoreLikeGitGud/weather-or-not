@@ -257,6 +257,7 @@ The engines come from [Meterless/Meterless](https://github.com/Meterless/Meterle
 | Memo | 12 drafts, 0 with a number that was not a tool output; the four clean runs kept their first draft (184, 176, 184, 176 words) |
 | Cloud model calls | 0, by construction: the model client accepts loopback URLs only |
 | Cold against warm | a warm run skips the tag probe from memory (4 chunks instead of 5, 8 planner calls instead of 9) but is not faster in wall time: the degree-day statements and the repair rounds dominate |
+| Think on / think off / no model (25 Oct, the four clean questions per mode) | mean wall per question 103.2 / 72.5 / 38.5 s; JSON valid on the first reply 27 of 34 with think on and 27 of 34 with think off; deterministic fallbacks 1 / 0; the same 12 cards to the printed digit; model memos kept 4 of 4 with either think setting (the template without a model); peak whole-GPU memory 7,145 / 6,981 / 3,765 MiB against 3,745 MiB with no model loaded. Think off was faster and no less reliable here; the shipped setting stays think on (frozen for judging) |
 
 The demo video's footer reads 96 tokens/s because that live run was recorded while a headless browser took screenshots of the page on the same machine; the 139.2 to 140.4 tokens/s above are from the four clean runs, recorded without capture.
 
@@ -295,7 +296,8 @@ Both from 300 of 300 valid resamples, seed 7; coverage 1.0000 and 0.9889; one re
 - **Three planner inputs named another utility's revenue tag.** The host rejects a tag that is not the utility's (a schema error, one repair round each); before that check one such input was silently ignored.
 - **Memo length on the first settings.** Four 95-word drafts with every number right were rejected for length alone; the policy is now 100 to 250 words and the four clean runs kept their first draft.
 - **The two earliest cold runs** carried placeholder object names in 11 of 20 evidence records (a provenance refresh bug, fixed in commit `47c7cdd`); they stay in the report as measured.
-- **Not measured:** the model's VRAM in this repository; a think on/off ablation of the planner; cold against warm on an empty memory store; analyst time saved (there is no baseline of the manual check); the override re-run is measured in the verification notes, not in the report.
+- **Measured since:** the planner ablation (think on, think off, no model) and the model's GPU memory, in [`docs/nemotron-bench.md`](docs/nemotron-bench.md) (25 Oct 2026).
+- **Not measured:** cold against warm on an empty memory store; analyst time saved (there is no baseline of the manual check); the override re-run is measured in the verification notes, not in the report.
 
 ## Limitations
 

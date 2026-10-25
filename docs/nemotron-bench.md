@@ -186,3 +186,52 @@ What the four runs show, stated plainly:
 - The other two repairs were the tag check (commit 8727309) rejecting a tag that is not the utility's; the repair chose the same tool with the right tag.
 - The memo policy kept every first draft (184, 176, 184, 176 words, every number a tool output); the template memo was not needed. In the five earlier runs the template was used twice and a second draft once.
 - The cards equal the earlier runs' to the printed digit (FE beta 0.5065, weather +8.20%; AEP beta 0.5287, weather +8.92%; 39 peers, supported, high, DQ pass in all four; the AEP recast conflict recorded again, rule R1).
+
+## Think on, think off and no model (25 Oct 2026)
+
+Does the model's thinking earn its cost? The four clean questions (FirstEnergy and AEP, CY2025Q1 against CY2024Q1, claim "colder weather", each cold and then warm) ran once per planner mode on the code at `0a7ea45`, each mode on a fresh data directory holding only the DQ onboarding file (`npm run warmup` first, then an empty H-MEM, World Model and run store, so the first run of each utility is cold), in the order FirstEnergy cold, AEP cold, FirstEnergy warm, AEP warm:
+
+```bash
+cd agent
+npm run ask -- --cik 0001031296 --period CY2025Q1 --claim "colder weather" --think on    # the shipped setting
+npm run ask -- --cik 0001031296 --period CY2025Q1 --claim "colder weather" --think off
+npm run ask -- --cik 0001031296 --period CY2025Q1 --claim "colder weather" --no-model    # the host takes every checklist step and writes the template memo
+```
+
+(and the same for AEP, `--cik 0000004904`). `--think` sets the planner only; the memo always runs with think off. The model was unloaded (`ollama stop`) before the no-model runs. GPU memory was sampled with `nvidia-smi` about every 0.5 s during each run. Windows does not report GPU memory per process, so the figure is the whole card's memory in use, desktop included: 3,745 MiB with no model loaded (NVIDIA GeForce RTX 4070 Ti SUPER, 16,376 MiB). Ollama 0.40.7 listed the loaded model at 3.0 GB, 100% on the GPU, context 8192; the warm-up read 2,881 MiB in VRAM. The per-run summary is in [`eval/nemotron-ablation.json`](eval/nemotron-ablation.json).
+
+Per mode (four questions each, measured):
+
+| Mode | Wall, mean (min to max) | Planner calls | Valid first try | Repaired (of them, think-off repairs after an empty reply) | Fallbacks | Pick = checklist's next | Median planner tok/s (per run) | Planner tokens out | Planner wall, sum | Memos kept from the model / verdict check pass | Peak GPU memory |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| think on | 103.2 s (94.0 to 111.2) | 34 | 27 | 6 (4) | 1 | 31 of 33 | 143.9 to 150.5 | 33,225 | 247.1 s | 4 of 4 / 4 of 4 | 7,145 MiB |
+| think off | 72.5 s (69.0 to 75.3) | 34 | 27 | 7 (0) | 0 | 30 of 34 | 147.2 to 152.3 | 14,595 | 124.1 s | 4 of 4 / 4 of 4 | 6,981 MiB |
+| no model | 38.5 s (38.0 to 39.4) | 0 | n/a | n/a | 34 (the host ran every step) | n/a | n/a | 0 | 0.0 s | 0 of 4 / 4 of 4 | 3,765 MiB |
+
+Per run:
+
+| Mode | Question | Run | Wall | Chunks | Planner calls | Valid first try | Repaired (of them, think-off repairs after an empty reply) | Fallbacks | Pick = checklist's next | Median planner tok/s | Planner tokens out | Memo (verdict check) | Card | Peak GPU memory |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| think on | FirstEnergy, cold | r20261025T1158279a6a | 98.6 s | 5 | 9 | 8 | 1 (1) | 0 | 9 of 9 | 147.4 | 7,540 | model, 184 words, 1 draft(s) (pass) | supported, high; weather +8.2% | 7,145 MiB (+3,400) |
+| think on | AEP, cold | r20261025T1200096856 | 111.2 s | 5 | 9 | 7 | 2 (1) | 0 | 9 of 9 | 150.5 | 9,546 | model, 176 words, 1 draft(s) (pass) | supported, high; weather +8.9% | 7,142 MiB (+3,397) |
+| think on | FirstEnergy, warm | r20261025T120204f6fe | 94.0 s | 4 | 8 | 7 | 1 (1) | 0 | 8 of 8 | 146.4 | 7,017 | model, 184 words, 1 draft(s) (pass) | supported, high; weather +8.2% | 7,135 MiB (+3,390) |
+| think on | AEP, warm | r20261025T120341bd7e | 109.1 s | 4 | 8 | 5 | 2 (1) | 1 | 5 of 7 | 143.9 | 9,122 | model, 176 words, 1 draft(s) (pass) | supported, high; weather +8.9% | 7,111 MiB (+3,366) |
+| think off | FirstEnergy, cold | r20261025T1205387bc9 | 70.4 s | 5 | 9 | 8 | 1 (0) | 0 | 8 of 9 | 147.2 | 3,190 | model, 184 words, 1 draft(s) (pass) | supported, high; weather +8.2% | 6,981 MiB (+3,236) |
+| think off | AEP, cold | r20261025T12065254de | 75.1 s | 5 | 9 | 8 | 1 (0) | 0 | 8 of 9 | 149.7 | 4,103 | model, 176 words, 1 draft(s) (pass) | supported, high; weather +8.9% | 6,933 MiB (+3,188) |
+| think off | FirstEnergy, warm | r20261025T1208115888 | 69.0 s | 4 | 8 | 6 | 2 (0) | 0 | 7 of 8 | 148.1 | 3,186 | model, 184 words, 1 draft(s) (pass) | supported, high; weather +8.2% | 6,918 MiB (+3,173) |
+| think off | AEP, warm | r20261025T1209241992 | 75.3 s | 4 | 8 | 5 | 3 (0) | 0 | 7 of 8 | 152.3 | 4,116 | model, 176 words, 1 draft(s) (pass) | supported, high; weather +8.9% | 6,919 MiB (+3,174) |
+| no model | FirstEnergy, cold | r20261025T121049e2be | 39.4 s | 5 | 0 | n/a | n/a | 9 (the host ran every step) | n/a | n/a | 0 | template, 213 words (pass) | supported, high; weather +8.2% | 3,747 MiB (+2) |
+| no model | AEP, cold | r20261025T1211326433 | 38.5 s | 5 | 0 | n/a | n/a | 9 (the host ran every step) | n/a | n/a | 0 | template, 243 words (pass) | supported, high; weather +8.9% | 3,748 MiB (+3) |
+| no model | FirstEnergy, warm | r20261025T121214a147 | 38.0 s | 4 | 0 | n/a | n/a | 8 (the host ran every step) | n/a | n/a | 0 | template, 213 words (pass) | supported, high; weather +8.2% | 3,748 MiB (+3) |
+| no model | AEP, warm | r20261025T1212561cb4 | 38.0 s | 4 | 0 | n/a | n/a | 8 (the host ran every step) | n/a | n/a | 0 | template, 243 words (pass) | supported, high; weather +8.9% | 3,765 MiB (+20) |
+
+What it shows, stated plainly:
+
+- **Think off was faster and no less reliable on these four questions.** Mean wall 72.5 s against 103.2 s with think on (30% less); the planner wrote 14,595 output tokens against 33,225 and spent 124.1 s in planner calls against 247.1 s. JSON valid on the first reply: 27 of 34 in both modes. With think on, 4 of the 7 invalid first replies were empty (the thinking used the whole 3,072-token output budget) and one run needed the deterministic fallback (AEP warm: an empty reply, then a repair that named the wrong tag); with think off there was no empty reply and no fallback, but all 7 of its invalid first replies named another utility's revenue tag (the host's tag check rejected each one and the repair fixed it).
+- **The cards do not depend on the mode.** All 12 cards equal the published ones to the printed digit (FirstEnergy beta 0.5065, weather +8.2%, supported, high; AEP beta 0.5287, weather +8.9%, supported, high, one recast conflict), the four without a model included. That is by design, since every number is a deterministic tool output; it also means the model's measured contribution is the memo and the order of the steps, not the numbers.
+- **The memo is the model's visible work.** With a model, 8 of 8 memos were the model's first draft (184 and 176 words) and passed the number and verdict checks; without one, the card carries the template memo (213 and 243 words).
+- **The order of steps.** The model's pick equalled the checklist's next step in 31 of 33 model picks with think on and 30 of 34 with think off; the exceptions were the peers loaded before the revenue (five times) and the Not-tested list written before the weather (once), both orders the checklist allows.
+- **No model is the floor:** 38.0 to 39.4 s, nearly all of it the two degree-day statements in Lightning SQL (about 18 s each) and the other gateway calls.
+- **VRAM.** Peak whole-card memory was 7,111 to 7,145 MiB with think on and 6,918 to 6,981 MiB with think off, against 3,747 to 3,765 MiB with no model: the 4B model at context 8192 took about 3,170 to 3,400 MiB above the desktop level at its peak on this card. In every run with a model, the card's memory also fell to the desktop level once, for about 1.5 to 2 s, and came back: the model was unloaded and reloaded mid-run. The agent's host-RAM guard unloads the model when less than 2,048 MiB of host RAM is free (2,433 to 5,664 MiB was free at the start of these runs), which is the likely cause; its events are not written to the run file, so it is not confirmed.
+- **Speed.** Median planner speed per run was 143.9 to 150.5 tok/s with think on and 147.2 to 152.3 with think off on 25 Oct, against 139.2 to 140.4 on the clean runs of 24 Oct, which stay the figures quoted elsewhere.
+- **Not changed.** The shipped planner setting stays think on, because the code and the saved runs are frozen for judging. On this evidence think off would be the better default for this checklist; that is reported here rather than switched two days before the deadline.

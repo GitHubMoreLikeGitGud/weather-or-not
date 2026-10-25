@@ -320,7 +320,7 @@
         </div>
         <div class="panel" style="padding:14px 18px">
           <h4>The checklist</h4>
-          <p class="small">utility_resolved, tag_chosen, revenue_like_for_like, peers_loaded, weather_target, weather_peers, dq_checked, attribution_done, claim_tested, not_tested_listed, memo_written. A warm run skips <code>tag_chosen</code> from memory: 4 chunks instead of 5. In the four clean runs the planner's pick was the checklist's next step every time (34 of 34).</p>
+          <p class="small">utility_resolved, tag_chosen, revenue_like_for_like, peers_loaded, weather_target, weather_peers, dq_checked, attribution_done, claim_tested, not_tested_listed, memo_written. A warm run skips <code>tag_chosen</code> from memory: 4 chunks instead of 5. The planner's pick was the checklist's next step in 33 of 34 calls on the four clean runs and 34 of 36 on four other utilities; the exceptions are allowed reorderings that leave the card unchanged.</p>
         </div>
         <div class="row" style="gap:14px">
           <div class="stat" style="flex:1"><div class="v">9 / 9</div><div class="k">planner replies valid first try, FirstEnergy cold run</div></div>
@@ -482,18 +482,16 @@
     </div>
     <div class="row" style="margin-top:20px; gap:36px; align-items:flex-start">
       <div style="width:1060px">
-        <h4>Per run; settings: temperature 0, seed 7, num_ctx 8192, planner output budget 3,072 with think on, memo 1,024 with think off</h4>
-        <table class="t" style="font-size:18.5px">
-          <thead><tr><th>Run</th><th class="n">Chunks</th><th class="n">Planner calls</th><th class="n">Valid first try</th><th class="n">Repaired (think off)</th><th class="n">Fallback</th><th class="n">Degree-day SQL</th><th class="n">Wall</th></tr></thead>
+        <h4>Planner ablation (25 Oct): FirstEnergy and AEP, cold then warm, per mode, each on an empty memory store</h4>
+        <table class="t" style="font-size:18px">
+          <thead><tr><th>Planner mode</th><th class="n">Wall, mean</th><th class="n">Valid first try</th><th class="n">Repaired</th><th class="n">Fallback</th><th class="n">Output tokens</th><th class="n">Model memos</th><th class="n">Peak GPU memory</th></tr></thead>
           <tbody>
-            <tr><td style="white-space:nowrap">FirstEnergy, cold</td><td class="n">5</td><td class="n">9</td><td class="n">9</td><td class="n">0 (0)</td><td class="n">0</td><td class="n">20.0 s + 21.0 s</td><td class="n">97.5 s</td></tr>
-            <tr><td style="white-space:nowrap">AEP, cold</td><td class="n">5</td><td class="n">9</td><td class="n">7</td><td class="n">2 (1)</td><td class="n">0</td><td class="n">18.3 s + 18.6 s</td><td class="n">114.9 s</td></tr>
-            <tr><td style="white-space:nowrap">FirstEnergy, warm</td><td class="n">4</td><td class="n">8</td><td class="n">6</td><td class="n">2 (2)</td><td class="n">0</td><td class="n">23.9 s + 18.8 s</td><td class="n">128.1 s</td></tr>
-            <tr><td style="white-space:nowrap">AEP, warm</td><td class="n">4</td><td class="n">8</td><td class="n">6</td><td class="n">2 (1)</td><td class="n">0</td><td class="n">18.2 s + 18.6 s</td><td class="n">112.7 s</td></tr>
-            <tr class="hi"><td style="white-space:nowrap">All nine saved runs</td><td class="n">40</td><td class="n">76</td><td class="n">64</td><td class="n">11 (4)</td><td class="n">1</td><td class="n">18.2 to 23.9 s each</td><td class="n">84.1 to 133.2 s</td></tr>
+            <tr><td style="white-space:nowrap">Think on (shipped)</td><td class="n">103.2 s</td><td class="n">27 / 34</td><td class="n">6</td><td class="n">1</td><td class="n">33,225</td><td class="n">4 / 4</td><td class="n">7,145 MiB</td></tr>
+            <tr class="hi"><td style="white-space:nowrap">Think off</td><td class="n">72.5 s</td><td class="n">27 / 34</td><td class="n">7</td><td class="n">0</td><td class="n">14,595</td><td class="n">4 / 4</td><td class="n">6,981 MiB</td></tr>
+            <tr><td style="white-space:nowrap">No model</td><td class="n">38.5 s</td><td class="n">n/a</td><td class="n">n/a</td><td class="n">every step</td><td class="n">0</td><td class="n">template</td><td class="n">3,765 MiB</td></tr>
           </tbody>
         </table>
-        <p class="small muted" style="margin-top:8px">The nine include five earlier runs on a 2,048-token planner budget, where the one deterministic fallback occurred (finalize, after an empty repair reply). The video's live run shows 96 tok/s: it was recorded while a headless browser took screenshots of the page on the same machine; 139 to 140 tok/s is from runs without capture.</p>
+        <p class="small muted" style="margin-top:8px">Wall ranges 94.0 to 111.2 s, 69.0 to 75.3 s and 38.0 to 39.4 s. With no model the host runs every checklist step and writes the template memo. All 12 cards are identical to the published ones: the numbers never come from the model. Think off was faster and no less reliable here; the shipped setting stays think on (frozen for judging). GPU memory is the whole card (nvidia-smi), 3,745 MiB with no model loaded. The video's 96 tok/s was recorded under screen capture; 139 to 140 tok/s is from the clean runs without capture.</p>
       </div>
       <div class="col" style="flex:1; gap:14px">
         <div class="panel" style="padding:14px 18px">
@@ -502,7 +500,7 @@
         </div>
         <div class="panel" style="padding:14px 18px">
           <h4>Right on the tool, reproducible on the numbers</h4>
-          <p class="small">The tool it chose was the checklist's next step in every planner call of the four clean runs; two wrong tag inputs were caught by the host's schema check. Temperature 0 and seed 7: the FirstEnergy card is identical across its five runs (beta 0.5065, weather +8.20%) and two warm-run memos matched byte for byte.</p>
+          <p class="small">The tool it chose was the checklist's next step in 33 of 34 planner calls of the four clean runs (once the peers before the revenue, an allowed order); two wrong tag inputs were caught by the host's schema check. Temperature 0 and seed 7: the FirstEnergy card is identical across its five runs (beta 0.5065, weather +8.20%) and two warm-run memos matched byte for byte.</p>
         </div>
       </div>
     </div>
@@ -511,7 +509,7 @@
       <figcaption>The UI's telemetry footer for the FirstEnergy run: model, planner validity, fallback steps, measured against naive prompt tokens per chunk, tokens per second, cloud model calls and refused hosts.</figcaption>
     </figure>
   </div>
-  <div class="foot"><span class="src">All figures from docs/nemotron-bench.md (settings, clean re-runs) and docs/eval-report.md sections 6 and 7; the verifier's runs from the Day-2 verification record. Token counts are Ollama's; the full-history baseline is estimated at chars/4 and labelled so.</span><span class="pg">10 / 12</span></div>
+  <div class="foot"><span class="src">All figures from docs/nemotron-bench.md (settings, clean re-runs, the 25 Oct ablation) and docs/eval-report.md sections 6 and 7; the verifier's runs from the Day-2 verification record. Token counts are Ollama's; the full-history baseline is estimated at chars/4 and labelled so.</span><span class="pg">10 / 12</span></div>
 </section>
 
 <!-- 11. What is unique, and the evaluation -->
@@ -541,14 +539,21 @@
           <tr><td>Agent tests (16 files); gateway tests</td><td class="n">203 / 203; 236 passed, 2 skipped</td></tr>
         </tbody>
       </table>
-      <p class="small muted">E-complete's 22 misses are the 11 placeholder object names in each of the two earliest runs, recorded before the provenance refresh landed; they are reported, not hidden.</p>
-      <figure>
-        <img class="shot" src="../img/eval-totals.png" style="width:100%" alt="The Evaluation screen's totals over every run: 9 runs, 76 planner calls, 1 fallback step, 75 tool calls, 12 memo drafts, 158 of 180 evidence records complete, 171 of 171 claims with evidence, 0 cloud model calls, 0 refused hosts">
-        <figcaption>The Evaluation screen renders docs/eval-report.json: the totals over the nine saved runs, nothing estimated in a measured figure's place.</figcaption>
-      </figure>
+      <p class="small muted">E-complete's 22 misses: placeholder object names in the two earliest runs, fixed since; reported, not hidden.</p>
+      <h4 style="margin-top:4px">Four other utilities, CY2025Q1: one agent run each, every result shown (25 Oct 2026)</h4>
+      <table class="t" style="font-size:17.5px">
+        <thead><tr><th>Utility</th><th class="n">Revenue</th><th class="n">Weather (range)</th><th class="n">Remainder</th><th>Verdict (ratio)</th></tr></thead>
+        <tbody>
+          <tr class="hi"><td>Southern Co</td><td class="n">+17.0%</td><td class="n">+6.6% (+0.9 to +11.3)</td><td class="n">+7.6%</td><td><b>partly supported</b> (0.39)</td></tr>
+          <tr><td>Duke Energy</td><td class="n">+7.5%</td><td class="n">+8.7% (+1.2 to +14.8)</td><td class="n">-4.7%</td><td>supported (1.16)</td></tr>
+          <tr><td>Xcel Energy</td><td class="n">+7.0%</td><td class="n">+6.8% (+0.9 to +11.4)</td><td class="n">-3.4%</td><td>supported (0.97)</td></tr>
+          <tr><td>Entergy</td><td class="n">+1.9%</td><td class="n">+10.2% (+2.1 to +16.7)</td><td class="n">-11.3%</td><td>supported (5.46)</td></tr>
+        </tbody>
+      </table>
+      <p class="small muted">Claim "the weather" (these filings were not read by hand); confidence high on all four. The rule has no upper bound: Entergy's weather part is 5.5 times its revenue change, so its "supported" means something else pulled revenue down.</p>
     </div>
   </div>
-  <div class="foot"><span class="src">docs/eval-report.md (sections 1 to 7, generated by agent/src/eval/run.ts from the run files, the DQ file and the join-map statements), zetaris/README.md (parity), the fresh-clone test run of 24 Oct 2026 (agent tests re-run 25 Oct 2026).</span><span class="pg">11 / 12</span></div>
+  <div class="foot"><span class="src">docs/eval-report.md (sections 1 to 7 generated by agent/src/eval/run.ts from the run, DQ and join-map files; section 8: four other utilities), zetaris/README.md (parity), the fresh-clone tests (re-run 25 Oct 2026).</span><span class="pg">11 / 12</span></div>
 </section>
 
 <!-- 12. Future enhancements, data and licences -->
