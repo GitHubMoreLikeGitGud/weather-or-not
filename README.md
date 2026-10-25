@@ -6,7 +6,7 @@
 
 Open Agent Hackathon 2026, Track 2: The Agent That Can Explain Why. Team: Umar Mohktar, Singapore - solo.
 
-Demo video (3:48): https://youtu.be/JXRQMF2Xfl0 · Deck (12 slides): [`docs/deck/WeatherOrNot.pdf`](docs/deck/WeatherOrNot.pdf) · The demo case step by step: [`docs/demo-case.md`](docs/demo-case.md)
+Demo video (3:22): https://youtu.be/t85jmc8h9Bs · Deck (12 slides): [`docs/deck/WeatherOrNot.pdf`](docs/deck/WeatherOrNot.pdf) · The demo case step by step: [`docs/demo-case.md`](docs/demo-case.md)
 
 ![The answer card for FirstEnergy, Q1 2025 against Q1 2024: a +14.5% revenue change split into weather +8.2% (range +1.6% to +14.0%), industry-wide +2.9% and a company-specific +3.5%; claim supported, confidence high, with the confidence rule stated in words; every figure opens the evidence behind it.](docs/deck/img/card-fe.png)
 
