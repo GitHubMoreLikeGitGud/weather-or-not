@@ -6,7 +6,7 @@
 
 Open Agent Hackathon 2026, Track 2: The Agent That Can Explain Why. Team: Umar Mohktar, Singapore - solo.
 
-Demo video (3:22): https://youtu.be/t85jmc8h9Bs · Deck (12 slides): [`docs/deck/WeatherOrNot.pdf`](docs/deck/WeatherOrNot.pdf) · The demo case step by step: [`docs/demo-case.md`](docs/demo-case.md)
+Demo video (3:13): https://youtu.be/5WSQS_0pVJA · Deck (12 slides): [`docs/deck/WeatherOrNot.pdf`](docs/deck/WeatherOrNot.pdf) · The demo case step by step: [`docs/demo-case.md`](docs/demo-case.md)
 
 > **Judge in 3 minutes (no Zetaris, no GPU).** Node 22.12 or newer, then:
 >

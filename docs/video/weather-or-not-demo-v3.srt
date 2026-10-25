@@ -1,0 +1,235 @@
+1
+00:00:00,300 --> 00:00:04,120
+FirstEnergy's first-quarter 10-Q credits colder weather:
+
+2
+00:00:04,140 --> 00:00:05,940
+heating degree days up 15%.
+
+3
+00:00:06,720 --> 00:00:08,920
+Revenue rose 14.5%.
+
+4
+00:00:09,400 --> 00:00:10,930
+How much of that was the weather?
+
+5
+00:00:11,183 --> 00:00:13,903
+The answer: weather is consistent with 8.2
+
+6
+00:00:13,923 --> 00:00:15,603
+of those points, a bit over half.
+
+7
+00:00:16,023 --> 00:00:18,013
+Supported, but with a wide range.
+
+8
+00:00:18,817 --> 00:00:20,547
+A solo entry from Singapore.
+
+9
+00:00:21,500 --> 00:00:24,860
+The analyst picks FirstEnergy, the first quarter of 2025,
+
+10
+00:00:25,320 --> 00:00:27,270
+and the claim: colder weather.
+
+11
+00:00:28,933 --> 00:00:32,073
+Each chunk streams as the local Nemotron model plans it.
+
+12
+00:00:32,453 --> 00:00:34,433
+The planner's text is shown as a plan,
+
+13
+00:00:34,673 --> 00:00:38,063
+never as a fact; only tool rows carry numbers.
+
+14
+00:00:39,500 --> 00:00:41,880
+Degree days are computed in Lightning SQL,
+
+15
+00:00:42,380 --> 00:00:43,640
+about 20 seconds a quarter;
+
+16
+00:00:44,080 --> 00:00:46,270
+the whole question takes about two minutes.
+
+17
+00:00:50,800 --> 00:00:53,140
+On the clean runs, the model's pick matched the
+
+18
+00:00:53,160 --> 00:00:56,020
+checklist's own order in 33 of 34 calls;
+
+19
+00:00:56,620 --> 00:00:59,590
+its real job is valid plans and the memo.
+
+20
+00:01:05,333 --> 00:01:08,253
+Revenue rose 14.5% like for like.
+
+21
+00:01:08,793 --> 00:01:11,113
+Weather is consistent with 8.2 of those points,
+
+22
+00:01:11,273 --> 00:01:12,253
+so the claim is supported.
+
+23
+00:01:12,773 --> 00:01:16,600
+But the range is wide, 1.6 to 14.0:
+
+24
+00:01:16,810 --> 00:01:19,413
+high confidence means the weather effect is above zero,
+
+25
+00:01:19,773 --> 00:01:21,573
+not that 8.2 is precise.
+
+26
+00:01:22,253 --> 00:01:26,703
+Industry-wide, 2.9; company-specific, 3.5.
+
+27
+00:01:27,267 --> 00:01:30,600
+The filing says heating degree days rose 15%;
+
+28
+00:01:30,743 --> 00:01:34,950
+the agent's nine stations show total degree days up 16.2%:
+
+29
+00:01:35,182 --> 00:01:37,757
+a check on a number the agent did not compute.
+
+30
+00:01:38,533 --> 00:01:40,413
+The memo is the model's own writing:
+
+31
+00:01:40,953 --> 00:01:42,993
+every number in it matched a tool output,
+
+32
+00:01:43,253 --> 00:01:46,443
+it states the verdict, and it lists what was not tested.
+
+33
+00:01:49,067 --> 00:01:50,267
+Every figure is a button.
+
+34
+00:01:50,807 --> 00:01:53,267
+The citation is the Lightning SQL itself,
+
+35
+00:01:53,587 --> 00:01:54,967
+with its hash, the rows,
+
+36
+00:01:55,227 --> 00:01:58,917
+the Zetaris object, the endpoint, the licence and the time.
+
+37
+00:01:59,667 --> 00:02:01,807
+A later filing's restatement is recorded,
+
+38
+00:02:02,167 --> 00:02:03,387
+never applied silently:
+
+39
+00:02:04,007 --> 00:02:07,247
+at American Electric Power it is 0.4 million,
+
+40
+00:02:07,507 --> 00:02:09,627
+tiny here, decisive when material.
+
+41
+00:02:10,227 --> 00:02:13,497
+An override needs a signed, single-use contract.
+
+42
+00:02:15,467 --> 00:02:19,287
+The same question for Southern Company: revenue rose 17.0%,
+
+43
+00:02:19,307 --> 00:02:22,767
+and weather is consistent with 6.6 points of it,
+
+44
+00:02:22,927 --> 00:02:24,947
+so the claim is only partly supported.
+
+45
+00:02:25,587 --> 00:02:27,857
+The company-specific part is larger.
+
+46
+00:02:28,600 --> 00:02:31,560
+In Zetaris Lightning, SEC EDGAR is a set of REST
+
+47
+00:02:31,580 --> 00:02:33,940
+tables and NOAA a set of parquet tables;
+
+48
+00:02:34,400 --> 00:02:36,900
+the semantic layer adds keys and quality rules,
+
+49
+00:02:37,160 --> 00:02:39,390
+and its coverage result gates the verdict.
+
+50
+00:02:39,474 --> 00:02:43,444
+At onboarding, that rule checked 342 rows: all valid.
+
+51
+00:02:44,400 --> 00:02:46,500
+The footer is measured: eight planner calls,
+
+52
+00:02:46,640 --> 00:02:49,750
+one of them repaired, no fallbacks, and zero cloud calls.
+
+53
+00:02:50,333 --> 00:02:52,313
+One data path, through Zetaris.
+
+54
+00:02:52,693 --> 00:02:56,013
+Meterless engines run the chain, the memory and the world model;
+
+55
+00:02:56,433 --> 00:02:59,223
+Nemotron plans and writes on one local GPU.
+
+56
+00:03:00,033 --> 00:03:03,793
+Measured: 171 of 171 claims cited,
+
+57
+00:03:04,133 --> 00:03:07,403
+one card from five runs, zero cloud calls.
+
+58
+00:03:08,200 --> 00:03:08,960
+Weather-or-Not.
+
+59
+00:03:09,180 --> 00:03:12,190
+Every number is cited, and every override is signed.
