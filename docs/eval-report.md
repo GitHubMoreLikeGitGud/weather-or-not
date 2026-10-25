@@ -244,3 +244,148 @@ A warm run is one that skipped at least one checklist step from memory (the reme
 | AMERICAN ELECTRIC POWER CO INC, cold | 2 | 5.00 | 107.3 s | 99.7 s to 114.9 s | 9.00 | 0.00 | r20261024T2034350adc, r20261024T214009cd85 |
 | AMERICAN ELECTRIC POWER CO INC, warm | 2 | 4.00 | 106.7 s | 100.7 s to 112.7 s | 8.00 | 1.00 | r20261024T203648826a, r20261024T2145294e73 |
 
+## 8. Four other utilities, same quarter (added 25 Oct 2026)
+
+Sections 1 to 7 above are unchanged and cover the nine runs of 24 Oct 2026. This section adds one cold run each for the four other seed utilities whose companyconcept views were registered at onboarding (Southern Co, Duke Energy, Xcel Energy, Entergy), asked through the agent on 25 Oct 2026 with the same command as the demo case: `npm run ask -- --cik <cik10> --period CY2025Q1 --claim "the weather"` (code at `0a7ea45`). The claim is the default "the weather": these four filings were not read by hand, so no management wording is quoted. Every result is published, not a pick. The summary per run is in [`eval/contrast-cy2025q1.json`](eval/contrast-cy2025q1.json).
+
+| Utility | Run | g | Degree days | Weather (range) | Industry | Remainder | Ratio | Verdict, confidence |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Southern Co | r20261025T115028c6c5 | +17.0% | +12.9% (3 stations, coverage 1.00) | +6.6% (+0.9% to +11.3%) | +2.8% | +7.6% | 0.39 | **partly supported**, high |
+| Duke Energy | r20261025T11524841a9 | +7.5% | +16.5% (9 stations, coverage 0.99) | +8.7% (+1.2% to +14.8%) | +3.4% | -4.7% | 1.16 | supported, high |
+| Xcel Energy | r20261025T11542503bf | +7.0% | +13.1% (9 stations, coverage 1.00) | +6.8% (+0.9% to +11.4%) | +3.6% | -3.4% | 0.97 | supported, high |
+| Entergy | r20261025T1155534448 | +1.9% | +18.0% (5 stations, coverage 1.00) | +10.2% (+2.1% to +16.7%) | +2.9% | -11.3% | 5.46 | supported, high |
+
+Read plainly:
+
+- **Southern Co is the "partly" case.** Weather is consistent with 6.6 of the 17.0 points of revenue growth (ratio 0.39, between the rule's 0.2 and 0.5), and the company-specific remainder (+7.6) is larger than the weather part: "it was the weather" would explain well under half of this rise.
+- **Entergy shows a limit of the verdict rule.** "Supported" only asks that the weather part be at least half the change with the same sign. Here it is 5.5 times the change (+10.2 against +1.9) and the remainder is -11.3: weather alone would have lifted revenue far more than it rose, and something the method does not see pulled it down by about as much. The rule has no upper bound, so this card's "supported" should be read that way, not as a confirmation of a sentence nobody quoted.
+- **Duke Energy and Xcel Energy:** the weather part is about the whole change (ratio 1.16 and 0.97) and the remainder is negative.
+- **Confidence is high on all four** for the same reason as on FirstEnergy (the peer slope's range stays above zero with 39 peers and coverage of at least 0.95); it does not mean the weather part is precise: every weather range runs from 1 to 2 points at its low end to 11 to 17 points at its high end.
+- **Planner and memo:** 36 planner calls, 33 valid on the first reply, 3 repaired (all with think off), 0 fallbacks. The model's pick differed from the checklist's next step twice (Southern Co: `attribute` before `dq_gate`; Entergy: `get_peers` before `get_revenue`); the card does not depend on the order. The memo verdict check (a draft must state the card's verdict) rejected both drafts in two of the four runs (Southern Co and Entergy; 0 numbers wrong in any draft), so those two cards carry the template memo; Duke Energy and Xcel Energy kept the model's first draft.
+
+The tables below are the output of `agent/src/eval/run.ts` over these four runs alone (`--data` pointing at a directory that holds only them), sections "Runs used", 4 and 6, unedited:
+
+| Run | Utility | CIK | Period | Claim | Started | Source |
+| --- | --- | --- | --- | --- | --- | --- |
+| r20261025T115028c6c5 | SOUTHERN CO | 0000092122 | CY2025Q1 | the weather | 2026-10-25T03:50:28.921Z | data/runs |
+| r20261025T11524841a9 | Duke Energy CORP | 0001326160 | CY2025Q1 | the weather | 2026-10-25T03:52:48.484Z | data/runs |
+| r20261025T11542503bf | XCEL ENERGY INC | 0000072903 | CY2025Q1 | the weather | 2026-10-25T03:54:25.623Z | data/runs |
+| r20261025T1155534448 | ENTERGY CORP /DE/ | 0000065984 | CY2025Q1 | the weather | 2026-10-25T03:55:53.710Z | data/runs |
+
+### 8a. Attribution with bootstrap ranges
+
+#### ENTERGY CORP /DE/ (CIK 0000065984), run r20261025T1155534448
+
+| Quantity | Value |
+| --- | --- |
+| Revenue tag | Revenues |
+| g (year on year) | +1.87% |
+| Accession numbers | current 0000065984-25-000046; previous original 0000065984-25-000046; previous comparative 0000065984-25-000046; recast no |
+| Degree-day change | +17.99% |
+| Peers | 39 |
+| beta [range] | 0.5677 [0.1165, 0.9281] |
+| Theil-Sen slope | 0.4464 |
+| Weather | +10.22% [+2.10%, +16.70%] |
+| Industry | +2.91% [-2.43%, +8.48%] |
+| Remainder | -11.25% [-23.31%, +2.21%] |
+| Bootstrap | 300 of 300 resamples valid, 0 skipped (zero variance), seed 7 |
+| Coverage | 1.0000 |
+| Confidence | high |
+| Claim ratio / verdict | 5.464 / supported |
+| Recast conflicts on the card | 0 |
+| Identical across runs | yes (1 run(s): r20261025T1155534448) |
+
+#### XCEL ENERGY INC (CIK 0000072903), run r20261025T11542503bf
+
+| Quantity | Value |
+| --- | --- |
+| Revenue tag | RegulatedAndUnregulatedOperatingRevenue |
+| g (year on year) | +7.04% |
+| Accession numbers | current 0000072903-25-000088; previous original 0000072903-24-000096; previous comparative 0000072903-25-000088; recast no |
+| Degree-day change | +13.15% |
+| Peers | 39 |
+| beta [range] | 0.5189 [0.0701, 0.8652] |
+| Theil-Sen slope | 0.3119 |
+| Weather | +6.82% [+0.92%, +11.37%] |
+| Industry | +3.61% [-1.29%, +9.13%] |
+| Remainder | -3.39% [-13.47%, +7.41%] |
+| Bootstrap | 300 of 300 resamples valid, 0 skipped (zero variance), seed 7 |
+| Coverage | 1.0000 |
+| Confidence | high |
+| Claim ratio / verdict | 0.969 / supported |
+| Recast conflicts on the card | 0 |
+| Identical across runs | yes (1 run(s): r20261025T11542503bf) |
+
+#### SOUTHERN CO (CIK 0000092122), run r20261025T115028c6c5
+
+| Quantity | Value |
+| --- | --- |
+| Revenue tag | Revenues |
+| g (year on year) | +16.99% |
+| Accession numbers | current 0000092122-25-000042; previous original 0000092122-24-000042; previous comparative 0000092122-25-000042; recast no |
+| Degree-day change | +12.87% |
+| Peers | 39 |
+| beta [range] | 0.5123 [0.0682, 0.8762] |
+| Theil-Sen slope | 0.3966 |
+| Weather | +6.59% [+0.88%, +11.28%] |
+| Industry | +2.77% [-2.15%, +9.02%] |
+| Remainder | +7.63% [-3.31%, +18.26%] |
+| Bootstrap | 300 of 300 resamples valid, 0 skipped (zero variance), seed 7 |
+| Coverage | 1.0000 |
+| Confidence | high |
+| Claim ratio / verdict | 0.388 / partly supported |
+| Recast conflicts on the card | 0 |
+| Identical across runs | yes (1 run(s): r20261025T115028c6c5) |
+
+#### Duke Energy CORP (CIK 0001326160), run r20261025T11524841a9
+
+| Quantity | Value |
+| --- | --- |
+| Revenue tag | RegulatedAndUnregulatedOperatingRevenue |
+| g (year on year) | +7.53% |
+| Accession numbers | current 0001326160-25-000150; previous original 0001326160-24-000108; previous comparative 0001326160-25-000150; recast no |
+| Degree-day change | +16.47% |
+| Peers | 39 |
+| beta [range] | 0.5311 [0.0736, 0.9009] |
+| Theil-Sen slope | 0.4071 |
+| Weather | +8.75% [+1.21%, +14.84%] |
+| Industry | +3.44% [-1.69%, +9.04%] |
+| Remainder | -4.65% [-16.34%, +8.01%] |
+| Bootstrap | 300 of 300 resamples valid, 0 skipped (zero variance), seed 7 |
+| Coverage | 0.9889 |
+| Confidence | high |
+| Claim ratio / verdict | 1.161 / supported |
+| Recast conflicts on the card | 0 |
+| Identical across runs | yes (1 run(s): r20261025T11524841a9) |
+
+### 8b. Per run
+
+| Run | Utility | Mode | Chunks | Wall | Planner calls | Valid first try | Repaired | Repaired with think off | Fallbacks | Median tok/s | Memo | E-complete | E-cov | Skipped steps | Verdict |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| r20261025T115028c6c5 | SOUTHERN CO | cold | 5 | 102.8 s | 9 | 8 | 1 | 1 | 0 | 147.9 | template, 215 words, 2 attempt(s) | 20/20 | 19/19 (1.000) | none | partly supported / high / DQ pass |
+| r20261025T11524841a9 | Duke Energy CORP | cold | 5 | 93.6 s | 9 | 8 | 1 | 1 | 0 | 147.8 | model, 178 words, 1 attempt(s) | 22/22 | 21/21 (1.000) | none | supported / high / DQ pass |
+| r20261025T11542503bf | XCEL ENERGY INC | cold | 5 | 84.6 s | 9 | 9 | 0 | 0 | 0 | 147.4 | model, 199 words, 1 attempt(s) | 22/22 | 21/21 (1.000) | none | supported / high / DQ pass |
+| r20261025T1155534448 | ENTERGY CORP /DE/ | cold | 5 | 105.7 s | 9 | 8 | 1 | 1 | 0 | 146.9 | template, 214 words, 2 attempt(s) | 20/20 | 19/19 (1.000) | none | supported / high / DQ pass |
+
+Memo drafts (word count, numbers not found in any tool output):
+
+| Run | Draft | Words | Unknown numbers | Kept |
+| --- | --- | --- | --- | --- |
+| r20261025T115028c6c5 | 1 | 155 | 0 | no |
+| r20261025T115028c6c5 | 2 | 152 | 0 | no |
+| r20261025T11524841a9 | 1 | 178 | 0 | yes |
+| r20261025T11542503bf | 1 | 199 | 0 | yes |
+| r20261025T1155534448 | 1 | 125 | 0 | no |
+| r20261025T1155534448 | 2 | 125 | 0 | no |
+
+Degree-day statements and memo time per run:
+
+| Run | weather_quarter current | weather_quarter previous | Memo | Model | Think | Cloud model calls | Refused hosts | Recast conflicts |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| r20261025T115028c6c5 | 18.2 s | 17.9 s | 9.4 s | nemotron-3-nano:4b | on | 0 | 0 | 0 |
+| r20261025T11524841a9 | 18.2 s | 18.2 s | 2.6 s | nemotron-3-nano:4b | on | 0 | 0 | 0 |
+| r20261025T11542503bf | 18.2 s | 18.1 s | 6.3 s | nemotron-3-nano:4b | on | 0 | 0 | 0 |
+| r20261025T1155534448 | 17.6 s | 17.8 s | 3.3 s | nemotron-3-nano:4b | on | 0 | 0 | 0 |
+
+Totals over 4 run(s): 36 planner calls, 33 valid on the first reply, 3 repaired (3 of them with think off), 0 deterministic fallback(s); 36 tool calls chosen by the model; memo drafts 6 (0 with an unknown number), 2 model memo(s) kept, 2 template memo(s); evidence 84/84 complete; claims 80/80 cited; cloud model calls 0; refused hosts 0.
+

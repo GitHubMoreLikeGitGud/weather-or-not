@@ -1,0 +1,490 @@
+{
+  "title": "Four other utilities, CY2025Q1 against CY2024Q1: one cold run each through the agent",
+  "measured": "2026-10-25 (SGT), live stack: local Zetaris through the gateway, Ollama nemotron-3-nano:4b, code at 0a7ea45",
+  "command": "cd agent && npm run ask -- --cik <cik10> --period CY2025Q1 --claim \"the weather\"",
+  "note": "Run in order Southern Co, Duke Energy, Xcel Energy, Entergy on one data directory that already held the FirstEnergy and AEP runs (each of the four is a cold run: no revenue tag remembered). The claim is the default \"the weather\": the four filings were not read by hand, so no management wording is quoted. Revenue levels are left out (SEC values are queried live, not redistributed); growth, degree days and the split are percentages from the card.",
+  "labels": {
+    "percentages": "measured, from each run's card (1 decimal)",
+    "ranges": "10th to 90th percentile of 300 bootstrap resamples, seed 7",
+    "wall_s": "measured, run.wall_ms"
+  },
+  "runs": [
+    {
+      "run_id": "r20261025T115028c6c5",
+      "utility": "SOUTHERN CO",
+      "ticker": "SO",
+      "cik": "0000092122",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T03:50:28.921Z",
+      "wall_s": 102.8,
+      "verdict": "partly supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.388,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 17,
+        "current_accession": "0000092122-25-000042",
+        "previous_comparative_accession": "0000092122-25-000042",
+        "recast": false
+      },
+      "degree_days": {
+        "previous": 1181,
+        "current": 1333,
+        "change_pct": 12.9,
+        "stations": 3,
+        "states": [
+          "GA",
+          "AL",
+          "MS"
+        ],
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5123,
+        "beta_range": [
+          0.0682,
+          0.8762
+        ],
+        "theil_sen": 0.3966,
+        "weather_pct": 6.6,
+        "weather_range_pct": [
+          0.9,
+          11.3
+        ],
+        "industry_pct": 2.8,
+        "industry_range_pct": [
+          -2.2,
+          9
+        ],
+        "remainder_pct": 7.6,
+        "remainder_range_pct": [
+          -3.3,
+          18.3
+        ],
+        "bootstrap": "300/300 seed 7",
+        "ranges": "10th-90th percentile"
+      },
+      "peers_excluded": [
+        "IDACORP INC: excluded: current period missing (no fact under any of the three tags)",
+        "MGE ENERGY INC: excluded: SIC 4900 not in 4911, 4931, 4932 (tag RegulatedAndUnregulatedOperatingRevenue)",
+        "ONCOR ELECTRIC DELIVERY CO LLC: excluded: previous period missing (tag Revenues)"
+      ],
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "chain": {
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "planner_repairs_think_off": 1,
+        "fallback_steps": 0,
+        "tool_calls": 9,
+        "tool_calls_by_model": 9,
+        "skipped_from_memory": [],
+        "pick_order": {
+          "model_picks": 9,
+          "equal_to_checklist_next": 8,
+          "different": [
+            "attribute (next was dq_gate)"
+          ]
+        },
+        "planner_tokens_in_out": [
+          16960,
+          7693
+        ],
+        "median_planner_tok_s": 147.9,
+        "memo_tok_s": 156.4,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0,
+        "weather_quarter_ms": [
+          18204,
+          17854
+        ],
+        "memo_ms": 9427
+      },
+      "memo": {
+        "source": "template",
+        "words": 215,
+        "model_attempts": 2,
+        "attempt_rejections": [
+          "memo: does not state the verdict \"partly supported\"",
+          "memo: does not state the verdict \"partly supported\""
+        ],
+        "kept_memo_verdict_guard": "pass"
+      },
+      "evidence": {
+        "e_cov": "19/19",
+        "e_complete": "20/20"
+      },
+      "gpu": {
+        "total_used_peak_mib": 6930,
+        "total_used_min_mib": 3747,
+        "util_peak_pct": 99,
+        "samples": 231,
+        "label": "measured (nvidia-smi every ~0.5 s during the run; whole-GPU memory, desktop included)"
+      }
+    },
+    {
+      "run_id": "r20261025T11524841a9",
+      "utility": "Duke Energy CORP",
+      "ticker": "DUK",
+      "cik": "0001326160",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T03:52:48.484Z",
+      "wall_s": 93.6,
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 1.161,
+      "revenue": {
+        "tag": "RegulatedAndUnregulatedOperatingRevenue",
+        "like_for_like_change_pct": 7.5,
+        "current_accession": "0001326160-25-000150",
+        "previous_comparative_accession": "0001326160-25-000150",
+        "recast": false
+      },
+      "degree_days": {
+        "previous": 1631,
+        "current": 1899,
+        "change_pct": 16.5,
+        "stations": 9,
+        "states": [
+          "NC",
+          "SC",
+          "FL",
+          "IN",
+          "OH",
+          "KY"
+        ],
+        "coverage": 0.9889
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5311,
+        "beta_range": [
+          0.0736,
+          0.9009
+        ],
+        "theil_sen": 0.4071,
+        "weather_pct": 8.7,
+        "weather_range_pct": [
+          1.2,
+          14.8
+        ],
+        "industry_pct": 3.4,
+        "industry_range_pct": [
+          -1.7,
+          9
+        ],
+        "remainder_pct": -4.7,
+        "remainder_range_pct": [
+          -16.3,
+          8
+        ],
+        "bootstrap": "300/300 seed 7",
+        "ranges": "10th-90th percentile"
+      },
+      "peers_excluded": [
+        "IDACORP INC: excluded: current period missing (no fact under any of the three tags)",
+        "MGE ENERGY INC: excluded: SIC 4900 not in 4911, 4931, 4932 (tag RegulatedAndUnregulatedOperatingRevenue)",
+        "ONCOR ELECTRIC DELIVERY CO LLC: excluded: previous period missing (tag Revenues)"
+      ],
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "chain": {
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "planner_repairs_think_off": 1,
+        "fallback_steps": 0,
+        "tool_calls": 9,
+        "tool_calls_by_model": 9,
+        "skipped_from_memory": [],
+        "pick_order": {
+          "model_picks": 9,
+          "equal_to_checklist_next": 9,
+          "different": []
+        },
+        "planner_tokens_in_out": [
+          17071,
+          6789
+        ],
+        "median_planner_tok_s": 147.8,
+        "memo_tok_s": 156.4,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0,
+        "weather_quarter_ms": [
+          18184,
+          18246
+        ],
+        "memo_ms": 2561
+      },
+      "memo": {
+        "source": "model",
+        "words": 178,
+        "model_attempts": 1,
+        "attempt_rejections": [],
+        "kept_memo_verdict_guard": "pass"
+      },
+      "evidence": {
+        "e_cov": "21/21",
+        "e_complete": "22/22"
+      },
+      "gpu": {
+        "total_used_peak_mib": 6926,
+        "total_used_min_mib": 3748,
+        "util_peak_pct": 95,
+        "samples": 211,
+        "label": "measured (nvidia-smi every ~0.5 s during the run; whole-GPU memory, desktop included)"
+      }
+    },
+    {
+      "run_id": "r20261025T11542503bf",
+      "utility": "XCEL ENERGY INC",
+      "ticker": "XEL",
+      "cik": "0000072903",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T03:54:25.623Z",
+      "wall_s": 84.6,
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.969,
+      "revenue": {
+        "tag": "RegulatedAndUnregulatedOperatingRevenue",
+        "like_for_like_change_pct": 7,
+        "current_accession": "0000072903-25-000088",
+        "previous_comparative_accession": "0000072903-25-000088",
+        "recast": false
+      },
+      "degree_days": {
+        "previous": 2523,
+        "current": 2855,
+        "change_pct": 13.1,
+        "stations": 9,
+        "states": [
+          "MN",
+          "CO",
+          "TX",
+          "NM",
+          "WI",
+          "ND"
+        ],
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5189,
+        "beta_range": [
+          0.0701,
+          0.8652
+        ],
+        "theil_sen": 0.3119,
+        "weather_pct": 6.8,
+        "weather_range_pct": [
+          0.9,
+          11.4
+        ],
+        "industry_pct": 3.6,
+        "industry_range_pct": [
+          -1.3,
+          9.1
+        ],
+        "remainder_pct": -3.4,
+        "remainder_range_pct": [
+          -13.5,
+          7.4
+        ],
+        "bootstrap": "300/300 seed 7",
+        "ranges": "10th-90th percentile"
+      },
+      "peers_excluded": [
+        "IDACORP INC: excluded: current period missing (no fact under any of the three tags)",
+        "MGE ENERGY INC: excluded: SIC 4900 not in 4911, 4931, 4932 (tag RegulatedAndUnregulatedOperatingRevenue)",
+        "ONCOR ELECTRIC DELIVERY CO LLC: excluded: previous period missing (tag Revenues)"
+      ],
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "chain": {
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 9,
+        "planner_repaired": 0,
+        "planner_repairs_think_off": 0,
+        "fallback_steps": 0,
+        "tool_calls": 9,
+        "tool_calls_by_model": 9,
+        "skipped_from_memory": [],
+        "pick_order": {
+          "model_picks": 9,
+          "equal_to_checklist_next": 9,
+          "different": []
+        },
+        "planner_tokens_in_out": [
+          15542,
+          5394
+        ],
+        "median_planner_tok_s": 147.4,
+        "memo_tok_s": 153.4,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0,
+        "weather_quarter_ms": [
+          18214,
+          18070
+        ],
+        "memo_ms": 6257
+      },
+      "memo": {
+        "source": "model",
+        "words": 199,
+        "model_attempts": 1,
+        "attempt_rejections": [],
+        "kept_memo_verdict_guard": "pass"
+      },
+      "evidence": {
+        "e_cov": "21/21",
+        "e_complete": "22/22"
+      },
+      "gpu": {
+        "total_used_peak_mib": 6919,
+        "total_used_min_mib": 3748,
+        "util_peak_pct": 99,
+        "samples": 189,
+        "label": "measured (nvidia-smi every ~0.5 s during the run; whole-GPU memory, desktop included)"
+      }
+    },
+    {
+      "run_id": "r20261025T1155534448",
+      "utility": "ENTERGY CORP /DE/",
+      "ticker": "ETR",
+      "cik": "0000065984",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T03:55:53.710Z",
+      "wall_s": 105.7,
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 5.464,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 1.9,
+        "current_accession": "0000065984-25-000046",
+        "previous_comparative_accession": "0000065984-25-000046",
+        "recast": false
+      },
+      "degree_days": {
+        "previous": 1034,
+        "current": 1220,
+        "change_pct": 18,
+        "stations": 5,
+        "states": [
+          "AR",
+          "LA",
+          "MS",
+          "TX"
+        ],
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5677,
+        "beta_range": [
+          0.1165,
+          0.9281
+        ],
+        "theil_sen": 0.4464,
+        "weather_pct": 10.2,
+        "weather_range_pct": [
+          2.1,
+          16.7
+        ],
+        "industry_pct": 2.9,
+        "industry_range_pct": [
+          -2.4,
+          8.5
+        ],
+        "remainder_pct": -11.3,
+        "remainder_range_pct": [
+          -23.3,
+          2.2
+        ],
+        "bootstrap": "300/300 seed 7",
+        "ranges": "10th-90th percentile"
+      },
+      "peers_excluded": [
+        "IDACORP INC: excluded: current period missing (no fact under any of the three tags)",
+        "MGE ENERGY INC: excluded: SIC 4900 not in 4911, 4931, 4932 (tag RegulatedAndUnregulatedOperatingRevenue)",
+        "ONCOR ELECTRIC DELIVERY CO LLC: excluded: previous period missing (tag Revenues)"
+      ],
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "chain": {
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "planner_repairs_think_off": 1,
+        "fallback_steps": 0,
+        "tool_calls": 9,
+        "tool_calls_by_model": 9,
+        "skipped_from_memory": [],
+        "pick_order": {
+          "model_picks": 9,
+          "equal_to_checklist_next": 8,
+          "different": [
+            "get_peers (next was get_revenue)"
+          ]
+        },
+        "planner_tokens_in_out": [
+          16903,
+          8728
+        ],
+        "median_planner_tok_s": 146.9,
+        "memo_tok_s": 156.7,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0,
+        "weather_quarter_ms": [
+          17617,
+          17755
+        ],
+        "memo_ms": 3347
+      },
+      "memo": {
+        "source": "template",
+        "words": 214,
+        "model_attempts": 2,
+        "attempt_rejections": [
+          "memo: does not state the verdict \"supported\"",
+          "memo: does not state the verdict \"supported\""
+        ],
+        "kept_memo_verdict_guard": "pass"
+      },
+      "evidence": {
+        "e_cov": "19/19",
+        "e_complete": "20/20"
+      },
+      "gpu": {
+        "total_used_peak_mib": 7737,
+        "total_used_min_mib": 3968,
+        "util_peak_pct": 96,
+        "samples": 238,
+        "label": "measured (nvidia-smi every ~0.5 s during the run; whole-GPU memory, desktop included)"
+      }
+    }
+  ]
+}

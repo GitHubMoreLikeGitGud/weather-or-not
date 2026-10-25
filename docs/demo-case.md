@@ -45,6 +45,19 @@ The second demo utility shows the trap live. American Electric Power (CIK 000000
 
 **The analyst override.** On the Memory and why screen the analyst can choose the later filing's value with a reason. The UI signs a high-risk `override_recast` contract (`POST /api/approvals/sign`), posts it with the choice (`POST /api/override`), and the conflict's status becomes `overridden` with the analyst's reason and the contract id; the H-MEM ledger records `conflict_resolved` by the analyst. "Re-run with the override" asks the question again: `get_revenue` uses 5,463,000,000 instead of rule R1's 5,463,400,000, recomputes the growth (+8.70%), and writes an evidence record naming the override, the contract and both values; the attribution is unchanged to the printed digit because 0.4 million on 5,463 million does not move it. A second use of the same contract is refused (`replayed`); a request without a contract is refused (`missing`) and logged, and nothing is written. The exact routes and the refusal codes are in [`docs/api.md`](api.md).
 
+## The same question for four other utilities
+
+FirstEnergy and AEP both came out "supported". To see whether the method ever says something else, the same question (CY2025Q1 against CY2024Q1, claim "the weather", the default, because these four filings were not read by hand) was asked once through the agent on 25 Oct 2026 for each of the four other seed utilities whose companyconcept views were registered at onboarding. Every result is listed; the full tables are in [`eval-report.md`](eval-report.md) section 8 and the per-run summary in [`eval/contrast-cy2025q1.json`](eval/contrast-cy2025q1.json).
+
+| Utility | Run | Revenue, like for like | Degree days | Weather (range) | Industry | Remainder | Verdict |
+|---|---|---|---|---|---|---|---|
+| Southern Co | `r20261025T115028c6c5` | +17.0% | +12.9% | +6.6% (+0.9% to +11.3%) | +2.8% | +7.6% | **partly supported** (ratio 0.39), high |
+| Duke Energy | `r20261025T11524841a9` | +7.5% | +16.5% | +8.7% (+1.2% to +14.8%) | +3.4% | -4.7% | supported (1.16), high |
+| Xcel Energy | `r20261025T11542503bf` | +7.0% | +13.1% | +6.8% (+0.9% to +11.4%) | +3.6% | -3.4% | supported (0.97), high |
+| Entergy | `r20261025T1155534448` | +1.9% | +18.0% | +10.2% (+2.1% to +16.7%) | +2.9% | -11.3% | supported (5.46), high |
+
+On Southern Co the agent's answer to "was it the weather?" is "partly": weather accounts for roughly 6.6 of the 17.0 points, and the company-specific remainder is larger than the weather part. Entergy is the opposite problem: the weather part is 5.5 times the whole change, so the card's "supported" means weather alone would have lifted revenue far more than it rose and something else pulled it down by about as much; the rule has no upper bound (README, Limitations). The confidence label is high on all four for the reason it is high on FirstEnergy (the peer slope's range stays above zero), and every weather range is about as wide: 1 to 2 points at its low end, 11 to 17 points at its high end.
+
 ## Not tested
 
 The card lists what the method cannot see, and the memo repeats it:
