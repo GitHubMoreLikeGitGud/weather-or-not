@@ -40,7 +40,7 @@ function ollamaWith(contents: string[]): OllamaClient {
 const words = (n: number, lead: string) => `${lead} ${Array.from({ length: n }, (_, i) => String.fromCharCode(97 + (i % 26)).repeat(3 + (i % 4))).join(" ")}.`;
 /** A memo of exactly `n` words that opens with `lead` (the lead carries the numbers). */
 const exactWords = (n: number, lead: string) => words(n - wordCount(lead), lead);
-const ALL_MATCH = "Weather accounts for roughly +9.0% [+2.0%, +14.0%] of the +15.0% change in Q1 2025 versus 2024 from 1,000.0 million to 1,150.0 million, consistent with the claim.";
+const ALL_MATCH = "Weather accounts for roughly +9.0% [+2.0%, +14.0%] of the +15.0% change in Q1 2025 versus 2024 from 1,000.0 million to 1,150.0 million, consistent with the claim; verdict supported.";
 
 describe("memo number check", () => {
   it("finds every number-like token, with sign and percent sign", () => {
@@ -63,7 +63,7 @@ describe("memo number check", () => {
 
 describe("writeMemo", () => {
   it("keeps a first draft whose numbers all match", async () => {
-    const memo = words(160, "Weather accounts for roughly +9.0% [+2.0%, +14.0%] of the +15.0% change in Q1 2025 versus 2024 from 1,000.0 million to 1,150.0 million, consistent with the claim.");
+    const memo = words(160, "Weather accounts for roughly +9.0% [+2.0%, +14.0%] of the +15.0% change in Q1 2025 versus 2024 from 1,000.0 million to 1,150.0 million, consistent with the claim; verdict supported.");
     const r = await writeMemo(ollamaWith([JSON.stringify({ memo })]), input);
     expect(r.source).toBe("model");
     expect(r.attempts).toHaveLength(1);
@@ -73,7 +73,7 @@ describe("writeMemo", () => {
 
   it("rejects a draft with a number that is not a tool output, retries once with the rejected numbers named, then keeps the retry", async () => {
     const bad = words(160, "Revenue rose 14.5% from 3,287 million, consistent with the claim.");
-    const good = words(160, "Revenue rose +15.0% from 1,000.0 million to 1,150.0 million; weather +9.0% [+2.0%, +14.0%].");
+    const good = words(160, "Revenue rose +15.0% from 1,000.0 million to 1,150.0 million; weather +9.0% [+2.0%, +14.0%]; verdict supported.");
     const r = await writeMemo(ollamaWith([JSON.stringify({ memo: bad }), JSON.stringify({ memo: good })]), input);
     expect(r.source).toBe("model");
     expect(r.attempts).toHaveLength(2);
@@ -160,5 +160,40 @@ describe("writeMemo", () => {
     const r = await writeMemo(null, input);
     expect(r.source).toBe("template");
     expect(r.attempts).toHaveLength(0);
+  });
+});
+
+describe("memo verdict check", () => {
+  it("reads each verdict phrase once, never reading 'not supported' as 'supported'", async () => {
+    const { verdictPhrases } = await import("../src/llm/memo.ts");
+    expect(verdictPhrases("Claim verdict: supported; confidence high.")).toEqual(["supported"]);
+    expect(verdictPhrases("The claim is not supported.")).toEqual(["not supported"]);
+    expect(verdictPhrases("Partly supported, not supported, supported.")).toEqual(["partly supported", "not supported", "supported"]);
+    expect(verdictPhrases("An unsupported reading.")).toEqual([]);
+  });
+
+  it("keeps the template memo's verdict", async () => {
+    const { verdictErrors } = await import("../src/llm/memo.ts");
+    expect(verdictErrors(templateMemo(input), "supported")).toEqual([]);
+  });
+
+  it("treats a withheld verdict as a verdict phrase of its own", async () => {
+    const { verdictErrors, verdictPhrases } = await import("../src/llm/memo.ts");
+    expect(verdictPhrases("The DQ gate withheld the verdict.")).toEqual(["withheld"]);
+    expect(verdictErrors(templateMemo({ ...input, verdict: "withheld" }), "withheld")).toEqual([]);
+    expect(verdictErrors("The claim is supported.", "withheld")).toEqual(['memo: does not state the verdict "withheld"', "memo: states another verdict (supported)"]);
+  });
+
+  it("rejects a draft that flips or omits the verdict, then keeps a retry that states it", async () => {
+    const flipped = exactWords(160, "Weather accounts for roughly +9.0% [+2.0%, +14.0%] of the +15.0% change; the claim is not supported.");
+    const omitted = exactWords(160, ALL_MATCH.replace("; verdict supported", ""));
+    const r = await writeMemo(ollamaWith([JSON.stringify({ memo: flipped }), JSON.stringify({ memo: exactWords(160, ALL_MATCH) })]), input);
+    expect(r.attempts[0]!.ok).toBe(false);
+    expect(r.attempts[0]!.schemaErrors).toEqual(['memo: does not state the verdict "supported"', "memo: states another verdict (not supported)"]);
+    expect(r.attempts[1]!.ok).toBe(true);
+    expect(r.source).toBe("model");
+    const o = await writeMemo(ollamaWith([JSON.stringify({ memo: omitted })]), input, { maxAttempts: 1 });
+    expect(o.source).toBe("template");
+    expect(o.attempts[0]!.schemaErrors).toEqual(['memo: does not state the verdict "supported"']);
   });
 });

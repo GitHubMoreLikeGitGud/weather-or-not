@@ -31,7 +31,7 @@ For one utility (by name, ticker or CIK), one calendar quarter (Q1 to Q3) and th
 - **Deterministic attribution.** The slope of peer revenue growth on peer degree-day change (OLS, with a Theil-Sen cross-check), the weather part of the target, the industry median and the remainder, with 300-resample bootstrap ranges from a seeded generator (seed 7). Confidence follows a fixed rule on peers, coverage and the slope interval.
 - **A data-quality gate from the semantic layer.** The `coverage_ok` rule's onboarding result (`RUN DQ` on the USL `weather_quarter` table, written to `data/dq/latest.json`) and the utility's own station coverage gate the verdict; the card states the rule's run time. The utility foreign-key rule found the one SIC orphan among the seeds (MGE Energy, SIC 4900) at onboarding; the peer filter keeps MGE out by its SIC code.
 - **Memory with provenance.** Every fact the agent learns carries its Zetaris object, SQL hash, endpoint, accession number and retrieval time; a reconfirmed fact refreshes its provenance and keeps the history. Remembered tag and station choices make the second run of a utility skip a step. `why mem-62` prints the trace. The World Model keeps utilities, states, stations, SIC codes, filings and quarters as a graph whose edges are dated by source time, so re-ingesting the same rows writes nothing.
-- **The model plans and writes, never computes.** Nemotron chooses the next tool in each Markovian chunk and writes the memo; the host string-matches every number in the memo against the tool outputs and rejects a draft with any other number. A "Not tested" list names what the method cannot see.
+- **The model plans and writes, never computes.** Nemotron chooses the next tool in each Markovian chunk and writes the memo; the host string-matches every number in the memo against the tool outputs and rejects a draft with any other number. The memo must also state the card's verdict and no other verdict; 8 of the 9 saved memos pass that check (the ninth, from the first settings, says only "consistent with the claim"). Which number goes with which label is not checked. In the four clean runs the tool the model chose was the checklist's next step every time (34 of 34 calls): its measured contribution is valid JSON plans and a grounded memo, not a different path. A "Not tested" list names what the method cannot see.
 
 ## What is new
 
@@ -50,7 +50,7 @@ For one utility (by name, ticker or CIK), one calendar quarter (Q1 to Q3) and th
 Needs Node 22.12 or newer, Python 3.12 and git. On a fresh clone of this repository the agent steps took under 10 seconds on the development PC (Windows 11), plus download time.
 
 ```bash
-# Agent: 199 unit tests in 16 files on synthetic fixtures (no network) and the type check
+# Agent: 203 unit tests in 16 files on synthetic fixtures (no network) and the type check
 cd agent && npm ci && npm test && npm run typecheck && cd ..
 
 # Meterless conformance on the vendored engines: 13/13, 8/8, 8/8, then "diff: empty"
@@ -71,7 +71,7 @@ python -m venv .venv
 cd agent && npm run dev                                          # open http://127.0.0.1:8794
 ```
 
-Without a gateway or Ollama the server still starts and serves the UI; `/api/health` reports `gateway_ok: false` and every screen says what it would show after a run. Measured on the fresh clone: `npm ci` 2 s (38 packages, 0 vulnerabilities), `npm test` 16 files / 199 tests in 2.25 s, `tsc` 0 errors, gateway tests 236 passed / 2 skipped in 1.48 s. The conformance results are in [`docs/conformance.md`](docs/conformance.md).
+Without a gateway or Ollama the server still starts and serves the UI; `/api/health` reports `gateway_ok: false` and every screen says what it would show after a run. Measured on the fresh clone: `npm ci` 2 s (38 packages, 0 vulnerabilities), `npm test` 16 files / 203 tests in 2.34 s, `tsc` 0 errors, gateway tests 236 passed / 2 skipped in 1.48 s. The conformance results are in [`docs/conformance.md`](docs/conformance.md).
 
 ### B. Full stack: Zetaris, gateway, agent and UI
 
@@ -217,7 +217,7 @@ The engines come from [Meterless/Meterless](https://github.com/Meterless/Meterle
 `nemotron-3-nano:4b` runs in local Ollama (tested with 0.40.7). Settings: temperature 0, seed 7, `num_ctx` 8192, one call at a time, output under a JSON schema (Ollama `format`) validated on the host. The planner runs with think on and an output budget of 3,072 tokens; the memo with think off and 1,024. The model host must be a loopback address: any other host is refused and counted (`refused_model_hosts`, 0 in every run). Nemotron does two jobs and computes nothing:
 
 1. **The Markovian planner**, which chooses the next tool from the ones the host allows at that step and keeps the chain's hypotheses (think on).
-2. **The memo**, 100 to 250 words from the tool outputs (think off). Every number in the draft is string-matched against the formatted tool outputs; a draft with any other number is rejected once with the reason, then the template memo is used.
+2. **The memo**, 100 to 250 words from the tool outputs (think off). Every number in the draft is string-matched against the formatted tool outputs, and the draft must state the card's verdict and no other verdict; a draft that fails either check is rejected once with the reason, then the template memo is used. 8 of the 9 saved memos pass the verdict check (the ninth, from the first settings, says only "consistent with the claim"); which number goes with which label is not checked.
 
 | Measured ([`docs/nemotron-bench.md`](docs/nemotron-bench.md), [`docs/eval-report.md`](docs/eval-report.md)) | Value |
 |---|---|

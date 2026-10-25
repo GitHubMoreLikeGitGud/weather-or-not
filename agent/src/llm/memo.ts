@@ -87,6 +87,26 @@ export function unknownNumbers(memo: string, allowed: readonly AllowedNumber[]):
   return out;
 }
 
+/** The verdict phrases a text states, each once; "not supported" and "partly supported" are never also read as "supported". */
+export function verdictPhrases(text: string): string[] {
+  const out: string[] = [];
+  for (const m of text.matchAll(/\b(not supported|partly supported|supported|withheld)\b/giu)) {
+    const p = m[1]!.toLowerCase();
+    if (!out.includes(p)) out.push(p);
+  }
+  return out;
+}
+
+/** A draft must state the host's verdict and no other verdict phrase. */
+export function verdictErrors(memo: string, verdict: string): string[] {
+  const found = verdictPhrases(memo);
+  const errors: string[] = [];
+  if (!found.includes(verdict)) errors.push(`memo: does not state the verdict "${verdict}"`);
+  const other = found.filter((p) => p !== verdict);
+  if (other.length) errors.push(`memo: states another verdict (${other.join(", ")})`);
+  return errors;
+}
+
 /** Deterministic fallback: the same findings as prose, every number from the allowed list. */
 export function templateMemo(m: MemoInput): string {
   const paras = [
@@ -150,6 +170,7 @@ export async function writeMemo(ollama: OllamaClient | null, input: MemoInput, o
     const words = wordCount(memo);
     const lengthOk = lengthAccepted(words);
     if (memo && !lengthOk) schemaErrors.push(`memo: ${words} words, wanted ${MEMO_WORDS.accept_min} to ${MEMO_WORDS.max}`);
+    if (memo) schemaErrors.push(...verdictErrors(memo, input.verdict));
     const ok = parseError === null && schemaErrors.length === 0 && unknown.length === 0;
     attempts.push({ attempt: i, ok, parseError, schemaErrors, unknownNumbers: unknown, wordCount: words, metrics: res.metrics, promptSha256: res.promptSha256, error: null });
     if (ok) return { text: memo, source: "model", attempts, allowed: input.allowed, wordCount: words, model: res.model };
