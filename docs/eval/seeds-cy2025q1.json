@@ -1,0 +1,4166 @@
+{
+  "title": "Every eligible seed utility, CY2025Q1 against CY2024Q1: one cold run each through the agent",
+  "measured": "2026-10-25 23:04 to 2026-10-26 00:25 (SGT), live stack: local Zetaris through the gateway, Ollama nemotron-3-nano:4b with the shipped settings (planner think on), code at d2f207d",
+  "command": "cd agent && npm run ask -- --cik <cik10> --period CY2025Q1 --claim \"the weather\"",
+  "eligibility": "A seed is eligible when the agent can build its like-for-like change: a CY2025Q1 frames fact under one of the three revenue tags (what probe_revenue_tag looks for) and a CY2024Q1 fact under that same tag (the rule the peer set applies to every peer). Every seed has station rows (eval-report section 3). Measured through the gateway's frames_seeds template on 25 Oct 2026: 41 of 43 eligible. IDACORP (no CY2025Q1 fact under any tag) and Oncor (no CY2024Q1 fact under its tag) are not; both were run anyway, last, as controls, and are listed with eligible=false outside the distribution.",
+  "note": "One fresh data directory holding only the DQ onboarding file, runs in seed-file order, each the utility's first run (cold). Ten companyconcept tables existed from onboarding; for every other target the agent registered its own companyconcept table at run time through the gateway's registrar (register_concept, a signed medium-risk contract). The claim is the default \"the weather\": these filings were not read by hand, so no management wording is quoted and a verdict is about the split, not about a sentence a utility wrote. Revenue levels and filing text are left out (SEC values are queried live, not redistributed); growth, degree days and the split are percentages from the card. A video re-cut ran ffmpeg on the same machine during part of the sweep (machine.ffmpeg_running_before_after), which can lengthen wall times.",
+  "labels": {
+    "percentages": "measured, from each run's card (1 decimal)",
+    "ranges": "weather, industry and beta: 10th to 90th percentile of 300 bootstrap resamples, seed 7; remainder: the change minus the weather and industry bounds",
+    "wall_s": "measured, run.wall_ms",
+    "outcome": "the card's verdict; withheld when the checklist could not produce an attribution"
+  },
+  "summary": {
+    "eligible": 41,
+    "outcomes": {
+      "supported": {
+        "count": 18,
+        "percent": 43.9
+      },
+      "partly supported": {
+        "count": 11,
+        "percent": 26.8
+      },
+      "not supported": {
+        "count": 12,
+        "percent": 29.3
+      },
+      "withheld": {
+        "count": 0,
+        "percent": 0
+      },
+      "failed": {
+        "count": 0,
+        "percent": 0
+      },
+      "no verdict": {
+        "count": 0,
+        "percent": 0
+      }
+    },
+    "confidence": {
+      "high": 40,
+      "medium": 1
+    },
+    "overshoot_flags": 3,
+    "wall_s": {
+      "median": 104.9,
+      "min": 76.7,
+      "max": 149.9,
+      "total": 4358.5
+    },
+    "planner": {
+      "calls": 369,
+      "valid_first_try": 331,
+      "repaired": 38,
+      "fallback_steps": 0,
+      "pick_equals_checklist": "364/369"
+    },
+    "memos": {
+      "model": 33,
+      "template": 8,
+      "none": 0,
+      "verdict_check_pass": 41
+    },
+    "runs_with_run_time_registration": 35,
+    "recast_conflicts": 3,
+    "cloud_model_calls": 0
+  },
+  "runs": [
+    {
+      "eligible": true,
+      "run_id": "r20261025T2304594ee8",
+      "utility": "Duke Energy CORP",
+      "ticker": "DUK",
+      "cik": "0001326160",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:04:59.462Z",
+      "wall_s": 117.6,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 1.161,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "RegulatedAndUnregulatedOperatingRevenue",
+        "like_for_like_change_pct": 7.5,
+        "current_accession": "0001326160-25-000150",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 16.5,
+        "stations": 9,
+        "coverage": 0.9889
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5311,
+        "beta_range": [
+          0.0736,
+          0.9009
+        ],
+        "weather_pct": 8.7,
+        "weather_range_pct": [
+          1.2,
+          14.8
+        ],
+        "industry_pct": 3.4,
+        "remainder_pct": -4.7,
+        "remainder_range_pct": [
+          -16.3,
+          8
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [],
+      "registrar_ms": [],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 144.9,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 178,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "21/21",
+        "e_complete": "22/22"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          40,
+          65
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 7910
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2307040273",
+      "utility": "SOUTHERN CO",
+      "ticker": "SO",
+      "cik": "0000092122",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:07:04.294Z",
+      "wall_s": 105.8,
+      "outcome": "partly supported",
+      "verdict": "partly supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.388,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 17,
+        "current_accession": "0000092122-25-000042",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 12.9,
+        "stations": 3,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5123,
+        "beta_range": [
+          0.0682,
+          0.8762
+        ],
+        "weather_pct": 6.6,
+        "weather_range_pct": [
+          0.9,
+          11.3
+        ],
+        "industry_pct": 2.8,
+        "remainder_pct": 7.6,
+        "remainder_range_pct": [
+          -3.3,
+          18.3
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [],
+      "registrar_ms": [],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 141.3,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "template",
+        "words": 215,
+        "model_attempts": 2,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "19/19",
+        "e_complete": "20/20"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          36,
+          34
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 8298
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T230856735f",
+      "utility": "NEXTERA ENERGY INC",
+      "ticker": "NEE",
+      "cik": "0000753308",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:08:56.003Z",
+      "wall_s": 95.2,
+      "outcome": "partly supported",
+      "verdict": "partly supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.324,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "RegulatedAndUnregulatedOperatingRevenue",
+        "like_for_like_change_pct": 9,
+        "current_accession": "0000753308-25-000024",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 5.5,
+        "stations": 2,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5333,
+        "beta_range": [
+          0.0572,
+          0.9063
+        ],
+        "weather_pct": 2.9,
+        "weather_range_pct": [
+          0.3,
+          5
+        ],
+        "industry_pct": 2.4,
+        "remainder_pct": 3.7,
+        "remainder_range_pct": [
+          -5.2,
+          11.1
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "RegulatedAndUnregulatedOperatingRevenue",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 2092"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 9,
+        "planner_repaired": 0,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 138.8,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 138,
+        "model_attempts": 2,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "22/22",
+        "e_complete": "23/23"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          41,
+          76
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 8061
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T23103711b0",
+      "utility": "AMERICAN ELECTRIC POWER CO INC",
+      "ticker": "AEP",
+      "cik": "0000004904",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:10:37.172Z",
+      "wall_s": 129.1,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 1.024,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 8.7,
+        "current_accession": "0000004904-25-000061",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 16.9,
+        "stations": 9,
+        "coverage": 0.9889
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5287,
+        "beta_range": [
+          0.0746,
+          0.8772
+        ],
+        "weather_pct": 8.9,
+        "weather_range_pct": [
+          1.3,
+          14.8
+        ],
+        "industry_pct": 3.5,
+        "remainder_pct": -3.7,
+        "remainder_range_pct": [
+          -15.1,
+          9.1
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 1,
+      "registered_at_run_time": [],
+      "registrar_ms": [],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 7,
+        "planner_repaired": 2,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "8/9",
+        "pick_differences": [
+          "get_peers (next was get_revenue)"
+        ],
+        "median_planner_tok_s": 137.8,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 177,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "19/19",
+        "e_complete": "20/20"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          42,
+          63
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 8091
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2312516ee6",
+      "utility": "XCEL ENERGY INC",
+      "ticker": "XEL",
+      "cik": "0000072903",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:12:51.939Z",
+      "wall_s": 104.5,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.969,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "RegulatedAndUnregulatedOperatingRevenue",
+        "like_for_like_change_pct": 7,
+        "current_accession": "0000072903-25-000088",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 13.1,
+        "stations": 9,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5189,
+        "beta_range": [
+          0.0701,
+          0.8652
+        ],
+        "weather_pct": 6.8,
+        "weather_range_pct": [
+          0.9,
+          11.4
+        ],
+        "industry_pct": 3.6,
+        "remainder_pct": -3.4,
+        "remainder_range_pct": [
+          -13.5,
+          7.4
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [],
+      "registrar_ms": [],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 143.3,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 199,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "21/21",
+        "e_complete": "22/22"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          27,
+          40
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 8125
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2314420367",
+      "utility": "ENTERGY CORP /DE/",
+      "ticker": "ETR",
+      "cik": "0000065984",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:14:42.544Z",
+      "wall_s": 116,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 5.464,
+      "overshoot_flag": true,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 1.9,
+        "current_accession": "0000065984-25-000046",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 18,
+        "stations": 5,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5677,
+        "beta_range": [
+          0.1165,
+          0.9281
+        ],
+        "weather_pct": 10.2,
+        "weather_range_pct": [
+          2.1,
+          16.7
+        ],
+        "industry_pct": 2.9,
+        "remainder_pct": -11.3,
+        "remainder_range_pct": [
+          -23.3,
+          2.2
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [],
+      "registrar_ms": [],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 7,
+        "planner_repaired": 2,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 137.7,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "template",
+        "words": 214,
+        "model_attempts": 2,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "19/19",
+        "e_complete": "20/20"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          51,
+          55
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          true
+        ],
+        "gpu_peak_mib": 9127
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T231644e300",
+      "utility": "Evergy, Inc.",
+      "ticker": "EVRG",
+      "cik": "0001711269",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:16:44.910Z",
+      "wall_s": 122.5,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 4.398,
+      "overshoot_flag": true,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 3.3,
+        "current_accession": "0001711269-25-000010",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 22.9,
+        "stations": 2,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.628,
+        "beta_range": [
+          0.1701,
+          0.9957
+        ],
+        "weather_pct": 14.4,
+        "weather_range_pct": [
+          3.9,
+          22.8
+        ],
+        "industry_pct": 2,
+        "remainder_pct": -13.1,
+        "remainder_range_pct": [
+          -27.7,
+          2.5
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 1253"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 132.8,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "template",
+        "words": 213,
+        "model_attempts": 2,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          51,
+          77
+        ],
+        "ffmpeg_running_before_after": [
+          true,
+          true
+        ],
+        "gpu_peak_mib": 8288
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2318533560",
+      "utility": "AMEREN CORP",
+      "ticker": "AEE",
+      "cik": "0001002910",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:18:53.989Z",
+      "wall_s": 135.3,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.558,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 15.5,
+        "current_accession": "0001002910-25-000098",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 17.2,
+        "stations": 3,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5022,
+        "beta_range": [
+          0.0647,
+          0.865
+        ],
+        "weather_pct": 8.6,
+        "weather_range_pct": [
+          1.1,
+          14.9
+        ],
+        "industry_pct": 2.9,
+        "remainder_pct": 3.9,
+        "remainder_range_pct": [
+          -8.1,
+          16
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 1196"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 7,
+        "planner_repaired": 2,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 133.4,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 172,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          76,
+          69
+        ],
+        "ffmpeg_running_before_after": [
+          true,
+          true
+        ],
+        "gpu_peak_mib": 8766
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2321157c83",
+      "utility": "CMS ENERGY CORP",
+      "ticker": "CMS",
+      "cik": "0000811156",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:21:15.187Z",
+      "wall_s": 121.9,
+      "outcome": "partly supported",
+      "verdict": "partly supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.453,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 12.5,
+        "current_accession": "0000811156-25-000047",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 10.8,
+        "stations": 2,
+        "coverage": 0.9556
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5204,
+        "beta_range": [
+          0.0916,
+          0.8761
+        ],
+        "weather_pct": 5.6,
+        "weather_range_pct": [
+          1,
+          9.5
+        ],
+        "industry_pct": 2.6,
+        "remainder_pct": 4.2,
+        "remainder_range_pct": [
+          -5.4,
+          13.4
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 955"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 7,
+        "planner_repaired": 2,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 143.4,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 171,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          51,
+          27
+        ],
+        "ffmpeg_running_before_after": [
+          true,
+          false
+        ],
+        "gpu_peak_mib": 8372
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2323220770",
+      "utility": "DTE ENERGY CO",
+      "ticker": "DTE",
+      "cik": "0000936340",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:23:22.945Z",
+      "wall_s": 105.9,
+      "outcome": "not supported",
+      "verdict": "not supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.16,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "RegulatedAndUnregulatedOperatingRevenue",
+        "like_for_like_change_pct": 37,
+        "current_accession": "0000936340-25-000097",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 10.8,
+        "stations": 2,
+        "coverage": 0.9556
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5459,
+        "beta_range": [
+          0.1304,
+          0.9064
+        ],
+        "weather_pct": 5.9,
+        "weather_range_pct": [
+          1.4,
+          9.8
+        ],
+        "industry_pct": 2.2,
+        "remainder_pct": 28.9,
+        "remainder_range_pct": [
+          19,
+          37.8
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "RegulatedAndUnregulatedOperatingRevenue",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 982"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 137.9,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "template",
+        "words": 216,
+        "model_attempts": 2,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "22/22",
+        "e_complete": "23/23"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          46,
+          80
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          true
+        ],
+        "gpu_peak_mib": 8337
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2325149509",
+      "utility": "WEC ENERGY GROUP, INC.",
+      "ticker": "WEC",
+      "cik": "0000783325",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:25:14.971Z",
+      "wall_s": 132.9,
+      "outcome": "partly supported",
+      "verdict": "partly supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.401,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 17.5,
+        "current_accession": "0000107815-25-000182",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 13.9,
+        "stations": 4,
+        "coverage": 0.9556
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5064,
+        "beta_range": [
+          0.1141,
+          0.8711
+        ],
+        "weather_pct": 7,
+        "weather_range_pct": [
+          1.6,
+          12.1
+        ],
+        "industry_pct": 2.9,
+        "remainder_pct": 7.6,
+        "remainder_range_pct": [
+          -3.1,
+          17.7
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 1172"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 7,
+        "planner_repaired": 2,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 131.2,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 121,
+        "model_attempts": 2,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          69,
+          60
+        ],
+        "ffmpeg_running_before_after": [
+          true,
+          true
+        ],
+        "gpu_peak_mib": 8279
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T23273331f5",
+      "utility": "ALLIANT ENERGY CORP",
+      "ticker": "LNT",
+      "cik": "0000352541",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:27:33.868Z",
+      "wall_s": 95.6,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.922,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 9.4,
+        "current_accession": "0000352541-25-000053",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 16.5,
+        "stations": 3,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5247,
+        "beta_range": [
+          0.1212,
+          0.893
+        ],
+        "weather_pct": 8.7,
+        "weather_range_pct": [
+          2,
+          14.8
+        ],
+        "industry_pct": 3.5,
+        "remainder_pct": -2.8,
+        "remainder_range_pct": [
+          -14.1,
+          9.2
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 1124"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 141,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 186,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          55,
+          27
+        ],
+        "ffmpeg_running_before_after": [
+          true,
+          false
+        ],
+        "gpu_peak_mib": 7937
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T23291517fd",
+      "utility": "PPL Corp",
+      "ticker": "PPL",
+      "cik": "0000922224",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:29:15.157Z",
+      "wall_s": 107.9,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.837,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 8.7,
+        "current_accession": "0000922224-25-000017",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 14,
+        "stations": 4,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5191,
+        "beta_range": [
+          0.1202,
+          0.8733
+        ],
+        "weather_pct": 7.3,
+        "weather_range_pct": [
+          1.7,
+          12.2
+        ],
+        "industry_pct": 3.6,
+        "remainder_pct": -2.2,
+        "remainder_range_pct": [
+          -12.4,
+          8.8
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 916"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 9,
+        "planner_repaired": 0,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 146.4,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 197,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          33,
+          27
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 7937
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T233108a5de",
+      "utility": "FIRSTENERGY CORP",
+      "ticker": "FE",
+      "cik": "0001031296",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:31:08.837Z",
+      "wall_s": 89.4,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.564,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 14.5,
+        "current_accession": "0001031296-25-000017",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 16.2,
+        "stations": 9,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5065,
+        "beta_range": [
+          0.1012,
+          0.8639
+        ],
+        "weather_pct": 8.2,
+        "weather_range_pct": [
+          1.6,
+          14
+        ],
+        "industry_pct": 2.9,
+        "remainder_pct": 3.5,
+        "remainder_range_pct": [
+          -8.2,
+          14.7
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [],
+      "registrar_ms": [],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 9,
+        "planner_repaired": 0,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 142.4,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 173,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "19/19",
+        "e_complete": "20/20"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          28,
+          31
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          true
+        ],
+        "gpu_peak_mib": 8153
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2332444bed",
+      "utility": "PUBLIC SERVICE ENTERPRISE GROUP INC",
+      "ticker": "PEG",
+      "cik": "0000788784",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:32:44.461Z",
+      "wall_s": 102.5,
+      "outcome": "partly supported",
+      "verdict": "partly supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.355,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 16.7,
+        "current_accession": "0000950170-25-061108",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 11.4,
+        "stations": 2,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.521,
+        "beta_range": [
+          0.1187,
+          0.8695
+        ],
+        "weather_pct": 5.9,
+        "weather_range_pct": [
+          1.4,
+          9.9
+        ],
+        "industry_pct": 2.6,
+        "remainder_pct": 8.2,
+        "remainder_range_pct": [
+          -1.7,
+          17.5
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 946"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 138.1,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "template",
+        "words": 218,
+        "model_attempts": 2,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          35,
+          57
+        ],
+        "ffmpeg_running_before_after": [
+          true,
+          true
+        ],
+        "gpu_peak_mib": 7977
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T23343309d5",
+      "utility": "CONSOLIDATED EDISON INC",
+      "ticker": "ED",
+      "cik": "0001047862",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:34:33.149Z",
+      "wall_s": 113.7,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.668,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 12.1,
+        "current_accession": "0001047862-25-000045",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 15.7,
+        "stations": 1,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5141,
+        "beta_range": [
+          0.1023,
+          0.8659
+        ],
+        "weather_pct": 8.1,
+        "weather_range_pct": [
+          1.6,
+          13.6
+        ],
+        "industry_pct": 2.7,
+        "remainder_pct": 1.3,
+        "remainder_range_pct": [
+          -10.1,
+          12.3
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 994"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 139.6,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 197,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          63,
+          36
+        ],
+        "ffmpeg_running_before_after": [
+          true,
+          false
+        ],
+        "gpu_peak_mib": 8152
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T23363295d6",
+      "utility": "EVERSOURCE ENERGY",
+      "ticker": "ES",
+      "cik": "0000072741",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:36:32.837Z",
+      "wall_s": 120.2,
+      "outcome": "partly supported",
+      "verdict": "partly supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.243,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 23.6,
+        "current_accession": "0000072741-25-000011",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 10.7,
+        "stations": 3,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5332,
+        "beta_range": [
+          0.1586,
+          0.8706
+        ],
+        "weather_pct": 5.7,
+        "weather_range_pct": [
+          1.7,
+          9.4
+        ],
+        "industry_pct": 2.4,
+        "remainder_pct": 15.4,
+        "remainder_range_pct": [
+          6.1,
+          24.2
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 1182"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 132.9,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 171,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          37,
+          76
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          true
+        ],
+        "gpu_peak_mib": 8067
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2338395d9e",
+      "utility": "EXELON CORP",
+      "ticker": "EXC",
+      "cik": "0001109357",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:38:39.658Z",
+      "wall_s": 117.9,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.67,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 11.1,
+        "current_accession": "0001109357-25-000113",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 14.4,
+        "stations": 9,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5156,
+        "beta_range": [
+          0.1082,
+          0.8526
+        ],
+        "weather_pct": 7.4,
+        "weather_range_pct": [
+          1.6,
+          12.3
+        ],
+        "industry_pct": 2.7,
+        "remainder_pct": 0.9,
+        "remainder_range_pct": [
+          -9.8,
+          11.6
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 1026"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 132.7,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 162,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          82,
+          55
+        ],
+        "ffmpeg_running_before_after": [
+          true,
+          false
+        ],
+        "gpu_peak_mib": 8612
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T23404317fb",
+      "utility": "EDISON INTERNATIONAL",
+      "ticker": "EIX",
+      "cik": "0000827052",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:40:43.486Z",
+      "wall_s": 91,
+      "outcome": "not supported",
+      "verdict": "not supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.193,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": -6.5,
+        "current_accession": "0000827052-25-000043",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 3,
+        "stations": 2,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.4278,
+        "beta_range": [
+          0.0183,
+          0.7942
+        ],
+        "weather_pct": 1.3,
+        "weather_range_pct": [
+          0.1,
+          2.4
+        ],
+        "industry_pct": 4.9,
+        "remainder_pct": -12.7,
+        "remainder_range_pct": [
+          -19,
+          -5.7
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 1018"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 9,
+        "planner_repaired": 0,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 132.9,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 173,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          28,
+          71
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          true
+        ],
+        "gpu_peak_mib": 7646
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T234220bd99",
+      "utility": "PG&E Corp",
+      "ticker": "PCG",
+      "cik": "0001004980",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:42:20.362Z",
+      "wall_s": 115.8,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.705,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 2.1,
+        "current_accession": "0001004980-25-000087",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 3,
+        "stations": 2,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.496,
+        "beta_range": [
+          0.0922,
+          0.8926
+        ],
+        "weather_pct": 1.5,
+        "weather_range_pct": [
+          0.3,
+          2.6
+        ],
+        "industry_pct": 3.9,
+        "remainder_pct": -3.3,
+        "remainder_range_pct": [
+          -10.2,
+          4.1
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 898"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 135,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 177,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          35,
+          49
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          true
+        ],
+        "gpu_peak_mib": 8084
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2344233865",
+      "utility": "SEMPRA",
+      "ticker": "SRE",
+      "cik": "0001032208",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:44:23.878Z",
+      "wall_s": 91.1,
+      "outcome": "not supported",
+      "verdict": "not supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 3.257,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+        "like_for_like_change_pct": -0.4,
+        "current_accession": "0001032208-25-000027",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 3,
+        "stations": 2,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.4761,
+        "beta_range": [
+          0.064,
+          0.8784
+        ],
+        "weather_pct": 1.4,
+        "weather_range_pct": [
+          0.2,
+          2.6
+        ],
+        "industry_pct": 4.2,
+        "remainder_pct": -6.1,
+        "remainder_range_pct": [
+          -13,
+          1.1
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 940"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 9,
+        "planner_repaired": 0,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 137.7,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 154,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "21/21",
+        "e_complete": "22/22"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          68,
+          32
+        ],
+        "ffmpeg_running_before_after": [
+          true,
+          false
+        ],
+        "gpu_peak_mib": 7813
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2346002f97",
+      "utility": "PINNACLE WEST CAPITAL CORP",
+      "ticker": "PNW",
+      "cik": "0000764622",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:46:00.879Z",
+      "wall_s": 104.5,
+      "outcome": "not supported",
+      "verdict": "not supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.086,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 8.5,
+        "current_accession": "0000764622-25-000047",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 1.3,
+        "stations": 1,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5612,
+        "beta_range": [
+          0.1048,
+          0.9443
+        ],
+        "weather_pct": 0.7,
+        "weather_range_pct": [
+          0.1,
+          1.2
+        ],
+        "industry_pct": 1.9,
+        "remainder_pct": 5.8,
+        "remainder_range_pct": [
+          -1.9,
+          11.6
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 958"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 141.7,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 128,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          30,
+          56
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          true
+        ],
+        "gpu_peak_mib": 7640
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T234751ae0b",
+      "utility": "PORTLAND GENERAL ELECTRIC CO /OR/",
+      "ticker": "POR",
+      "cik": "0000784977",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:47:51.291Z",
+      "wall_s": 88,
+      "outcome": "not supported",
+      "verdict": "not supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 5.038,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": -0.1,
+        "current_accession": "0000784977-25-000074",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 1.1,
+        "stations": 1,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.4789,
+        "beta_range": [
+          0.0467,
+          0.8885
+        ],
+        "weather_pct": 0.5,
+        "weather_range_pct": [
+          0.1,
+          1
+        ],
+        "industry_pct": 4.2,
+        "remainder_pct": -4.8,
+        "remainder_range_pct": [
+          -11.2,
+          2.5
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 883"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 144,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 175,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          57,
+          68
+        ],
+        "ffmpeg_running_before_after": [
+          true,
+          true
+        ],
+        "gpu_peak_mib": 7611
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2349256a6e",
+      "utility": "NorthWestern Energy Group, Inc.",
+      "ticker": "NWE",
+      "cik": "0001993004",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:49:25.458Z",
+      "wall_s": 104.6,
+      "outcome": "not supported",
+      "verdict": "not supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 2.944,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": -1.8,
+        "current_accession": "0001993004-25-000084",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 10.7,
+        "stations": 3,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5044,
+        "beta_range": [
+          0.1095,
+          0.8803
+        ],
+        "weather_pct": 5.4,
+        "weather_range_pct": [
+          1.2,
+          9.4
+        ],
+        "industry_pct": 3.8,
+        "remainder_pct": -11.1,
+        "remainder_range_pct": [
+          -20.4,
+          -1.2
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 895"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 146.1,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 173,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          65,
+          35
+        ],
+        "ffmpeg_running_before_after": [
+          true,
+          false
+        ],
+        "gpu_peak_mib": 7627
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2351155fb7",
+      "utility": "BLACK HILLS CORP /SD/",
+      "ticker": "BKH",
+      "cik": "0001130464",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:51:15.675Z",
+      "wall_s": 93.1,
+      "outcome": "partly supported",
+      "verdict": "partly supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.394,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 10.8,
+        "current_accession": "0000950170-25-066572",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 8.1,
+        "stations": 4,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5281,
+        "beta_range": [
+          0.1441,
+          0.9067
+        ],
+        "weather_pct": 4.3,
+        "weather_range_pct": [
+          1.2,
+          7.3
+        ],
+        "industry_pct": 2.5,
+        "remainder_pct": 4.1,
+        "remainder_range_pct": [
+          -4.9,
+          12.3
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 888"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 9,
+        "planner_repaired": 0,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 147.2,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 130,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          20,
+          34
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 7607
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2352547c7a",
+      "utility": "AVISTA CORP",
+      "ticker": "AVA",
+      "cik": "0000104918",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:52:54.394Z",
+      "wall_s": 105.7,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 2.815,
+      "overshoot_flag": true,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 1.3,
+        "current_accession": "0000950170-25-064737",
+        "recast": true
+      },
+      "degree_days": {
+        "change_pct": 7.5,
+        "stations": 2,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.4948,
+        "beta_range": [
+          0.1006,
+          0.8538
+        ],
+        "weather_pct": 3.7,
+        "weather_range_pct": [
+          0.8,
+          6.4
+        ],
+        "industry_pct": 4,
+        "remainder_pct": -6.3,
+        "remainder_range_pct": [
+          -14.1,
+          2.1
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 1,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 963"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 146.1,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 212,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          48,
+          34
+        ],
+        "ffmpeg_running_before_after": [
+          true,
+          false
+        ],
+        "gpu_peak_mib": 7608
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2354454559",
+      "utility": "OGE ENERGY CORP.",
+      "ticker": "OGE",
+      "cik": "0001021635",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:54:45.774Z",
+      "wall_s": 105.1,
+      "outcome": "partly supported",
+      "verdict": "partly supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.244,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 25.3,
+        "current_accession": "0000950170-25-060389",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 11.9,
+        "stations": 1,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5198,
+        "beta_range": [
+          0.1214,
+          0.8716
+        ],
+        "weather_pct": 6.2,
+        "weather_range_pct": [
+          1.4,
+          10.4
+        ],
+        "industry_pct": 2.6,
+        "remainder_pct": 16.5,
+        "remainder_range_pct": [
+          6.6,
+          26.3
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 953"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 145.3,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 198,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          51,
+          46
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 7833
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T2356368af1",
+      "utility": "CENTERPOINT ENERGY INC",
+      "ticker": "CNP",
+      "cik": "0001130310",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:56:36.957Z",
+      "wall_s": 106.2,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.767,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 11.5,
+        "current_accession": "0001130310-25-000079",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 16.9,
+        "stations": 4,
+        "coverage": 0.9889
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5183,
+        "beta_range": [
+          0.1026,
+          0.8943
+        ],
+        "weather_pct": 8.8,
+        "weather_range_pct": [
+          1.7,
+          15.2
+        ],
+        "industry_pct": 3.6,
+        "remainder_pct": -1,
+        "remainder_range_pct": [
+          -12.1,
+          11.8
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 974"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 146.1,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "template",
+        "words": 214,
+        "model_attempts": 2,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          32,
+          52
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 7854
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T235829031e",
+      "utility": "Vistra Corp.",
+      "ticker": "VST",
+      "cik": "0001692819",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:58:29.040Z",
+      "wall_s": 76.7,
+      "outcome": "partly supported",
+      "verdict": "partly supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.266,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 28.8,
+        "current_accession": "0001692819-25-000035",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 17.1,
+        "stations": 8,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.4487,
+        "beta_range": [
+          0.0314,
+          0.7895
+        ],
+        "weather_pct": 7.7,
+        "weather_range_pct": [
+          0.5,
+          13.5
+        ],
+        "industry_pct": 3.8,
+        "remainder_pct": 17.3,
+        "remainder_range_pct": [
+          6.4,
+          29.4
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 888"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 9,
+        "planner_repaired": 0,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 145.6,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 198,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          18,
+          38
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 7777
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261025T235951108b",
+      "utility": "NRG ENERGY, INC.",
+      "ticker": "NRG",
+      "cik": "0001013871",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T15:59:51.455Z",
+      "wall_s": 100.3,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.595,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 15.6,
+        "current_accession": "0001013871-25-000013",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 18.5,
+        "stations": 2,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5014,
+        "beta_range": [
+          0.1015,
+          0.8739
+        ],
+        "weather_pct": 9.3,
+        "weather_range_pct": [
+          1.9,
+          16.1
+        ],
+        "industry_pct": 3,
+        "remainder_pct": 3.3,
+        "remainder_range_pct": [
+          -9,
+          15.5
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 1181"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 145.6,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "template",
+        "words": 214,
+        "model_attempts": 2,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          30,
+          28
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 7777
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261026T000137f70d",
+      "utility": "HAWAIIAN ELECTRIC INDUSTRIES INC",
+      "ticker": "HE",
+      "cik": "0000354707",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T16:01:37.540Z",
+      "wall_s": 94.1,
+      "outcome": "not supported",
+      "verdict": "not supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 2.139,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": -6.1,
+        "current_accession": "0000354707-25-000026",
+        "recast": true
+      },
+      "degree_days": {
+        "change_pct": 20,
+        "stations": 1,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.6468,
+        "beta_range": [
+          0.2637,
+          1.0146
+        ],
+        "weather_pct": 12.9,
+        "weather_range_pct": [
+          5.3,
+          20.3
+        ],
+        "industry_pct": 1.8,
+        "remainder_pct": -20.8,
+        "remainder_range_pct": [
+          -34,
+          -7.6
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 1,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 967"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 9,
+        "planner_repaired": 0,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "8/9",
+        "pick_differences": [
+          "attribute (next was dq_gate)"
+        ],
+        "median_planner_tok_s": 148.2,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 200,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          28,
+          51
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 7761
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261026T0003174e1b",
+      "utility": "ALLETE INC",
+      "ticker": "ALE",
+      "cik": "0000066756",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T16:03:17.629Z",
+      "wall_s": 94.6,
+      "outcome": "not supported",
+      "verdict": "not supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 13.094,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": -0.8,
+        "current_accession": "0000066756-25-000060",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 17.5,
+        "stations": 4,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5741,
+        "beta_range": [
+          0.1952,
+          0.9448
+        ],
+        "weather_pct": 10.1,
+        "weather_range_pct": [
+          3.4,
+          16.6
+        ],
+        "industry_pct": 2.8,
+        "remainder_pct": -13.6,
+        "remainder_range_pct": [
+          -25.5,
+          -1.4
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 940"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 144.5,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 168,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          24,
+          26
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 7785
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261026T000458d8fb",
+      "utility": "Otter Tail Corp",
+      "ticker": "OTTR",
+      "cik": "0001466593",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T16:04:58.225Z",
+      "wall_s": 83.5,
+      "outcome": "not supported",
+      "verdict": "not supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 2.66,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": -2.9,
+        "current_accession": "0001466593-25-000083",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 14.1,
+        "stations": 5,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5377,
+        "beta_range": [
+          0.1712,
+          0.9096
+        ],
+        "weather_pct": 7.6,
+        "weather_range_pct": [
+          2.4,
+          12.8
+        ],
+        "industry_pct": 3.3,
+        "remainder_pct": -13.8,
+        "remainder_range_pct": [
+          -24,
+          -3.3
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 1794"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 146.1,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 186,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          24,
+          17
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 7844
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261026T00062705ec",
+      "utility": "MGE ENERGY INC",
+      "ticker": "MGEE",
+      "cik": "0001161728",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T16:06:27.640Z",
+      "wall_s": 104.9,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.601,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "RegulatedAndUnregulatedOperatingRevenue",
+        "like_for_like_change_pct": 14.4,
+        "current_accession": "0000950170-25-065302",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 16.8,
+        "stations": 2,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 40,
+        "beta": 0.5165,
+        "beta_range": [
+          0.0891,
+          0.8464
+        ],
+        "weather_pct": 8.7,
+        "weather_range_pct": [
+          1.5,
+          14.2
+        ],
+        "industry_pct": 3.2,
+        "remainder_pct": 2.6,
+        "remainder_range_pct": [
+          -8.6,
+          14.4
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "RegulatedAndUnregulatedOperatingRevenue",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 950"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 143.6,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 185,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "22/22",
+        "e_complete": "23/23"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          22,
+          60
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          true
+        ],
+        "gpu_peak_mib": 7779
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261026T0008185710",
+      "utility": "UNITIL CORP",
+      "ticker": "UTL",
+      "cik": "0000755001",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T16:08:18.351Z",
+      "wall_s": 87.5,
+      "outcome": "not supported",
+      "verdict": "not supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 1.33,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+        "like_for_like_change_pct": -4.4,
+        "current_accession": "0000950170-25-064590",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 11.5,
+        "stations": 2,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5099,
+        "beta_range": [
+          0.1305,
+          0.8737
+        ],
+        "weather_pct": 5.9,
+        "weather_range_pct": [
+          1.5,
+          10.1
+        ],
+        "industry_pct": 3.7,
+        "remainder_pct": -14,
+        "remainder_range_pct": [
+          -23.1,
+          -4.5
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 995"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 9,
+        "planner_repaired": 0,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 146,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 153,
+        "model_attempts": 2,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "21/21",
+        "e_complete": "22/22"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          42,
+          39
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 7777
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261026T000951a7c3",
+      "utility": "TXNM ENERGY INC",
+      "ticker": "TXNM",
+      "cik": "0001108426",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T16:09:51.845Z",
+      "wall_s": 102.6,
+      "outcome": "partly supported",
+      "verdict": "partly supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.376,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 10.5,
+        "current_accession": "0001108426-25-000033",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 7.5,
+        "stations": 3,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5299,
+        "beta_range": [
+          0.1523,
+          0.8979
+        ],
+        "weather_pct": 4,
+        "weather_range_pct": [
+          1.1,
+          6.7
+        ],
+        "industry_pct": 2.5,
+        "remainder_pct": 4.1,
+        "remainder_range_pct": [
+          -4.5,
+          12
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 892"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 146.7,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 171,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          42,
+          37
+        ],
+        "ffmpeg_running_before_after": [
+          true,
+          false
+        ],
+        "gpu_peak_mib": 7778
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261026T001140ad49",
+      "utility": "DOMINION ENERGY, INC",
+      "ticker": "D",
+      "cik": "0000715957",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T16:11:40.379Z",
+      "wall_s": 90.8,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.673,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 12.2,
+        "current_accession": "0000950170-25-061558",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 16,
+        "stations": 3,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.514,
+        "beta_range": [
+          0.134,
+          0.8656
+        ],
+        "weather_pct": 8.2,
+        "weather_range_pct": [
+          2.1,
+          13.9
+        ],
+        "industry_pct": 2.7,
+        "remainder_pct": 1.3,
+        "remainder_range_pct": [
+          -10,
+          12.3
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 947"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 9,
+        "planner_repaired": 0,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 146.1,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 183,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          39,
+          56
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 8250
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261026T0013178b7e",
+      "utility": "Constellation Energy Corp",
+      "ticker": "CEG",
+      "cik": "0001868275",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T16:13:17.001Z",
+      "wall_s": 114.6,
+      "outcome": "supported",
+      "verdict": "supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.835,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 10.2,
+        "current_accession": "0001868275-25-000044",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 16.3,
+        "stations": 7,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5212,
+        "beta_range": [
+          0.1352,
+          0.8665
+        ],
+        "weather_pct": 8.5,
+        "weather_range_pct": [
+          2.2,
+          14.1
+        ],
+        "industry_pct": 3.6,
+        "remainder_pct": -1.9,
+        "remainder_range_pct": [
+          -12.3,
+          10
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 992"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 134.4,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 166,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          56,
+          45
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 7841
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261026T0015170e77",
+      "utility": "NISOURCE INC.",
+      "ticker": "NI",
+      "cik": "0001111711",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T16:15:17.524Z",
+      "wall_s": 98.4,
+      "outcome": "partly supported",
+      "verdict": "partly supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.238,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+        "like_for_like_change_pct": 30.8,
+        "current_accession": "0001111711-25-000020",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 16.3,
+        "stations": 2,
+        "coverage": 0.9889
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.4519,
+        "beta_range": [
+          0.0712,
+          0.8269
+        ],
+        "weather_pct": 7.3,
+        "weather_range_pct": [
+          1.2,
+          13.4
+        ],
+        "industry_pct": 3.8,
+        "remainder_pct": 19.7,
+        "remainder_range_pct": [
+          8.4,
+          31.1
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 936"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 9,
+        "planner_repaired": 0,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "9/9",
+        "pick_differences": [],
+        "median_planner_tok_s": 138.8,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "template",
+        "words": 215,
+        "model_attempts": 2,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "21/21",
+        "e_complete": "22/22"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          49,
+          45
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 8392
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261026T0017025166",
+      "utility": "TUCSON ELECTRIC POWER CO",
+      "ticker": null,
+      "cik": "0000100122",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T16:17:02.143Z",
+      "wall_s": 121.6,
+      "outcome": "not supported",
+      "verdict": "not supported",
+      "confidence": "medium",
+      "withheld_reason": null,
+      "claim_ratio": 0.02,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": -19.2,
+        "current_accession": "0000100122-25-000013",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 1.3,
+        "stations": 1,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.2949,
+        "beta_range": [
+          -0.0135,
+          0.598
+        ],
+        "weather_pct": 0.4,
+        "weather_range_pct": [
+          0,
+          0.8
+        ],
+        "industry_pct": 6.8,
+        "remainder_pct": -26.4,
+        "remainder_range_pct": [
+          -30.1,
+          -20.6
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 976"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 6,
+        "planner_repaired": 3,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "8/9",
+        "pick_differences": [
+          "get_peers (next was get_revenue)"
+        ],
+        "median_planner_tok_s": 141.5,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 134,
+        "model_attempts": 2,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          40,
+          29
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 8190
+      }
+    },
+    {
+      "eligible": true,
+      "run_id": "r20261026T0019094c43",
+      "utility": "TAMPA ELECTRIC CO",
+      "ticker": null,
+      "cik": "0000096271",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T16:19:09.781Z",
+      "wall_s": 149.9,
+      "outcome": "not supported",
+      "verdict": "not supported",
+      "confidence": "high",
+      "withheld_reason": null,
+      "claim_ratio": 0.174,
+      "overshoot_flag": false,
+      "revenue": {
+        "tag": "Revenues",
+        "like_for_like_change_pct": 18.4,
+        "current_accession": "0000950170-25-066297",
+        "recast": false
+      },
+      "degree_days": {
+        "change_pct": 5.5,
+        "stations": 2,
+        "coverage": 1
+      },
+      "attribution": {
+        "peers": 39,
+        "beta": 0.5857,
+        "beta_range": [
+          0.2284,
+          0.9256
+        ],
+        "weather_pct": 3.2,
+        "weather_range_pct": [
+          1.2,
+          5.1
+        ],
+        "industry_pct": 1.5,
+        "remainder_pct": 13.7,
+        "remainder_range_pct": [
+          5.9,
+          20.2
+        ]
+      },
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 931"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 7,
+        "planner_repaired": 2,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "7/9",
+        "pick_differences": [
+          "get_peers (next was get_revenue)",
+          "get_weather (next was get_revenue)"
+        ],
+        "median_planner_tok_s": 133.4,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 174,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "20/20",
+        "e_complete": "21/21"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          22,
+          43
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 8237
+      }
+    },
+    {
+      "eligible": false,
+      "run_id": "r20261026T0021453c30",
+      "utility": "IDACORP INC",
+      "ticker": "IDA",
+      "cik": "0001057877",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T16:21:45.850Z",
+      "wall_s": 77.6,
+      "outcome": "withheld",
+      "verdict": "withheld",
+      "confidence": null,
+      "withheld_reason": "no like-for-like revenue",
+      "claim_ratio": null,
+      "overshoot_flag": false,
+      "revenue": null,
+      "degree_days": {
+        "change_pct": 6.4,
+        "stations": 1,
+        "coverage": 1
+      },
+      "attribution": null,
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [],
+      "registrar_ms": [],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [
+          "tag_chosen: no revenue fact for CIK 0001057877 in CY2025Q1 under Revenues, RevenueFromContractWithCustomerExcludingAssessedTax or RegulatedAndUnregulatedOperatingRevenue"
+        ],
+        "chunks": 4,
+        "planner_calls": 7,
+        "planner_valid_first_try": 7,
+        "planner_repaired": 0,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "2/7",
+        "pick_differences": [
+          "get_peers (next was probe_revenue_tag)",
+          "get_weather (next was probe_revenue_tag)",
+          "dq_gate (next was probe_revenue_tag)",
+          "not_tested (next was probe_revenue_tag)",
+          "finalize (next was probe_revenue_tag)"
+        ],
+        "median_planner_tok_s": 128.2,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 117,
+        "model_attempts": 1,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "19/19",
+        "e_complete": "20/20"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          57,
+          40
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 8531
+      }
+    },
+    {
+      "eligible": false,
+      "run_id": "r20261026T0023094d17",
+      "utility": "ONCOR ELECTRIC DELIVERY CO LLC",
+      "ticker": null,
+      "cik": "0001193311",
+      "period": "CY2025Q1",
+      "previous_period": "CY2024Q1",
+      "claim": "the weather",
+      "started_at": "2026-10-25T16:23:09.508Z",
+      "wall_s": 117.7,
+      "outcome": "withheld",
+      "verdict": "withheld",
+      "confidence": null,
+      "withheld_reason": "no like-for-like revenue",
+      "claim_ratio": null,
+      "overshoot_flag": false,
+      "revenue": null,
+      "degree_days": {
+        "change_pct": 18.5,
+        "stations": 2,
+        "coverage": 1
+      },
+      "attribution": null,
+      "dq_gate": "pass (onboarding+coverage)",
+      "recast_conflicts": 0,
+      "registered_at_run_time": [
+        {
+          "action": "register_concept",
+          "tag": "Revenues",
+          "error": null
+        }
+      ],
+      "registrar_ms": [
+        "registrar.register_concept 1096"
+      ],
+      "chain": {
+        "status": "completed",
+        "checklist_complete": true,
+        "checklist_failed": [
+          "revenue_like_for_like: no original fact for previous period CY2024Q1",
+          "attribution_done: no tool could resolve it"
+        ],
+        "chunks": 5,
+        "planner_calls": 9,
+        "planner_valid_first_try": 8,
+        "planner_repaired": 1,
+        "fallback_steps": 0,
+        "pick_equals_checklist": "4/9",
+        "pick_differences": [
+          "not_tested (next was get_revenue)",
+          "get_peers (next was get_revenue)",
+          "get_weather (next was get_revenue)",
+          "dq_gate (next was get_revenue)",
+          "finalize (next was get_revenue)"
+        ],
+        "median_planner_tok_s": 132.9,
+        "model": "nemotron-3-nano:4b",
+        "think": true,
+        "cloud_model_calls": 0
+      },
+      "memo": {
+        "source": "model",
+        "words": 147,
+        "model_attempts": 2,
+        "verdict_check": "pass"
+      },
+      "evidence": {
+        "e_cov": "18/18",
+        "e_complete": "19/19"
+      },
+      "machine": {
+        "cpu_load_pct_before_after": [
+          31,
+          50
+        ],
+        "ffmpeg_running_before_after": [
+          false,
+          false
+        ],
+        "gpu_peak_mib": 7855
+      }
+    }
+  ]
+}

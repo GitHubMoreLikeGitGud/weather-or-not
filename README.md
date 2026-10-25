@@ -21,6 +21,7 @@ Demo video (3:22): https://youtu.be/t85jmc8h9Bs · Deck (12 slides): [`docs/deck
 > | One question, wall time | 97.5 s (the demo run) |
 > | The same card from repeated runs | 5 runs of FirstEnergy, identical to the printed digit |
 > | Claims cited to an evidence record | 171 of 171 (nine runs) |
+> | Every eligible seed utility, CY2025Q1 (41 cold runs, 26 Oct) | 18 supported, 11 partly supported, 12 not supported, 0 withheld, 0 failed ([eval report section 9](docs/eval-report.md#9-every-eligible-seed-utility-same-quarter-added-26-oct-2026)) |
 > | Planner reply valid on the first try | 64 of 76 calls (nine runs) |
 > | Model's pick = the checklist's next step | 33 of 34 (the four clean runs) |
 > | Memo numbers that are not a tool output | 0 (12 drafts) |
@@ -235,7 +236,7 @@ Zetaris is Weather-or-Not's only runtime path to data. It federates the sources,
 | Object | Source | Notes |
 |---|---|---|
 | `WON_SEC.frames_<tag>_<period>` | SEC XBRL frames, `https://data.sec.gov/api/xbrl/frames/us-gaap/<tag>/USD/<period>.json` | 6 at onboarding (three tags, CY2025Q1 and CY2024Q1) plus 2 registered at run time through the gateway's registrar (Revenues CY2025Q2 and CY2024Q2); counts equal the source (1,937 facts for Revenues CY2025Q1) |
-| `WON_SEC.concept_<cik10>_<tag>` | SEC companyconcept, the filer's full history under one tag | 10 tables for the filers whose like-for-like history the questions needed; counts equal the source (FirstEnergy Revenues 194, American Electric Power Revenues 304) |
+| `WON_SEC.concept_<cik10>_<tag>` | SEC companyconcept, the filer's full history under one tag | 10 tables at onboarding for the filers whose like-for-like history the first questions needed, plus 36 the agent registered itself during the 26 Oct sweep of every seed (0 failed); counts equal the source (FirstEnergy Revenues 194, American Electric Power Revenues 304) |
 | `WON_SEC.submissions_<cik10>` | SEC submissions, `cik, name, sic, sicDescription, state` only (never street fields) | 43, one per seed utility |
 | `WON_DNS.sic_codes_v4_raw` | company_dns V4 SIC list | 1,005 codes |
 | `WON_GHCN.ghcn_<yyyy>_<tmax\|tmin>` | NOAA GHCN-Daily parquet on the public bucket, `by_year/YEAR=<yyyy>/ELEMENT=<TMAX\|TMIN>/` | 4 partitions (2024 and 2025), 9 files and 4.3 million rows each; the views `won.ghcn_*` filter to the 56 seed stations (plus one validation station) and are cached; counts equal pyarrow over the same files |
@@ -335,7 +336,7 @@ Both from 300 of 300 valid resamples, seed 7; the weather, industry and beta ran
 ## Limitations
 
 - **Revenue is a proxy for volume.** A fuel or purchased-power clause moves revenue without moving margin; rate cases, large-load growth, mergers and divestitures are not read from the filings. All of this is on every card's Not-tested list.
-- **About 40 peers on one quarter give wide ranges.** The weather part's 10th to 90th percentile range spans +1.6% to +14.0% on the demo case; the confidence label is high because the slope interval excludes zero, not because the range is narrow.
+- **About 40 peers on one quarter give wide ranges.** The weather part's 10th to 90th percentile range spans +1.6% to +14.0% on the demo case; the confidence label is high because the slope interval excludes zero, not because the range is narrow. The slope also leans on single peers: on the one card whose peer set leaves out Tucson Electric Power (its own), beta is 0.295 with a range that includes zero (confidence medium), against 0.428 to 0.647 on the other 40 cards of the 26 Oct sweep; a leave-one-out check is not in the method yet.
 - **The verdict has no upper bound.** "Supported" means the weather part is at least half the change with the same sign; when it is several times the change (Entergy, CY2025Q1: weather +10.2% against revenue +1.9%, remainder -11.3%), the card still says supported, and the large negative remainder is the part to read. Since 25 Oct the card adds an overshoot note when the weather part is more than twice the change (display only; the rule and the saved verdicts are unchanged).
 - **Days with a GHCN quality flag are dropped**, not corrected; coverage reports how many days remain (two stations lose one and four days in 2025 Q1).
 - **States served are capped at six per utility** and curated from the annual reports' service-territory text; one or two airport stations stand for each state. The largest systems serve more states.
@@ -347,7 +348,7 @@ Both from 300 of 300 valid resamples, seed 7; the weather, industry and beta ran
 - **The model's empty replies.** With think on, the 4B model sometimes spends the whole output budget thinking and returns no JSON; the repair round then runs with think off, and the deterministic fallback is the last resort (it ran once in nine runs and once in two verification runs).
 - **Warm runs are not faster in wall time.** Memory saves a planner call and a statement; the degree-day statements (about 18 s each) and any repair round decide the wall time.
 - **A local demo identity.** `POST /api/approvals/sign` issues an analyst contract to any request on this machine that names the server as its Host and carries no foreign Origin. There is no login. A real deployment needs single sign-on in front of the two write endpoints.
-- **Scope:** 43 seed utilities, 56 stations; frames registered for CY2024Q1 and CY2025Q1 under three tags (plus two run-time registrations), GHCN cached for 2024 and 2025. The two run-time registrations were operator calls through the gateway's registrar; the agent's own `register_frames` step, which asks the registrar for another quarter (Q1 to Q3), is unit-tested and has not run in a saved question. One analyst and one model job at a time. Developed and run on Windows 11; CI runs the offline checks (tests, type check, conformance, gateway tests) on Windows and Ubuntu, while the full stack has run on Windows only. No personal data is read or stored.
+- **Scope:** 43 seed utilities, 56 stations; frames registered for CY2024Q1 and CY2025Q1 under three tags (plus two run-time registrations), GHCN cached for 2024 and 2025. The two run-time registrations were operator calls through the gateway's registrar; the agent's own `register_frames` step, which asks the registrar for another quarter (Q1 to Q3), is unit-tested and has not run in a saved question; its `register_concept` step, which registers a filer's companyconcept history, ran in 36 saved questions of the 26 Oct sweep. One analyst and one model job at a time. Developed and run on Windows 11; CI runs the offline checks (tests, type check, conformance, gateway tests) on Windows and Ubuntu, while the full stack has run on Windows only. No personal data is read or stored.
 
 ## Responsible use
 
