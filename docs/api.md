@@ -29,6 +29,7 @@ The analyst UI talks to the agent server (`agent/src/server.ts`, `npm run dev` i
 | `/api/world/:cik` | `{ cik, neighbourhood: { utility, edges: [{ type, dir, other, otherType, otherName, attrs, validFrom }] }, timeline }`: the utility's open edges (`serves`, `peer_of`, `reported_in`, `classified_as`, ...) and the source-time ordered event lines of the utility and the filings and peers that touch it. 400 `bad_cik`, 404 `not_found`. |
 | `/api/telemetry` | `{ model, runs, busy_run_id, run_id, cik, period, started_at, wall_ms, chunks, summary, telemetry, chart, skipped_steps }` of the newest saved run: `summary` is the run's `TelemetrySummary`, `telemetry` its model block, `chart` the per-chunk prompt tokens (measured against the estimated full-history baseline), `skipped_steps` the checklist items a warm run took from memory. Fields are `null` when no run is saved. |
 | `/api/eval` | `{ file: "eval/report.json", updated_at, report }`: the measured evaluation report (`agent/src/eval/run.ts` writes it; the committed copy is [`docs/eval-report.json`](eval-report.json)). 404 `not_found` when no report exists; the UI then shows "Not yet measured". |
+| `/api/eval/sweep` | `{ file: "docs/eval/seeds-cy2025q1.json", committed: true, sweep }`: the committed sweep of every eligible seed utility for CY2025Q1 (41 cold runs of 26 Oct), shown on the Evaluation screen above the report. Read-only; 404 `not_found` when the file is absent. |
 
 ### Run (`RunResult`, `agent/src/loop/investigate.ts`)
 

@@ -113,6 +113,8 @@ export interface ServerDeps {
   evalReport?: string | null;
   /** The committed report (docs/eval-report.json) served, labelled, when the data directory has none; null serves none. */
   committedEvalReport?: string | null;
+  /** The committed sweep of every eligible seed (docs/eval/seeds-cy2025q1.json) for GET /api/eval/sweep; null serves none. */
+  sweepFile?: string | null;
   /** docs/sample-run/: committed saved runs (revenue levels masked) listed and opened read-only next to the data directory's runs; null lists none. */
   sampleDir?: string | null;
   /** <data>/evidence/ for records a saved run does not carry inline; null reads none. */
@@ -361,6 +363,7 @@ export function createServer(deps: ServerDeps): WonServer {
   const evalReport = deps.evalReport === undefined ? DATA_PATHS.evalReport : deps.evalReport;
   const evidenceDir = deps.evidenceDir === undefined ? DATA_PATHS.evidence : deps.evidenceDir;
   const committedEval = deps.committedEvalReport === undefined ? fileURLToPath(new URL("docs/eval-report.json", REPO_ROOT_URL)) : deps.committedEvalReport;
+  const sweepFile = deps.sweepFile === undefined ? fileURLToPath(new URL("docs/eval/seeds-cy2025q1.json", REPO_ROOT_URL)) : deps.sweepFile;
   const samples = loadSampleRuns(deps.sampleDir === undefined ? fileURLToPath(new URL("docs/sample-run/", REPO_ROOT_URL)) : deps.sampleDir);
   /** The data directory's runs, then the committed samples whose ids it does not hold. */
   const allRuns = (): (RunIndexEntry & { sample?: true })[] => {
@@ -620,6 +623,17 @@ export function createServer(deps: ServerDeps): WonServer {
       const gen = (body as { generated_at?: unknown }).generated_at;
       const day = typeof gen === "string" && Number.isFinite(Date.parse(gen)) ? new Date(gen).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }) : null;
       return send(res, 200, { file: "docs/eval-report.json", committed: true, label: `committed report${day ? ` of ${day}` : ""}: the data directory has no eval/report.json yet`, updated_at: typeof gen === "string" ? gen : null, report: body });
+    }
+
+    if (m === "GET" && p === "/api/eval/sweep") {
+      if (!sweepFile || !existsSync(sweepFile)) throw new HttpError(404, "no committed sweep (docs/eval/seeds-cy2025q1.json)", "not_found");
+      let body: unknown;
+      try {
+        body = JSON.parse(readFileSync(sweepFile, "utf8"));
+      } catch (e) {
+        throw new HttpError(500, `sweep file is not valid JSON: ${(e as Error).message.slice(0, 120)}`, "bad_report");
+      }
+      return send(res, 200, { file: "docs/eval/seeds-cy2025q1.json", committed: true, sweep: body });
     }
 
     if (m === "POST" && p === "/api/approvals/sign") {

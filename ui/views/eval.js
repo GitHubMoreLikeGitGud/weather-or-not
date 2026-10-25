@@ -1,7 +1,8 @@
 // Evaluation: data/eval/report.json from GET /api/eval rendered as tables, "Not yet measured"
 // on 404. The report is the evaluation script's (agent/src/eval): the known sections get their
 // own tables (totals, runs, cold vs warm, attribution, peers, coverage, DQ, join map); anything
-// else falls back to a generic renderer. renderReport is pure.
+// else falls back to a generic renderer. Above it, the committed sweep of every eligible seed
+// (GET /api/eval/sweep, docs/eval/seeds-cy2025q1.json). renderReport and renderSweep are pure.
 
 import { api, esc, fmtMs, fmtNum, fmtPct, fmtTime, renderError, tagShort } from "../lib.js";
 
@@ -228,6 +229,55 @@ function inputsPanel(i) {
   );
 }
 
+// ---------- the committed sweep of every eligible seed (docs/eval/seeds-cy2025q1.json) ----------
+
+/** A percentage already in percent units (12.9 means +12.9%), signed, one decimal. */
+function pp(v) {
+  return typeof v === "number" ? `${v > 0 ? "+" : v < 0 ? "-" : ""}${Math.abs(v).toFixed(1)}%` : "";
+}
+
+/** Pure: one panel with the outcome counts and one row per run of the sweep. */
+export function renderSweep(sw) {
+  if (!sw || typeof sw !== "object" || !Array.isArray(sw.runs)) return "";
+  const s = sw.summary ?? {};
+  const o = s.outcomes ?? {};
+  const n = (k) => o[k]?.count ?? 0;
+  const conf = s.confidence ?? {};
+  const eligible = sw.runs.filter((r) => r.eligible);
+  const controls = sw.runs.filter((r) => !r.eligible);
+  const tiles = [
+    tile("supported", num(n("supported"))),
+    tile("partly supported", num(n("partly supported"))),
+    tile("not supported", num(n("not supported"))),
+    tile("withheld or failed", num(n("withheld") + n("failed") + n("no verdict"))),
+    tile("confidence high", `${num(conf.high)} / ${num(eligible.length)}`, "the label says the weather effect is above zero; read the ranges"),
+    tile("planner valid first try", `${num(s.planner?.valid_first_try)} / ${num(s.planner?.calls)}`, `pick = the checklist's next step ${esc(s.planner?.pick_equals_checklist ?? "")}`),
+    tile("memos", `${num(s.memos?.model)} model, ${num(s.memos?.template)} template`),
+  ];
+  const cols = [{ h: "Utility" }, { h: "Revenue, like for like", r: true }, { h: "Degree days (stations)", r: true }, { h: "Weather [range]", r: true }, { h: "Remainder [range]", r: true }, { h: "Ratio", r: true }, { h: "Verdict" }, { h: "Notes" }];
+  const rows = eligible.map((r) => {
+    const a = r.attribution ?? {};
+    const notes = [r.recast_conflicts ? `${esc(fmtNum(r.recast_conflicts))} recast conflict(s)` : "", r.overshoot_flag ? "overshoot note" : "", r.memo?.source === "template" ? "template memo" : ""].filter(Boolean).join("; ");
+    return [
+      `${esc(r.utility ?? r.cik)}<br><code class="small muted">${esc(r.run_id)}</code>`,
+      esc(pp(r.revenue?.like_for_like_change_pct)),
+      `${esc(pp(r.degree_days?.change_pct))} <span class="muted">(${esc(fmtNum(r.degree_days?.stations))})</span>`,
+      `${esc(pp(a.weather_pct))} <span class="muted">[${esc(pp(a.weather_range_pct?.[0]))}, ${esc(pp(a.weather_range_pct?.[1]))}]</span>`,
+      `${esc(pp(a.remainder_pct))} <span class="muted">[${esc(pp(a.remainder_range_pct?.[0]))}, ${esc(pp(a.remainder_range_pct?.[1]))}]</span>`,
+      num(r.claim_ratio, 2),
+      `${esc(r.verdict ?? "")}${r.confidence ? ` <span class="muted">${esc(r.confidence)}</span>` : ""}`,
+      notes ? `<span class="small">${notes}</span>` : "",
+    ];
+  });
+  const ctl = controls.length ? `<p class="small muted">Not eligible, run last as controls: ${controls.map((r) => `${esc(r.utility ?? r.cik)} (${esc(r.verdict ?? "")}: ${esc(r.withheld_reason ?? "")})`).join("; ")}.</p>` : "";
+  return panel(
+    "sweep",
+    "Every eligible seed utility, CY2025Q1 against CY2024Q1",
+    `${esc(fmtNum(eligible.length))} cold runs, one per utility, claim <q>the weather</q>; every result published, from <code>docs/eval/seeds-cy2025q1.json</code> (committed)`,
+    `<div class="counts__row">${tiles.join("")}</div>${table(cols, rows)}${ctl}`,
+  );
+}
+
 const KNOWN = ["generated_at", "label", "totals", "runs", "cold_vs_warm", "attribution", "peers", "coverage", "dq", "join_map", "inputs"];
 
 /** Pure: the report, one panel per section. */
@@ -249,7 +299,11 @@ export function renderReport(rep) {
 }
 
 export function mount(el, ctx) {
-  el.innerHTML = `<h1 class="view-h">Evaluation <span class="view-h__sub">measured only; nothing is estimated in the report's place</span></h1><div id="eval"><p class="muted" role="status">Loading the report…</p></div>`;
+  el.innerHTML = `<h1 class="view-h">Evaluation <span class="view-h__sub">measured only; nothing is estimated in the report's place</span></h1><div id="eval-sweep"></div><div id="eval"><p class="muted" role="status">Loading the report…</p></div>`;
+  api("/api/eval/sweep").then((r) => {
+    const box = el.querySelector("#eval-sweep");
+    if (box && r.ok) box.innerHTML = renderSweep(r.data?.sweep);
+  });
   api("/api/eval").then((r) => {
     const box = el.querySelector("#eval");
     if (r.status === 404) {

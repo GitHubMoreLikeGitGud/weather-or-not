@@ -194,7 +194,7 @@ afterEach(async () => {
   app = null;
 });
 
-async function start(o: { ask?: AskFn; defaultVerifier?: boolean; committedEval?: string; sampleDir?: string } = {}) {
+async function start(o: { ask?: AskFn; defaultVerifier?: boolean; committedEval?: string; sampleDir?: string; sweepFile?: string } = {}) {
   const root = mkdtempSync(join(tmpdir(), "won-server-"));
   const uiDir = join(root, "ui");
   mkdirSync(uiDir);
@@ -203,7 +203,7 @@ async function start(o: { ask?: AskFn; defaultVerifier?: boolean; committedEval?
   writeFileSync(join(root, "secret.txt"), "not served");
   const fake = fakeRuntime(root);
   const verifier = o.defaultVerifier ? undefined : new ContractVerifier(VECTOR_SECRET, "server", join(root, "contracts"));
-  app = createServer({ runtime: fake.rt, ask: o.ask ?? fakeAsk(), verifier, uiDir, committedEvalReport: o.committedEval ?? null, sampleDir: o.sampleDir ?? null });
+  app = createServer({ runtime: fake.rt, ask: o.ask ?? fakeAsk(), verifier, uiDir, committedEvalReport: o.committedEval ?? null, sampleDir: o.sampleDir ?? null, sweepFile: o.sweepFile ?? null });
   const port = await app.listen(0);
   return { ...fake, root, port, base: `http://127.0.0.1:${port}`, verifierLog: join(root, "contracts", "verifier-server.jsonl"), usedLedger: join(root, "contracts", "used-server.jsonl") };
 }
@@ -401,6 +401,16 @@ describe("server: reads", () => {
     expect(r.body).toMatchObject({ file: "docs/eval-report.json", committed: true, label: "committed report of 24 Oct 2026: the data directory has no eval/report.json yet" });
     expect(r.body.report.totals).toBeTypeOf("object");
     expect(Array.isArray(r.body.report.runs)).toBe(true);
+  });
+
+  it("GET /api/eval/sweep serves the committed sweep of every eligible seed, and 404 without it", async () => {
+    const { base } = await start({ sweepFile: fileURLToPath(new URL("../../docs/eval/seeds-cy2025q1.json", import.meta.url)) });
+    const r = await call(base, "/api/eval/sweep");
+    expect(r.status).toBe(200);
+    expect(r.body).toMatchObject({ file: "docs/eval/seeds-cy2025q1.json", committed: true, sweep: { summary: { eligible: 41 } } });
+    await app?.close();
+    const none = await start();
+    expect((await call(none.base, "/api/eval/sweep")).status).toBe(404);
   });
 
   it("lists and opens the committed sample run read-only, after the data directory's own runs", async () => {

@@ -406,7 +406,7 @@
         <tbody>
           <tr><td>Data platform</td><td><b>Zetaris Lightning 2.4.3.1</b>, local Docker, JDBC <code>localhost:10000</code>; REST tables, Parquet filestore tables, SchemaStore views with CACHE, a USL with PK, FK and a custom DQ rule, LIST / RUN / SHOW DQ</td></tr>
           <tr><td>Gateway</td><td><b>Python 3.12.0</b>, FastAPI, JayDeBeApi over the Zetaris JDBC driver; 28 named templates, allowlist, registrar plans, execution-contract check; pytest 237 passed, 2 skipped</td></tr>
-          <tr><td>Agent</td><td><b>Node 22.13.1 + TypeScript 7.0.2</b> run with tsx 4.23.15, no runtime dependencies; vitest 5.0.3, 21 files, 222 tests; <code>tsc --noEmit</code> 0 errors</td></tr>
+          <tr><td>Agent</td><td><b>Node 22.13.1 + TypeScript 7.0.2</b> run with tsx 4.23.15, no runtime dependencies; vitest 5.0.3, 21 files, 224 tests; <code>tsc --noEmit</code> 0 errors</td></tr>
           <tr><td>Reasoning engines</td><td><b>Meterless</b> H-MEM, Markovian and World Model reference engines, vendored unchanged at upstream commit <code>1742dec5</code> (Apache-2.0); Scout Intent subset reimplemented in <code>agent/src/contract</code> and labelled partial</td></tr>
           <tr><td>Model</td><td><b>NVIDIA Nemotron 3 Nano 4B</b> (<code>nemotron-3-nano:4b</code>) through Ollama on 127.0.0.1:11434; temperature 0, seed 7, num_ctx 8192, JSON schema output; think on for the planner (output budget 3,072), off for the memo (1,024)</td></tr>
           <tr><td>UI</td><td>Plain HTML, CSS and ES modules, no build step, served by the agent server; server-sent events for the live timeline; light and dark; keyboard-reachable evidence drawer</td></tr>
@@ -537,7 +537,7 @@
           <tr><td>DQ coverage_ok (total / valid / invalid); utility SIC foreign key</td><td class="n">342 / 342 / 0; 43 / 42 / 1</td></tr>
           <tr><td>Join map: LPAD join counts equal the integer IN counts; the no-LPAD control</td><td class="n">6 of 6; 0</td></tr>
           <tr class="hi"><td>Cloud model calls and refused hosts across every run</td><td class="n"><b>0; 0</b></td></tr>
-          <tr><td>Agent tests (21 files); gateway tests</td><td class="n">222 / 222; 237 passed, 2 skipped</td></tr>
+          <tr><td>Agent tests (21 files); gateway tests</td><td class="n">224 / 224; 237 passed, 2 skipped</td></tr>
         </tbody>
       </table>
       <p class="small muted">E-complete's 22 misses: placeholder object names in the two earliest runs, fixed since; reported, not hidden.</p>
