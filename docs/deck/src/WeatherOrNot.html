@@ -172,15 +172,16 @@
   <div class="eyebrow">Open Agent Hackathon 2026 &middot; Track 2: The Agent That Can Explain Why</div>
   <div class="brand">Weather<span>-or-</span>Not</div>
   <p class="tagline"><b>The utility says it was the weather. Weather-or-Not checks.</b> It splits a US electric utility's year-on-year revenue change into weather, industry-wide and company-specific parts, each a range, with the Lightning SQL behind every number.</p>
+  <p style="position:absolute; left:920px; top:902px; width:904px; margin:0; font: 600 23px/1.35 var(--font-display); color: var(--ink)">FirstEnergy, Q1 2025: the company says heating degree days +15%; the agent's 9 stations say +16.2%; weather is consistent with 8.2 of the 14.5 points of revenue growth.</p>
   <div class="meta">
     <div><b>Zetaris</b><span>The only data path: SEC EDGAR, NOAA GHCN-Daily parquet and company_dns read through Lightning SQL; degree days computed in SQL; a USL with keys and a data-quality gate; the SQL text is the citation.</span></div>
     <div><b>Meterless</b><span>H-MEM facts with Zetaris provenance and recast conflicts, a Markovian question chain with a flat carryover, World Model edges with validity dates, Scout-style signed contracts.</span></div>
-    <div><b>NVIDIA</b><span>Nemotron 3 Nano 4B through local Ollama plans each step and writes the memo; it never computes a number. 0 cloud model calls.</span></div>
+    <div><b>NVIDIA</b><span>Nemotron 3 Nano 4B through local Ollama picks each next step the checklist allows and writes the memo; it never computes a number. 0 cloud model calls.</span></div>
   </div>
   <div class="team">Umar Mohktar, Singapore - solo</div>
   <figure class="hero">
     <img class="shot" src="../img/card-fe.png" style="width:904px" alt="Weather-or-Not answer card for FirstEnergy, CY2025Q1: revenue up 14.5%, weather consistent with 8.2% (range 1.6% to 14.0%), claim supported with high confidence">
-    <figcaption>The answer card for FirstEnergy, CY2025Q1 against CY2024Q1, from a saved run of the local Weather-or-Not UI, 24 Oct 2026. Every figure is a button that opens the evidence behind it.</figcaption>
+    <figcaption>The answer card for FirstEnergy, CY2025Q1 against CY2024Q1: saved run of 24 Oct 2026, rendered by the Weather-or-Not UI's card view. Every figure is a button that opens the evidence behind it.</figcaption>
   </figure>
   <div class="foot"><span class="src">Data: SEC EDGAR (US government work, public domain; queried live, never redistributed), NOAA GHCN-Daily (CC0-1.0), company_dns SIC list (Apache-2.0 service).</span><span class="pg">1 / 12</span></div>
 </section>
@@ -202,7 +203,7 @@
       <div class="row" style="gap:20px">
         <div class="stat" style="flex:1"><div class="v">43</div><div class="k">seed utilities whose states and airport stations are curated from public filings</div><div class="m">56 GHCN stations in 43 states</div></div>
         <div class="stat" style="flex:1"><div class="v">1,937</div><div class="k">filers in one SEC frames period (Revenues, CY2025Q1); the peer set is cut from three such tags</div><div class="m">count equal to the source response</div></div>
-        <div class="stat" style="flex:1"><div class="v">0.4 M</div><div class="k">American Electric Power's own Q1 2025 revenue differs between its 2025 and 2026 10-Qs</div><div class="m">5,463.4 M against 5,463.0 M</div></div>
+        <div class="stat" style="flex:1"><div class="v">+15% / +16.2%</div><div class="k">heating degree days in FirstEnergy's own 10-Q against total degree days at the agent's 9 stations: the one outside check</div><div class="m">10-Q accession 0001031296-25-000017</div></div>
       </div>
       <p class="lead" style="margin-top:6px">Weather-or-Not answers in about two minutes with ranges, a claim verdict, a "Not tested" list, and the SQL behind every number.</p>
     </div>
@@ -211,13 +212,13 @@
       <figcaption>What the analyst sees instead of a sentence: both accession numbers, the like-for-like rule, degree days over the utility's nine stations, and the 39-peer table, each number cited.</figcaption>
     </figure>
   </div>
-  <div class="foot"><span class="src">Quote from the FirstEnergy Q1 2025 10-Q, accession 0001031296-25-000017 (SEC EDGAR). Counts from seeds/utilities.json, seeds/stations.json and zetaris/README.md; the restatement from data read through Zetaris (docs/eval-report.md).</span><span class="pg">2 / 12</span></div>
+  <div class="foot"><span class="src">Quote from the FirstEnergy Q1 2025 10-Q, accession 0001031296-25-000017 (SEC EDGAR). Counts from seeds/utilities.json, seeds/stations.json and zetaris/README.md; the agent's +16.2% from the saved runs (docs/eval-report.md section 4).</span><span class="pg">2 / 12</span></div>
 </section>
 
 <!-- 3. The recast trap -->
 <section class="slide">
   <div class="eyebrow">The recast trap</div>
-  <h2 class="title">Why a naive year-on-year reads the wrong number, and rule R1</h2>
+  <h2 class="title">Why a naive year-on-year can read the wrong number, and rule R1</h2>
   <div class="body row" style="gap:44px">
     <div class="col" style="width:1000px; gap:16px">
       <p class="lead">The SEC frames API serves the <b>most recently filed</b> fact for a period. A quarter's value can be restated in a later 10-Q's comparative column, so the number a script reads today is not the number the company reported in its own quarter.</p>
@@ -239,6 +240,7 @@
       <div class="panel">
         <h4>Rule R1, fixed in advance</h4>
         <p class="small">Use the current quarter's value as reported in its <b>own</b> filing, and the previous quarter as that same filing restates it (like-for-like). A later restatement is recorded in H-MEM as a <code>recast_comparative</code> conflict with both values and both accession numbers, never applied silently. The analyst can override it with a signed high-risk contract; the override and its reason go into the trust ledger.</p>
+        <p class="small" style="margin-top:6px">On AEP the restatement is 0.4 M on 5,463 M and moves nothing on the card; the rule matters when a restatement is material, as on the synthetic fixture (+12.2% like for like against +10.0% naive).</p>
       </div>
       <div class="row" style="gap:20px">
         <div class="stat" style="flex:1"><div class="v">128 of 133</div><div class="k">rows of the USL <code>revenue_quarter</code> table are comparatives, not first filings</div><div class="m">what the frames endpoint serves today</div></div>
@@ -257,7 +259,7 @@
 <!-- 4. The answer card -->
 <section class="slide">
   <div class="eyebrow">The answer</div>
-  <h2 class="title">FirstEnergy, CY2025Q1: weather is consistent with 8.2 of the 14.5 points</h2>
+  <h2 class="title">FirstEnergy, CY2025Q1: weather is consistent with 8.2 of the 14.5 points, somewhere between 1.6 and 14.0</h2>
   <div class="body row" style="gap:36px">
     <figure style="width:1060px">
       <img class="shot" src="../img/card-fe.png" style="width:1060px" alt="The FirstEnergy answer card: verdict sentence, the three-part split with ranges, the claim verdict and the data-quality gate">
@@ -273,21 +275,21 @@
       <table class="t">
         <tbody>
           <tr><td>Claim "colder weather"</td><td class="n"><span class="chip chip--good" style="font-size:17px">supported</span> ratio 0.56</td></tr>
-          <tr><td>Confidence (beta range excludes zero, 39 peers, coverage 1.00)</td><td class="n">high</td></tr>
+          <tr><td>Confidence</td><td class="n">high</td></tr>
           <tr><td>Degree days, 9 stations in 5 states</td><td class="n">2,164 to 2,514, +16.2%</td></tr>
           <tr><td>Peer sensitivity beta over 39 peers</td><td class="n">0.51 (range 0.10 to 0.86)</td></tr>
           <tr><td>Theil-Sen cross-check</td><td class="n">0.31</td></tr>
-          <tr><td>Peers by tag; excluded with a reason</td><td class="n">32 + 3 + 4; 3</td></tr>
+          <tr><td>Peers by tag; excluded</td><td class="n">32 + 3 + 4; 3</td></tr>
           <tr><td>Station coverage; DQ gate</td><td class="n">1.00; pass</td></tr>
           <tr><td>Memo by the model, numbers string-matched</td><td class="n">184 words, 1 attempt, 0 unknown</td></tr>
           <tr><td>Not tested, listed on the card</td><td class="n">8 items</td></tr>
         </tbody>
       </table>
-      <p class="small"><b>Supported</b> because the central estimate is over half the change (ratio 0.56). <b>High</b> confidence says the weather effect is above zero; it does not say 8.2 is precise.</p>
-      <p class="small muted">The company's own MD&amp;A figure for heating degree days, 15% above the prior-year quarter, sits next to the station-based +16.2%. The wording is "consistent with": a statistical attribution over the peer set, not a causal proof.</p>
+      <p class="small"><b>Supported</b> because the central estimate is over half the change (ratio 0.56). <b>High</b>: the beta range excludes zero with 39 peers and coverage 1.00, so the weather effect is above zero; it does not say 8.2 is precise.</p>
+      <p class="small muted">The wording is "consistent with": a statistical attribution over the peer set, not a causal proof.</p>
     </div>
   </div>
-  <div class="foot"><span class="src">Every number from data/runs/r20261024T213805fb4e/run.json as rendered by the UI and tabulated in docs/eval-report.md section 4; identical across the five FirstEnergy runs. MD&amp;A figure: 10-Q accession 0001031296-25-000017.</span><span class="pg">4 / 12</span></div>
+  <div class="foot"><span class="src">Every number from data/runs/r20261024T213805fb4e/run.json as rendered by the UI and tabulated in docs/eval-report.md section 4; identical across the five FirstEnergy runs.</span><span class="pg">4 / 12</span></div>
 </section>
 
 <!-- 5. Agent workflow -->
@@ -318,7 +320,7 @@
         </div>
         <div class="panel" style="padding:14px 18px">
           <h4>The checklist</h4>
-          <p class="small">utility_resolved, tag_chosen, revenue_like_for_like, peers_loaded, weather_target, weather_peers, dq_checked, attribution_done, claim_tested, not_tested_listed, memo_written. A warm run skips <code>tag_chosen</code> from memory: 4 chunks instead of 5.</p>
+          <p class="small">utility_resolved, tag_chosen, revenue_like_for_like, peers_loaded, weather_target, weather_peers, dq_checked, attribution_done, claim_tested, not_tested_listed, memo_written. A warm run skips <code>tag_chosen</code> from memory: 4 chunks instead of 5. In the four clean runs the planner's pick was the checklist's next step every time (34 of 34).</p>
         </div>
         <div class="row" style="gap:14px">
           <div class="stat" style="flex:1"><div class="v">9 / 9</div><div class="k">planner replies valid first try, FirstEnergy cold run</div></div>
@@ -418,7 +420,7 @@
       <div class="card"><h4>Shared instance etiquette</h4><p>Only <code>WON_*</code> databases, the <code>won</code> container and the <code>weatherornot</code> namespace are touched; never DROP, GRANT or INVALIDATE CACHE from code; SEC calls at most 10 a second with a declared User-Agent.</p></div>
     </div>
   </div>
-  <div class="foot"><span class="src">Versions from agent/package.json, engines/UPSTREAM.md, docs/nemotron-bench.md and the fresh-clone check of 24 Oct 2026 (Node, npm, Python, test counts).</span><span class="pg">7 / 12</span></div>
+  <div class="foot"><span class="src">Versions from agent/package.json, engines/UPSTREAM.md, docs/nemotron-bench.md and the fresh-clone check of 24 Oct 2026 (Node, npm, Python, test counts; agent tests re-run 25 Oct 2026).</span><span class="pg">7 / 12</span></div>
 </section>
 
 <!-- 8. Zetaris -->
@@ -491,7 +493,7 @@
             <tr class="hi"><td style="white-space:nowrap">All nine saved runs</td><td class="n">40</td><td class="n">76</td><td class="n">64</td><td class="n">11 (4)</td><td class="n">1</td><td class="n">18.2 to 23.9 s each</td><td class="n">84.1 to 133.2 s</td></tr>
           </tbody>
         </table>
-        <p class="small muted" style="margin-top:8px">The nine include five earlier runs on a 2,048-token planner budget, where the one deterministic fallback occurred (finalize, after an empty repair reply).</p>
+        <p class="small muted" style="margin-top:8px">The nine include five earlier runs on a 2,048-token planner budget, where the one deterministic fallback occurred (finalize, after an empty repair reply). The video's live run shows 96 tok/s: it was recorded while a headless browser took screenshots of the page on the same machine; 139 to 140 tok/s is from runs without capture.</p>
       </div>
       <div class="col" style="flex:1; gap:14px">
         <div class="panel" style="padding:14px 18px">
@@ -521,7 +523,7 @@
       <div class="card"><h4>Like-for-like revenue</h4><p>The comparative column is recast between filings; rule R1 reads each quarter from its own filing and records a restatement as a conflict, never a silent overwrite.</p></div>
       <div class="card"><h4>Peers pooled across three XBRL tags</h4><p>Each filer under its first available revenue tag (32 + 3 + 4 peers); every exclusion named with its reason on the card.</p></div>
       <div class="card"><h4>Degree days in Lightning SQL, flagged days dropped</h4><p>Computed where the parquet is cached, over the whole station union in one statement per quarter; coverage reported per station.</p></div>
-      <div class="card"><h4>A DQ gate from the USL</h4><p>The <code>coverage_ok</code> result from onboarding and the question's own station coverage can withhold a verdict. The SIC key's one orphan, MGE Energy (SIC 4900), is a real data finding.</p></div>
+      <div class="card"><h4>A DQ gate from the USL</h4><p><code>coverage_ok</code> (onboarding) and the question's coverage can withhold a verdict; the SIC orphan, MGE, is a real finding.</p></div>
       <div class="card"><h4>Memory with a why trace, edges with dates, a flat carryover</h4><p>H-MEM provenance and conflicts, World Model validity dates, Markovian chunks; the model plans and writes but never computes a number.</p></div>
     </div>
     <div class="col" style="flex:1; gap:12px">
@@ -546,7 +548,7 @@
       </figure>
     </div>
   </div>
-  <div class="foot"><span class="src">docs/eval-report.md (sections 1 to 7, generated by agent/src/eval/run.ts from the run files, the DQ file and the join-map statements), zetaris/README.md (parity), the fresh-clone test run of 24 Oct 2026.</span><span class="pg">11 / 12</span></div>
+  <div class="foot"><span class="src">docs/eval-report.md (sections 1 to 7, generated by agent/src/eval/run.ts from the run files, the DQ file and the join-map statements), zetaris/README.md (parity), the fresh-clone test run of 24 Oct 2026 (agent tests re-run 25 Oct 2026).</span><span class="pg">11 / 12</span></div>
 </section>
 
 <!-- 12. Future enhancements, data and licences -->
@@ -557,7 +559,7 @@
     <div class="col" style="width:1000px; gap:14px">
       <h3>Limits, stated on every card</h3>
       <div class="finding"><div class="n" style="background:var(--mid-edge)">!</div><div><h4>Revenue is a proxy</h4><p>Fuel-cost pass-through, rate cases, data-centre load growth and mergers are not read from the filings; they stay in the "Not tested" list with the fourth quarter, weather normals and the simplified service territories.</p></div></div>
-      <div class="finding"><div class="n" style="background:var(--mid-edge)">!</div><div><h4>About two minutes a question, and a USL that reads slowly</h4><p>The two degree-day statements take 18 to 24 s each; the USL's governed copies answer in seconds (revenue) to minutes (weather), so the gate reads an onboarding DQ file and the card states its time.</p></div></div>
+      <div class="finding"><div class="n" style="background:var(--mid-edge)">!</div><div><h4>About two minutes a question, and a USL that reads slowly</h4><p>The two degree-day statements take 18 to 24 s each; the USL's governed copies answer in seconds (revenue) to minutes (weather), so the gate reads an onboarding DQ file and the card states its time. The verdict uses the central estimate; on the demo case the weather range runs from a small part of the change to nearly all of it.</p></div></div>
       <div class="finding"><div class="n" style="background:var(--mid-edge)">!</div><div><h4>Demo identity and admin reads</h4><p>The analyst is a local demo identity; Zetaris reads run on the admin login behind the read-only allowlist.</p></div></div>
       <h3 style="margin-top:6px">Future enhancements</h3>
       <div class="row" style="gap:14px">
