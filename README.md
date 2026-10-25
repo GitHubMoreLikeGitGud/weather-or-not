@@ -1,5 +1,7 @@
 # Weather-or-Not
 
+[![ci](https://github.com/GitHubMoreLikeGitGud/weather-or-not/actions/workflows/ci.yml/badge.svg)](https://github.com/GitHubMoreLikeGitGud/weather-or-not/actions/workflows/ci.yml)
+
 **The utility says it was the weather. Weather-or-Not checks.**
 
 Open Agent Hackathon 2026, Track 2: The Agent That Can Explain Why. Team: Umar Mohktar, Singapore - solo.
