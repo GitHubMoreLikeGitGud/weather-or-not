@@ -148,7 +148,7 @@ function attributionPanel(list) {
     esc(a.verdict ?? ""),
     `${yes(a.identical_across_runs)} <span class="small muted">(${esc(fmtNum((a.runs ?? []).length))} runs)</span>`,
   ]);
-  return panel("attribution", "Attribution per utility", "ranges are the 10th to 90th percentile of the peer bootstrap", table(cols, rows));
+  return panel("attribution", "Attribution per utility", "the beta, weather and industry ranges are the 10th to 90th percentile of the peer bootstrap; the remainder range combines the weather and industry bounds, so it is wider than a percentile", table(cols, rows));
 }
 
 function peersPanel(p) {

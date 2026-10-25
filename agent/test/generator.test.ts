@@ -8,7 +8,7 @@ import { EvidenceStore } from "../src/evidence/store.ts";
 import { OllamaClient } from "../src/llm/ollama.ts";
 import { CHECKLIST_ITEMS } from "../src/llm/schemas.ts";
 import { ADOPTED_JOB_SETTINGS } from "../src/llm/settings.ts";
-import { repairWithoutThinking } from "../src/loop/generator.ts";
+import { repairWithoutThinking, type LoopEvent } from "../src/loop/generator.ts";
 import { investigate } from "../src/loop/investigate.ts";
 import type { ToolDeps } from "../src/loop/tools.ts";
 import { HMEM } from "../src/memory/hmemFacade.ts";
@@ -138,5 +138,20 @@ describe("planner repair policy (D3)", () => {
     expect(r.summary.planner_repaired).toBe(0);
     expect(r.summary.planner_repairs_think_off).toBe(1);
     expect(r.checklist_complete).toBe(true);
+  });
+
+  it("labels a model that never replies as unreachable, not as an invalid reply", async () => {
+    const fetchImpl = (async () => {
+      throw new TypeError("fetch failed");
+    }) as typeof fetch;
+    const ollama = new OllamaClient({ baseUrl: "http://127.0.0.1:11434", model: "m", ramGuard: false, fetchImpl });
+    const events: LoopEvent[] = [];
+    const r = await investigate({ cik: TARGET, period: PERIOD, claim: "colder weather", historyDir: null, think: true, onEvent: (e) => events.push(e) }, deps(ollama));
+    expect(r.planner_calls[0]).toMatchObject({ attempts: 0, valid: false });
+    expect(r.timeline[0]).toMatchObject({ tool: "resolve_utility", source: "fallback" });
+    expect(r.timeline[0]!.fallback_reason).toMatch(/^model unreachable: no reply to either attempt/u);
+    const planner = events.filter((e) => e.type === "planner");
+    expect(planner.length).toBeGreaterThan(0);
+    expect(planner.every((e) => e.type === "planner" && e.unreachable === true)).toBe(true);
   });
 });
