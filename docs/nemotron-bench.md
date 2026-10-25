@@ -288,3 +288,48 @@ memos 25; every named label bound to its own value in 25
   "Absent" means the memo did not name that label with one of the listed words (three model memos say the weather "accounts for" the change instead); it is not a failure. The check runs on the saved run files, which stay local (`data/` is gitignored); on the committed sample run (`docs/sample-run/`, revenue levels masked) it is asserted in `agent/test/memo-binding.test.ts`, together with a memo whose industry and remainder figures are swapped, which it rejects.
 
 **Which setting the evidence favours.** Think off: 72.5 s against 103.2 s per question, 27 of 34 JSON-valid first replies either way, 0 fallbacks against 1, the same cards and 4 of 4 model memos kept. The shipped planner setting stays think on only because the code and the saved runs were frozen for judging; `--think off` on the command line, or `WON_THINK=off` for every job, selects it.
+
+## A second local model on the same questions (26 Oct 2026)
+
+Is Nemotron 3 Nano 4B the right model for this job, or would any local model do as well? The four clean questions (FirstEnergy and AEP, CY2025Q1 against CY2024Q1, claim "colder weather", each cold and then warm) ran once with `qwen2.5:7b` and, back to back on the same machine, once with `nemotron-3-nano:4b`, with identical prompts, schemas, settings (temperature 0, seed 7, `num_ctx` 8192) and code (`d2f207d`). Only the model changes, through the existing `WON_MODEL` setting; no code or prompt was changed:
+
+```bash
+cd agent
+WON_MODEL=qwen2.5:7b npm run ask -- --cik 0001031296 --period CY2025Q1 --claim "colder weather" --think off
+npm run ask -- --cik 0001031296 --period CY2025Q1 --claim "colder weather" --think off      # nemotron-3-nano:4b, the default
+```
+
+(and the same for AEP, `--cik 0000004904`), each model on a fresh data directory holding only the DQ onboarding file (`npm run warmup` first), in the order FirstEnergy cold, AEP cold, FirstEnergy warm, AEP warm.
+
+**Read this first: the comparison is not like for like in size.** `qwen2.5:7b` is a bigger model: 7.6B parameters against Nemotron 3 Nano's 4.0B, both Q4_K_M in Ollama. It also has no thinking mode (Ollama lists no thinking capability for it), so both models ran the planner with think off, the setting the ablation above favours; Nemotron with think on is the ablation's first row (25 Oct). GPU memory was sampled with `nvidia-smi` about every 0.5 s and is the whole card, desktop included: 4,391 MiB with no model loaded, measured between the two sets. No video encode ran during these eight runs; CPU load was 22 to 57% at the run boundaries. The per-run summary is in [`eval/second-model-cy2025q1.json`](eval/second-model-cy2025q1.json).
+
+Per model (four questions each, measured):
+
+| Model, planner think | Wall, mean (min to max) | Planner calls | JSON valid on the first reply | Repaired | Fallbacks | Pick = checklist's next | Median planner tok/s (per run) | Planner tokens out | Memos kept from the model / verdict check pass | Memo drafts with a number not in the tool outputs | Peak GPU memory (above 4,391 MiB with no model) | Cards equal to the published ones |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `nemotron-3-nano:4b` (4.0B), think off | 76.3 s (72.1 to 82.0) | 34 | 28 of 34 | 6 | 0 | 29 of 34 | 128.0 to 140.8 | 14,226 | 4 of 4 / 4 of 4 | 0 of 4 | 8,035 MiB (+3,381 to +3,644) | 4 of 4 |
+| `qwen2.5:7b` (7.6B), think off | 87.2 s (77.0 to 95.8) | 34 | 28 of 34 | 6 | 0 | 34 of 34 | 89.7 to 91.0 | 15,399 | 4 of 4 / 4 of 4 | 0 of 4 | 10,336 MiB (+5,480 to +5,945) | 4 of 4 |
+
+Per run:
+
+| Model | Question | Run | Wall | Chunks | Planner calls | Valid first try | Repaired | Fallbacks | Pick = checklist's next | Median planner tok/s | Planner tokens out | Memo (verdict check) | Card | Peak GPU memory |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| nemotron-3-nano:4b | FirstEnergy, cold | r20261026T002557735c | 72.1 s | 5 | 9 | 9 | 0 | 0 | 7 of 9 | 128.0 | 2,715 | model, 184 words, 1 draft (pass) | supported, high; weather +8.2% | 7,772 MiB |
+| nemotron-3-nano:4b | AEP, cold | r20261026T002715240e | 82.0 s | 5 | 9 | 8 | 1 | 0 | 8 of 9 | 129.9 | 4,209 | model, 176 words, 1 draft (pass) | supported, high; weather +8.9% | 7,854 MiB |
+| nemotron-3-nano:4b | FirstEnergy, warm | r20261026T0028424271 | 73.0 s | 4 | 8 | 6 | 2 | 0 | 7 of 8 | 133.5 | 3,196 | model, 184 words, 1 draft (pass) | supported, high; weather +8.2% | 8,020 MiB |
+| nemotron-3-nano:4b | AEP, warm | r20261026T0030011b2e | 78.3 s | 4 | 8 | 5 | 3 | 0 | 7 of 8 | 140.8 | 4,106 | model, 176 words, 1 draft (pass) | supported, high; weather +8.9% | 8,035 MiB |
+| qwen2.5:7b | FirstEnergy, cold | r20261026T003145a2cd | 91.3 s | 5 | 9 | 7 | 2 | 0 | 9 of 9 | 90.2 | 4,170 | model, 122 words, 1 draft (pass) | supported, high; weather +8.2% | 9,871 MiB |
+| qwen2.5:7b | AEP, cold | r20261026T003322075b | 84.6 s | 5 | 9 | 8 | 1 | 0 | 9 of 9 | 90.0 | 3,575 | model, 159 words, 1 draft (pass) | supported, high; weather +8.9% | 9,901 MiB |
+| qwen2.5:7b | FirstEnergy, warm | r20261026T003452ea4a | 77.0 s | 4 | 8 | 7 | 1 | 0 | 8 of 8 | 89.7 | 3,007 | model, 159 words, 1 draft (pass) | supported, high; weather +8.2% | 10,187 MiB |
+| qwen2.5:7b | AEP, warm | r20261026T003615dd1a | 95.8 s | 4 | 8 | 6 | 2 | 0 | 8 of 8 | 91.0 | 4,647 | model, 148 words, 1 draft (pass) | supported, high; weather +8.9% | 10,336 MiB |
+
+What it shows, stated plainly:
+
+- **The bigger model is not more reliable at the JSON.** Both models gave valid JSON on the first reply in 28 of 34 planner calls, needed 6 repairs and no deterministic fallback; every one of the 12 invalid first replies (6 each) named another utility's revenue tag, and the host's tag check sent each one back.
+- **It is slower and heavier.** `qwen2.5:7b` took 87.2 s per question against 76.3 s (14% longer), generated at 89.7 to 91.0 tokens/s against 128.0 to 140.8, and held about 2.0 to 2.3 GB more of the card at its peak.
+- **It follows the checklist's order more closely:** 34 of 34 picks against 29 of 34 (Nemotron put the peers before the revenue four times and the split before the DQ gate once, orders the host allows). The order does not change the card.
+- **The cards are identical,** 8 of 8 equal to the published ones, as they must be: every number is a tool output.
+- **Memos.** Both kept their first draft 4 of 4 times with 0 numbers outside the tool outputs and the card's verdict stated; `qwen2.5:7b`'s memos are shorter (122 to 159 words against 176 to 184). The offline label check (`agent/src/eval/memoBinding.ts`) binds every label in 4 of 4 Nemotron memos; on the `qwen2.5:7b` memos it flags 2 of 4, and on reading both are the checker's own strictness, not wrong figures (a positive degree-day change written without its "+", and a "the weather part, industry-wide part and remainder contributed +8.9%, +3.5% and -3.7% respectively" sentence).
+- **One difference not explained.** In each Nemotron run the card's memory fell to near the no-model level once (minimum 4,305 to 4,669 MiB) and came back: the model was unloaded and reloaded mid-run, as in the 25 Oct ablation; in no `qwen2.5:7b` run did that happen (minimum 9,316 to 9,457 MiB). The reload is inside Nemotron's wall times above. Free host RAM was 3,203 to 4,322 MiB at the start of the Nemotron runs, above the RAM guard's 2,048 MiB, so the guard is not a confirmed cause.
+- **Speed against 25 Oct.** Nemotron with think off generated 128.0 to 140.8 tokens/s here against 147.2 to 152.3 in the ablation of 25 Oct (same settings, older code `0a7ea45`); the machine was not idle (the desktop held 4,391 MiB of the card against 3,745 MiB on 25 Oct). The ablation's figures stay as measured.
+- **Decision.** Nemotron 3 Nano 4B stays the model: the same JSON reliability, a faster question and a smaller footprint on a 16 GB card shared with the desktop. The larger model's one gain, the step order, does not reach the answer.
