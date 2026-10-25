@@ -60,7 +60,8 @@
       "memo_drafts": "12 drafts, 0 with a number that is not a tool output; the four clean runs kept their first draft (184, 176, 184, 176 words)",
       "question_wall_seconds": "97.5 to 128.1 on the four clean runs (84.1 to 133.2 over all nine); the two degree-day statements take 18.2 to 23.9 s each",
       "carryover_tokens_max_estimated": "284 to 387 against the 800 budget",
-      "model_vram_mib": "not measured in this repository"
+      "model_vram_mib": "peak whole-GPU memory during a question 7,111 to 7,145 MiB with think on and 6,918 to 6,981 MiB with think off, against 3,745 MiB with no model loaded (nvidia-smi, desktop included; Ollama lists the model at 3.0 GB, 100% GPU, context 8192); docs/nemotron-bench.md, 25 Oct 2026",
+      "planner_ablation_25_oct": "four clean questions per mode: think on mean wall 103.2 s, 27/34 valid first try, 1 fallback; think off 72.5 s, 27/34, 0 fallbacks; no model 38.5 s (template memo); the same 12 cards"
     },
     "cloud_model_calls": 0,
     "cloud_model_calls_basis": "by construction: the model client accepts loopback URLs only and counts refused hosts (0 in every run)"
