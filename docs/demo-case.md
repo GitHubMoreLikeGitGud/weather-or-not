@@ -56,7 +56,7 @@ FirstEnergy and AEP both came out "supported". To see whether the method ever sa
 | Xcel Energy | `r20261025T11542503bf` | +7.0% | +13.1% | +6.8% (+0.9% to +11.4%) | +3.6% | -3.4% | supported (0.97), high |
 | Entergy | `r20261025T1155534448` | +1.9% | +18.0% | +10.2% (+2.1% to +16.7%) | +2.9% | -11.3% | supported (5.46), high |
 
-On Southern Co the agent's answer to "was it the weather?" is "partly": weather accounts for roughly 6.6 of the 17.0 points, and the company-specific remainder is larger than the weather part. Entergy is the opposite problem: the weather part is 5.5 times the whole change, so the card's "supported" means weather alone would have lifted revenue far more than it rose and something else pulled it down by about as much; the rule has no upper bound (README, Limitations). The confidence label is high on all four for the reason it is high on FirstEnergy (the peer slope's range stays above zero), and every weather range is about as wide: 1 to 2 points at its low end, 11 to 17 points at its high end.
+On Southern Co the agent's answer to "was it the weather?" is "partly": weather accounts for roughly 6.6 of the 17.0 points, and the company-specific remainder is larger than the weather part. Entergy is the opposite problem: the weather part is 5.5 times the whole change, so the card's "supported" means weather alone would have lifted revenue far more than it rose and something else pulled it down by about as much; the rule has no upper bound (README, Limitations). The confidence label is high on all four for the reason it is high on FirstEnergy (the peer slope's range stays above zero), and every weather range is about as wide: 0.9 to 2.1 points at its low end, 11.3 to 16.7 at its high end.
 
 ## Not tested
 
