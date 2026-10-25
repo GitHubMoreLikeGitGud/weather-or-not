@@ -49,6 +49,7 @@
   .body { position: absolute; left: 96px; right: 96px; top: 196px; bottom: 82px; }
   .foot { position: absolute; left: 96px; right: 96px; bottom: 30px; padding-top: 12px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; gap: 24px; font-size: 15.5px; color: var(--ink-3); }
   .foot .src { flex: 1; }
+.foot a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 2px; }
   .foot .pg { font-family: var(--font-fig); font-weight: 600; color: var(--ink-2); white-space: nowrap; }
 
   .row { display: flex; gap: 40px; }
@@ -172,7 +173,7 @@
   <div class="eyebrow">Open Agent Hackathon 2026 &middot; Track 2: The Agent That Can Explain Why</div>
   <div class="brand">Weather<span>-or-</span>Not</div>
   <p class="tagline"><b>The utility says it was the weather. Weather-or-Not checks.</b> It splits a US electric utility's year-on-year revenue change into weather, industry-wide and company-specific parts, each a range, with the Lightning SQL behind every number.</p>
-  <p style="position:absolute; left:920px; top:902px; width:904px; margin:0; font: 600 23px/1.35 var(--font-display); color: var(--ink)">FirstEnergy, Q1 2025: the company says heating degree days +15%; the agent's 9 stations say +16.2%; weather is consistent with 8.2 of the 14.5 points of revenue growth.</p>
+  <p style="position:absolute; left:920px; top:902px; width:904px; margin:0; font: 600 23px/1.35 var(--font-display); color: var(--ink)">FirstEnergy, Q1 2025: the company says heating degree days +15%; at the agent's 9 stations they rose +15.9% (+16.2% with cooling); weather is consistent with 8.2 of the 14.5 points of revenue growth.</p>
   <div class="meta">
     <div><b>Zetaris</b><span>The only data path: SEC EDGAR, NOAA GHCN-Daily parquet and company_dns read through Lightning SQL; degree days computed in SQL; a USL with keys and a data-quality gate; the SQL text is the citation.</span></div>
     <div><b>Meterless</b><span>H-MEM facts with Zetaris provenance and recast conflicts, a Markovian question chain with a flat carryover, World Model edges with validity dates, Scout-style signed contracts.</span></div>
@@ -183,7 +184,7 @@
     <img class="shot" src="../img/card-fe.png" style="width:904px" alt="Weather-or-Not answer card for FirstEnergy, CY2025Q1: revenue up 14.5%, weather consistent with 8.2% (range 1.6% to 14.0%), claim supported with high confidence">
     <figcaption>The answer card for FirstEnergy, CY2025Q1 against CY2024Q1: saved run of 24 Oct 2026, rendered by the Weather-or-Not UI's card view. Every figure is a button that opens the evidence behind it.</figcaption>
   </figure>
-  <div class="foot"><span class="src">Data: SEC EDGAR (US government work, public domain; queried live, never redistributed), NOAA GHCN-Daily (CC0-1.0), company_dns SIC list (Apache-2.0 service).</span><span class="pg">1 / 12</span></div>
+  <div class="foot"><span class="src">Data: SEC EDGAR (public domain; queried live, never redistributed), NOAA GHCN-Daily (CC0-1.0), company_dns SIC list (Apache-2.0). Code: <a href="https://github.com/GitHubMoreLikeGitGud/weather-or-not">github.com/GitHubMoreLikeGitGud/weather-or-not</a> · Video: <a href="https://youtu.be/5WSQS_0pVJA">youtu.be/5WSQS_0pVJA</a></span><span class="pg">1 / 12</span></div>
 </section>
 
 <!-- 2. Problem and users -->
@@ -203,7 +204,7 @@
       <div class="row" style="gap:20px">
         <div class="stat" style="flex:1"><div class="v">43</div><div class="k">seed utilities whose states and airport stations are curated from public filings</div><div class="m">56 GHCN stations in 43 states</div></div>
         <div class="stat" style="flex:1"><div class="v">1,937</div><div class="k">filers in one SEC frames period (Revenues, CY2025Q1); the peer set is cut from three such tags</div><div class="m">count equal to the source response</div></div>
-        <div class="stat" style="flex:1"><div class="v">+15% / +16.2%</div><div class="k">heating degree days in FirstEnergy's own 10-Q against total degree days at the agent's 9 stations: the one outside check</div><div class="m">10-Q accession 0001031296-25-000017</div></div>
+        <div class="stat" style="flex:1"><div class="v">+15% / +15.9%</div><div class="k">heating degree days: FirstEnergy's 10-Q against the agent's 9 stations (+16.2% with cooling)</div><div class="m">10-Q accession 0001031296-25-000017</div></div>
       </div>
       <p class="lead" style="margin-top:6px">Weather-or-Not answers in about two minutes with ranges, a claim verdict, a "Not tested" list, and the SQL behind every number.</p>
     </div>
@@ -212,7 +213,7 @@
       <figcaption>What the analyst sees instead of a sentence: both accession numbers, the like-for-like rule, degree days over the utility's nine stations, and the 39-peer table, each number cited.</figcaption>
     </figure>
   </div>
-  <div class="foot"><span class="src">Quote from the FirstEnergy Q1 2025 10-Q, accession 0001031296-25-000017 (SEC EDGAR). Counts from seeds/utilities.json, seeds/stations.json and zetaris/README.md; the agent's +16.2% from the saved runs (docs/eval-report.md section 4).</span><span class="pg">2 / 12</span></div>
+  <div class="foot"><span class="src">Quote from the FirstEnergy Q1 2025 10-Q, accession 0001031296-25-000017 (SEC EDGAR). Counts from seeds/*.json and zetaris/README.md; the agent's +15.9% and +16.2% from the saved run (docs/eval/robustness-sample-run.json).</span><span class="pg">2 / 12</span></div>
 </section>
 
 <!-- 3. The recast trap -->
@@ -404,8 +405,8 @@
         <thead><tr><th style="width:230px">Layer</th><th>What</th></tr></thead>
         <tbody>
           <tr><td>Data platform</td><td><b>Zetaris Lightning 2.4.3.1</b>, local Docker, JDBC <code>localhost:10000</code>; REST tables, Parquet filestore tables, SchemaStore views with CACHE, a USL with PK, FK and a custom DQ rule, LIST / RUN / SHOW DQ</td></tr>
-          <tr><td>Gateway</td><td><b>Python 3.12.0</b>, FastAPI, JayDeBeApi over the Zetaris JDBC driver; 28 named templates, allowlist, registrar plans, execution-contract check; pytest 236 passed, 2 skipped</td></tr>
-          <tr><td>Agent</td><td><b>Node 22.13.1 + TypeScript 7.0.2</b> run with tsx 4.23.15, no runtime dependencies; vitest 5.0.3, 16 files, 203 tests; <code>tsc --noEmit</code> 0 errors</td></tr>
+          <tr><td>Gateway</td><td><b>Python 3.12.0</b>, FastAPI, JayDeBeApi over the Zetaris JDBC driver; 28 named templates, allowlist, registrar plans, execution-contract check; pytest 237 passed, 2 skipped</td></tr>
+          <tr><td>Agent</td><td><b>Node 22.13.1 + TypeScript 7.0.2</b> run with tsx 4.23.15, no runtime dependencies; vitest 5.0.3, 21 files, 222 tests; <code>tsc --noEmit</code> 0 errors</td></tr>
           <tr><td>Reasoning engines</td><td><b>Meterless</b> H-MEM, Markovian and World Model reference engines, vendored unchanged at upstream commit <code>1742dec5</code> (Apache-2.0); Scout Intent subset reimplemented in <code>agent/src/contract</code> and labelled partial</td></tr>
           <tr><td>Model</td><td><b>NVIDIA Nemotron 3 Nano 4B</b> (<code>nemotron-3-nano:4b</code>) through Ollama on 127.0.0.1:11434; temperature 0, seed 7, num_ctx 8192, JSON schema output; think on for the planner (output budget 3,072), off for the memo (1,024)</td></tr>
           <tr><td>UI</td><td>Plain HTML, CSS and ES modules, no build step, served by the agent server; server-sent events for the live timeline; light and dark; keyboard-reachable evidence drawer</td></tr>
@@ -420,7 +421,7 @@
       <div class="card"><h4>Shared instance etiquette</h4><p>Only <code>WON_*</code> databases, the <code>won</code> container and the <code>weatherornot</code> namespace are touched; never DROP, GRANT or INVALIDATE CACHE from code; SEC calls at most 10 a second with a declared User-Agent.</p></div>
     </div>
   </div>
-  <div class="foot"><span class="src">Versions from agent/package.json, engines/UPSTREAM.md, docs/nemotron-bench.md and the fresh-clone check of 24 Oct 2026 (Node, npm, Python, test counts; agent tests re-run 25 Oct 2026).</span><span class="pg">7 / 12</span></div>
+  <div class="foot"><span class="src">Versions from agent/package.json, engines/UPSTREAM.md, docs/nemotron-bench.md and the fresh-clone check of 24 Oct 2026 (Node, npm, Python, test counts; tests re-run 26 Oct 2026).</span><span class="pg">7 / 12</span></div>
 </section>
 
 <!-- 8. Zetaris -->
@@ -450,7 +451,7 @@
   <div class="body row" style="gap:36px">
     <div class="col" style="width:940px; gap:12px">
       <div class="card"><h4>H-MEM: provenance, conflicts and the why trace</h4><p>Vendored reference, subclassed. Every fact carries Zetaris provenance (object, SQL sha256, endpoint, accession, filing date, licence, retrieval time, latency, cache state, evidence id); a reconfirmed fact refreshes it and keeps the history: 70 facts after two questions, 16 provenance entries, 0 placeholders. The AEP restatement is conflict <code>rc-4cd5f8bdf0bd</code> (mem-62 against mem-65, rule R1); <code>why mem-62</code> prints the fact, provenance, evidence, conflict and ledger (create, conflict_detected, update).</p></div>
-      <div class="card"><h4>Markovian: a flat carryover instead of a growing history</h4><p>Vendored reference generator. The carried state stayed at or below 284 tokens (estimated) against the 800 budget; measured first-call prompts stayed between 1,421 and 1,644 tokens per chunk while a full-history prompt (estimated, chars/4) would have grown to 3,742: 6,615 against 12,956 over the run, 48.9% less.</p></div>
+      <div class="card"><h4>Markovian: a flat carryover instead of a growing history</h4><p>Vendored reference generator. The carried state stayed at or below 284 tokens (estimated) against the 800 budget; measured first-call prompts stayed between 1,421 and 1,644 tokens per chunk while a full-history prompt (estimated, chars/4) would have grown to 3,742. Over the run: 7,770 measured against 12,956 estimated, 40% less (48.9% estimate against estimate).</p></div>
       <div class="card"><h4>World Model: what we knew, and since when</h4><p>Vendored reference. 239 nodes (91 filings, 56 stations, 43 states, 43 utilities, 4 SIC codes, 2 quarters), 526 edges: <code>serves</code> valid from 2024-01-01 on the FY2024 10-K text, <code>reported_in</code> from the filing date, <code>peer_of</code> per period with g and dw, <code>observed_in</code> with HDD, CDD and coverage, one <code>recasts</code> edge. 769 events before and after the warm run: re-ingesting appends nothing.</p></div>
       <div class="card"><h4>Scout subset: signed, single-use contracts (partial)</h4><p>Reimplemented from the spec. Registrar actions are medium risk; the analyst's <code>override_recast</code> is high risk. Contracts are HMAC-signed, expire after 15 minutes, and a replayed one is refused; the applied override recomputed growth with 5,463.0 M and the ledger records who, when and why.</p></div>
     </div>
@@ -505,8 +506,8 @@
       </div>
     </div>
     <figure style="margin-top:16px">
-      <img class="shot" src="../img/telemetry-footer.png" style="width:1728px" alt="The telemetry footer: nemotron-3-nano:4b with think on, 9 planner calls, 0 fallback steps, prompt per chunk 49% below the naive estimate, 140 tokens per second, 0 cloud model calls, 0 refused hosts">
-      <figcaption>The UI's telemetry footer for the FirstEnergy run: model, planner validity, fallback steps, measured against naive prompt tokens per chunk, tokens per second, cloud model calls and refused hosts.</figcaption>
+      <img class="shot" src="../img/telemetry-footer.png" style="width:1728px" alt="The telemetry footer as captured on 24 Oct: nemotron-3-nano:4b with think on, 9 planner calls, 0 fallback steps, prompt per chunk 49% below the naive estimate (estimate against estimate), 140 tokens per second, 0 cloud model calls, 0 refused hosts">
+      <figcaption>The UI's telemetry footer for the FirstEnergy run, captured 24 Oct. Its "49% less" compared two chars/4 estimates; measured against the estimate it is 40%, which the footer prints since 26 Oct.</figcaption>
     </figure>
   </div>
   <div class="foot"><span class="src">All figures from docs/nemotron-bench.md (settings, clean re-runs, the 25 Oct ablation) and docs/eval-report.md sections 6 and 7; the verifier's runs from the Day-2 verification record. Token counts are Ollama's; the full-history baseline is estimated at chars/4 and labelled so.</span><span class="pg">10 / 12</span></div>
@@ -536,7 +537,7 @@
           <tr><td>DQ coverage_ok (total / valid / invalid); utility SIC foreign key</td><td class="n">342 / 342 / 0; 43 / 42 / 1</td></tr>
           <tr><td>Join map: LPAD join counts equal the integer IN counts; the no-LPAD control</td><td class="n">6 of 6; 0</td></tr>
           <tr class="hi"><td>Cloud model calls and refused hosts across every run</td><td class="n"><b>0; 0</b></td></tr>
-          <tr><td>Agent tests (16 files); gateway tests</td><td class="n">203 / 203; 236 passed, 2 skipped</td></tr>
+          <tr><td>Agent tests (21 files); gateway tests</td><td class="n">222 / 222; 237 passed, 2 skipped</td></tr>
         </tbody>
       </table>
       <p class="small muted">E-complete's 22 misses: placeholder object names in the two earliest runs, fixed since; reported, not hidden.</p>
@@ -550,10 +551,10 @@
           <tr><td>Entergy</td><td class="n">+1.9%</td><td class="n">+10.2% (+2.1 to +16.7)</td><td class="n">-11.3%</td><td>supported (5.46)</td></tr>
         </tbody>
       </table>
-      <p class="small muted">Four of the 41; claim "the weather" (filings not read by hand). Hawaiian Electric's 2025 10-Q restates Q1 2024 11.7% lower: naive -17.1%, rule R1 -6.1%. Entergy: overshoot note. Confidence high on 40 of 41.</p>
+      <p class="small muted">Four of the 41, claim "the weather". Hawaiian Electric's 2025 10-Q restates Q1 2024 11.7% lower: naive -17.1%, rule R1 -6.1%. Entergy: overshoot note. Confidence high on 40 of 41. Demo card: supported in 35 of 39 leave-one-out runs.</p>
     </div>
   </div>
-  <div class="foot"><span class="src">docs/eval-report.md (sections 1 to 7 generated by agent/src/eval/run.ts from the run, DQ and join-map files; section 8: four other utilities; section 9: every eligible seed), zetaris/README.md (parity), the fresh-clone tests (re-run 25 Oct 2026).</span><span class="pg">11 / 12</span></div>
+  <div class="foot"><span class="src">docs/eval-report.md (sections 1 to 7 generated by agent/src/eval/run.ts from the run, DQ and join-map files; section 8: four other utilities; section 9: every eligible seed), zetaris/README.md (parity), the fresh-clone tests (re-run 26 Oct 2026).</span><span class="pg">11 / 12</span></div>
 </section>
 
 <!-- 12. Future enhancements, data and licences -->
@@ -585,7 +586,7 @@
       <div style="margin-top:12px; font: 600 24px/1.3 var(--font-fig); color: var(--ink)">Umar Mohktar, Singapore - solo</div>
     </div>
   </div>
-  <div class="foot"><span class="src">Open Agent Hackathon 2026, Track 2: The Agent That Can Explain Why. Decision support, not investment advice: the split is a statistical attribution over the peer set.</span><span class="pg">12 / 12</span></div>
+  <div class="foot"><span class="src">Open Agent Hackathon 2026, Track 2. Decision support, not investment advice: the split is a statistical attribution over the peer set. Code: <a href="https://github.com/GitHubMoreLikeGitGud/weather-or-not">github.com/GitHubMoreLikeGitGud/weather-or-not</a> · Video: <a href="https://youtu.be/5WSQS_0pVJA">youtu.be/5WSQS_0pVJA</a></span><span class="pg">12 / 12</span></div>
 </section>
 
 <script>
