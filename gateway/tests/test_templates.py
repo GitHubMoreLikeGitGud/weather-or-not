@@ -110,6 +110,15 @@ def test_param_patterns(kind, value, ok):
             templates.validate_param(kind, value)
 
 
+def test_trailing_newline_is_refused_for_every_kind():
+    # "$" also matches before a final "\n"; the whole value must match.
+    for kind, value in SAMPLES.items():
+        assert templates.validate_param(kind, value) == value
+        for bad in (value + "\n", value + "\r\n", "\n" + value):
+            with pytest.raises(BadParams):
+                templates.validate_param(kind, bad)
+
+
 def test_non_string_and_unknown_kind_are_refused():
     with pytest.raises(BadParams):
         templates.validate_param("year", 2025)

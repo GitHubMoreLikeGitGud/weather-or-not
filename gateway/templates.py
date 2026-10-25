@@ -300,7 +300,7 @@ def validate_param(kind: str, value: object) -> str:
         raise BadParams(f"unknown parameter kind: {kind}")
     if not isinstance(value, str):
         raise BadParams(f"{kind} must be a string")
-    if not PARAM_PATTERNS[kind].match(value):
+    if not PARAM_PATTERNS[kind].fullmatch(value):
         raise BadParams(f"invalid {kind}: {value[:40]!r}")
     return value
 
