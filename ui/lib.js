@@ -169,7 +169,7 @@ export function confidenceChip(level, opts = {}) {
 
 export function dqChip(label) {
   const l = String(label ?? "").toLowerCase();
-  const cls = l === "pass" ? "good" : l === "withheld" || l === "fail" ? "bad" : "neutral";
+  const cls = l === "pass" ? "good" : l === "withheld" || l === "fail" ? "bad" : l === "unknown" ? "mid" : "neutral";
   return `<span class="chip chip--${cls}" data-dq="${esc(l)}">DQ ${esc(l || "not run")}</span>`;
 }
 

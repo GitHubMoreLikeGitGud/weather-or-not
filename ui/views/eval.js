@@ -259,7 +259,11 @@ export function mount(el, ctx) {
     } else {
       const d = r.data ?? {};
       const rep = d.report && typeof d.report === "object" ? d.report : d;
-      const head = d.report ? `<p class="small muted">From <code>${esc(d.file ?? "eval/report.json")}</code>${d.updated_at ? `, updated ${esc(fmtTime(d.updated_at, true))}` : ""}.</p>` : "";
+      const head = d.report
+        ? d.committed
+          ? `<p class="msg msg--ok" data-committed="yes">Showing the <strong>${esc(d.label ?? "committed report")}</strong>, from <code>${esc(d.file ?? "docs/eval-report.json")}</code>. Running <code>npx tsx src/eval/run.ts</code> over your own saved runs writes <code>eval/report.json</code> under the data directory, which then takes its place.</p>`
+          : `<p class="small muted">From <code>${esc(d.file ?? "eval/report.json")}</code>${d.updated_at ? `, updated ${esc(fmtTime(d.updated_at, true))}` : ""}.</p>`
+        : "";
       box.innerHTML = `${head}${renderReport(rep)}`;
     }
     ctx.setTitle("Evaluation");

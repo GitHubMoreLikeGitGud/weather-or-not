@@ -33,7 +33,7 @@ export function renderStreamEvent(type, d = {}, at = d.at) {
     case "planner":
       return line(
         d.valid === false ? "fail" : "plan",
-        `<span class="s__b"><span class="s__k">Planner</span> ${d.valid === false ? `<span class="cross">reply invalid</span>` : `chose <code>${esc(d.tool ?? "no tool")}</code>`}${d.thought ? `<span class="s__plan"><span class="s__plank">Plan:</span> <q>${esc(d.thought)}</q> <span class="s__m">(the model's plan, not a fact)</span></span>` : ""} <span class="s__m">${esc(fmtNum(d.prompt_tokens))} prompt / ${esc(fmtNum(d.eval_tokens))} out tokens <span class="label">measured</span>${Number(d.attempts) > 1 ? `, ${esc(d.attempts)} attempts` : ""}${d.tokens_per_s ? `, ${esc(fmtNum(d.tokens_per_s))} tok/s` : ""}</span></span>`,
+        `<span class="s__b"><span class="s__k">Planner</span> ${d.valid === false ? (d.unreachable ? `<span class="cross">model unreachable</span> <span class="s__m">(no reply from the local model server)</span>` : `<span class="cross">reply invalid</span>`) : `chose <code>${esc(d.tool ?? "no tool")}</code>`}${d.thought ? `<span class="s__plan"><span class="s__plank">Plan:</span> <q>${esc(d.thought)}</q> <span class="s__m">(the model's plan, not a fact)</span></span>` : ""} <span class="s__m">${esc(fmtNum(d.prompt_tokens))} prompt / ${esc(fmtNum(d.eval_tokens))} out tokens <span class="label">measured</span>${Number(d.attempts) > 1 ? `, ${esc(d.attempts)} attempts` : ""}${d.tokens_per_s ? `, ${esc(fmtNum(d.tokens_per_s))} tok/s` : ""}</span></span>`,
       );
     case "tool":
       return line(
@@ -73,7 +73,7 @@ export function replayRows(run) {
     const max = Math.max(ps.length, ts.length);
     for (let i = 0; i < max; i++) {
       const p = ps[i];
-      if (p) out.push(renderStreamEvent("planner", { chunk: n, call: p.call, valid: p.valid, attempts: p.attempts, tool: p.chosen?.tool ?? null, thought: p.thought, prompt_tokens: p.prompt_tokens, eval_tokens: p.eval_tokens, tokens_per_s: p.tokens_per_s }));
+      if (p) out.push(renderStreamEvent("planner", { chunk: n, call: p.call, valid: p.valid, attempts: p.attempts, tool: p.chosen?.tool ?? null, thought: p.thought, prompt_tokens: p.prompt_tokens, eval_tokens: p.eval_tokens, tokens_per_s: p.tokens_per_s, unreachable: p.valid === false && p.attempts === 0 && String(p.errors?.[0] ?? "").startsWith("planner call failed") }));
       const s = ts[i];
       if (s) out.push(renderStreamEvent("tool", { run_id: run.run_id, chunk: n, seq: s.seq, tool: s.tool, source: s.source, fallback_reason: s.fallback_reason, ok: s.ok, fact: s.fact, evidence_ids: s.evidence_ids, latency_ms: s.latency_ms }));
     }

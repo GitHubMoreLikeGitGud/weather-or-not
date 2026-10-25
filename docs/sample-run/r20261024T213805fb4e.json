@@ -1,0 +1,6479 @@
+{
+ "run_id": "r20261024T213805fb4e",
+ "cik": "0001031296",
+ "period": "CY2025Q1",
+ "previous_period": "CY2024Q1",
+ "claim": "colder weather",
+ "started_at": "2026-10-24T13:38:05.321Z",
+ "finished_at": "2026-10-24T13:39:42.778Z",
+ "wall_ms": 97457,
+ "card": {
+  "question": "FIRSTENERGY CORP's CY2025Q1 revenue changed year on year (CY2024Q1 to CY2025Q1) and management credits \"colder weather\". How much of the change is weather?",
+  "utility": {
+   "cik": "0001031296",
+   "name": "FIRSTENERGY CORP",
+   "ticker": "FE",
+   "sic": "4911",
+   "hq_state": "OH",
+   "states_served": [
+    "OH",
+    "PA",
+    "NJ",
+    "WV",
+    "MD"
+   ],
+   "stations": [
+    "USW00014821",
+    "USW00014820",
+    "USW00013739",
+    "USW00094823",
+    "USW00014734",
+    "USW00093730",
+    "USW00013866",
+    "USW00093721",
+    "USW00093720"
+   ],
+   "flags": []
+  },
+  "verdict": {
+   "claim": "colder weather",
+   "verdict": "supported",
+   "ratio": 0.5639124534641556,
+   "confidence": "high",
+   "withheld_reason": null
+  },
+  "growth": {
+   "tag": "Revenues",
+   "g": 0.14542135686035898,
+   "rev_current": null,
+   "rev_previous": null,
+   "current_accn": "0001031296-25-000017",
+   "current_filed": "2025-04-30",
+   "previous_original_accn": "0001031296-24-000026",
+   "previous_comparative_accn": "0001031296-25-000017",
+   "recast": false,
+   "tag_switch_note": null,
+   "levels_masked": true
+  },
+  "weather": {
+   "delta_w": 0.1618968398838543,
+   "tdd_current": 2514.286666666667,
+   "tdd_previous": 2163.9500000000003,
+   "coverage": 1,
+   "stations_used": [
+    "USW00014821",
+    "USW00014820",
+    "USW00013739",
+    "USW00094823",
+    "USW00014734",
+    "USW00093730",
+    "USW00013866",
+    "USW00093721",
+    "USW00093720"
+   ],
+   "stations_missing": []
+  },
+  "peers": {
+   "count": 39,
+   "by_tag": {
+    "RegulatedAndUnregulatedOperatingRevenue": 4,
+    "Revenues": 32,
+    "RevenueFromContractWithCustomerExcludingAssessedTax": 3
+   },
+   "with_weather": 39,
+   "excluded": [
+    {
+     "cik": "0001057877",
+     "reason": "IDACORP INC: excluded: current period missing (no fact under any of the three tags)"
+    },
+    {
+     "cik": "0001161728",
+     "reason": "MGE ENERGY INC: excluded: SIC 4900 not in 4911, 4931, 4932 (tag RegulatedAndUnregulatedOperatingRevenue)"
+    },
+    {
+     "cik": "0001193311",
+     "reason": "ONCOR ELECTRIC DELIVERY CO LLC: excluded: previous period missing (tag Revenues)"
+    }
+   ],
+   "list": [
+    {
+     "cik": "0001326160",
+     "name": "Duke Energy CORP",
+     "tag": "RegulatedAndUnregulatedOperatingRevenue",
+     "g": 0.07534871594316256,
+     "dw": 0.16473206894648743
+    },
+    {
+     "cik": "0000092122",
+     "name": "SOUTHERN CO",
+     "tag": "Revenues",
+     "g": 0.1698766175142943,
+     "dw": 0.12872301686102147
+    },
+    {
+     "cik": "0000753308",
+     "name": "NEXTERA ENERGY INC",
+     "tag": "RegulatedAndUnregulatedOperatingRevenue",
+     "g": 0.09003664281975222,
+     "dw": 0.054706073725568835
+    },
+    {
+     "cik": "0000004904",
+     "name": "AMERICAN ELECTRIC POWER CO INC",
+     "tag": "Revenues",
+     "g": 0.08701275444216726,
+     "dw": 0.16861234893913582
+    },
+    {
+     "cik": "0000072903",
+     "name": "XCEL ENERGY INC",
+     "tag": "RegulatedAndUnregulatedOperatingRevenue",
+     "g": 0.0704302548643464,
+     "dw": 0.13146562542104664
+    },
+    {
+     "cik": "0000065984",
+     "name": "ENTERGY CORP /DE/",
+     "tag": "Revenues",
+     "g": 0.018695153702031182,
+     "dw": 0.17994694467502137
+    },
+    {
+     "cik": "0001711269",
+     "name": "Evergy, Inc.",
+     "tag": "Revenues",
+     "g": 0.03268219383921863,
+     "dw": 0.228875897922644
+    },
+    {
+     "cik": "0001002910",
+     "name": "AMEREN CORP",
+     "tag": "Revenues",
+     "g": 0.15473568281938327,
+     "dw": 0.17201305113124118
+    },
+    {
+     "cik": "0000811156",
+     "name": "CMS ENERGY CORP",
+     "tag": "Revenues",
+     "g": 0.12454044117647059,
+     "dw": 0.10845507829586211
+    },
+    {
+     "cik": "0000936340",
+     "name": "DTE ENERGY CO",
+     "tag": "RegulatedAndUnregulatedOperatingRevenue",
+     "g": 0.37037037037037035,
+     "dw": 0.10845507829586211
+    },
+    {
+     "cik": "0000783325",
+     "name": "WEC ENERGY GROUP, INC.",
+     "tag": "Revenues",
+     "g": 0.17509887321841652,
+     "dw": 0.13880668564557308
+    },
+    {
+     "cik": "0000352541",
+     "name": "ALLIANT ENERGY CORP",
+     "tag": "Revenues",
+     "g": 0.09408341416100872,
+     "dw": 0.16532084872433644
+    },
+    {
+     "cik": "0000922224",
+     "name": "PPL Corp",
+     "tag": "Revenues",
+     "g": 0.08680555555555555,
+     "dw": 0.13991292220823814
+    },
+    {
+     "cik": "0000788784",
+     "name": "PUBLIC SERVICE ENTERPRISE GROUP INC",
+     "tag": "Revenues",
+     "g": 0.1673913043478261,
+     "dw": 0.1140954541342815
+    },
+    {
+     "cik": "0001047862",
+     "name": "CONSOLIDATED EDISON INC",
+     "tag": "Revenues",
+     "g": 0.12102803738317756,
+     "dw": 0.15735716112168646
+    },
+    {
+     "cik": "0000072741",
+     "name": "EVERSOURCE ENERGY",
+     "tag": "Revenues",
+     "g": 0.23578764168848412,
+     "dw": 0.10744599407515874
+    },
+    {
+     "cik": "0001109357",
+     "name": "EXELON CORP",
+     "tag": "Revenues",
+     "g": 0.11103756412377958,
+     "dw": 0.14436121402237337
+    },
+    {
+     "cik": "0000827052",
+     "name": "EDISON INTERNATIONAL",
+     "tag": "Revenues",
+     "g": -0.06547327121137812,
+     "dw": 0.029608591461791185
+    },
+    {
+     "cik": "0001004980",
+     "name": "PG&E Corp",
+     "tag": "Revenues",
+     "g": 0.02081556048455895,
+     "dw": 0.029608591461791185
+    },
+    {
+     "cik": "0001032208",
+     "name": "SEMPRA",
+     "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+     "g": -0.004327833378414931,
+     "dw": 0.029608591461791185
+    },
+    {
+     "cik": "0000764622",
+     "name": "PINNACLE WEST CAPITAL CORP",
+     "tag": "Revenues",
+     "g": 0.08465586227766383,
+     "dw": 0.01290288603328422
+    },
+    {
+     "cik": "0000784977",
+     "name": "PORTLAND GENERAL ELECTRIC CO /OR/",
+     "tag": "Revenues",
+     "g": -0.001076426264800861,
+     "dw": 0.01132336562151939
+    },
+    {
+     "cik": "0001993004",
+     "name": "NorthWestern Energy Group, Inc.",
+     "tag": "Revenues",
+     "g": -0.01832785657484506,
+     "dw": 0.10697457520086268
+    },
+    {
+     "cik": "0001130464",
+     "name": "BLACK HILLS CORP /SD/",
+     "tag": "Revenues",
+     "g": 0.10848017621145374,
+     "dw": 0.08091608851977508
+    },
+    {
+     "cik": "0000104918",
+     "name": "AVISTA CORP",
+     "tag": "Revenues",
+     "g": 0.013136288998357963,
+     "dw": 0.07473619764468607
+    },
+    {
+     "cik": "0001021635",
+     "name": "OGE ENERGY CORP.",
+     "tag": "Revenues",
+     "g": 0.2528485254691689,
+     "dw": 0.1188069537162567
+    },
+    {
+     "cik": "0001130310",
+     "name": "CENTERPOINT ENERGY INC",
+     "tag": "Revenues",
+     "g": 0.11450381679389313,
+     "dw": 0.16948788554139257
+    },
+    {
+     "cik": "0001692819",
+     "name": "Vistra Corp.",
+     "tag": "Revenues",
+     "g": 0.28781925343811393,
+     "dw": 0.17057417108452888
+    },
+    {
+     "cik": "0001013871",
+     "name": "NRG ENERGY, INC.",
+     "tag": "Revenues",
+     "g": 0.15560640732265446,
+     "dw": 0.184759056367687
+    },
+    {
+     "cik": "0000354707",
+     "name": "HAWAIIAN ELECTRIC INDUSTRIES INC",
+     "tag": "Revenues",
+     "g": -0.060534283484887895,
+     "dw": 0.200196199542201
+    },
+    {
+     "cik": "0000066756",
+     "name": "ALLETE INC",
+     "tag": "Revenues",
+     "g": -0.007686585668237045,
+     "dw": 0.1753172746308
+    },
+    {
+     "cik": "0001466593",
+     "name": "Otter Tail Corp",
+     "tag": "Revenues",
+     "g": -0.028527737219971143,
+     "dw": 0.14110721208234547
+    },
+    {
+     "cik": "0000755001",
+     "name": "UNITIL CORP",
+     "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+     "g": -0.04420817011751539,
+     "dw": 0.11528073378636783
+    },
+    {
+     "cik": "0001108426",
+     "name": "TXNM ENERGY INC",
+     "tag": "Revenues",
+     "g": 0.10509823130995681,
+     "dw": 0.07460980064150771
+    },
+    {
+     "cik": "0000715957",
+     "name": "DOMINION ENERGY, INC",
+     "tag": "Revenues",
+     "g": 0.1222466960352423,
+     "dw": 0.16007316281676823
+    },
+    {
+     "cik": "0001868275",
+     "name": "Constellation Energy Corp",
+     "tag": "Revenues",
+     "g": 0.1017691933127739,
+     "dw": 0.16299741402601411
+    },
+    {
+     "cik": "0001111711",
+     "name": "NISOURCE INC.",
+     "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+     "g": 0.30827754108338407,
+     "dw": 0.16253845245783274
+    },
+    {
+     "cik": "0000100122",
+     "name": "TUCSON ELECTRIC POWER CO",
+     "tag": "Revenues",
+     "g": -0.19220065554073276,
+     "dw": 0.01290288603328422
+    },
+    {
+     "cik": "0000096271",
+     "name": "TAMPA ELECTRIC CO",
+     "tag": "Revenues",
+     "g": 0.1843065693430657,
+     "dw": 0.054706073725568835
+    }
+   ]
+  },
+  "attribution": {
+   "target": {
+    "cik": "0001031296",
+    "g": 0.14542135686035898,
+    "dw": 0.1618968398838543,
+    "coverage": 1
+   },
+   "peers": 39,
+   "beta": 0.5065257246036571,
+   "theil_sen": 0.3056936800029751,
+   "weather": 0.08200491413321155,
+   "industry": 0.028653842758497555,
+   "remainder": 0.034762599968649874,
+   "ranges": {
+    "beta": {
+     "lo": 0.10121282138746253,
+     "hi": 0.8639498318971774
+    },
+    "weather": {
+     "lo": 0.01638603593835917,
+     "hi": 0.13987074760234017
+    },
+    "industry": {
+     "lo": -0.018138934895090393,
+     "hi": 0.08719808771518327
+    },
+    "remainder": {
+     "lo": -0.08164747845716445,
+     "hi": 0.1471742558170902
+    }
+   },
+   "bootstrap": {
+    "resamples": 300,
+    "valid": 300,
+    "skipped_zero_variance": 0,
+    "seed": 7
+   },
+   "coverage": 1,
+   "confidence": "high",
+   "claim": {
+    "ratio": 0.5639124534641556,
+    "verdict": "supported"
+   }
+  },
+  "dq": {
+   "label": "pass",
+   "basis": "onboarding+coverage",
+   "ranAt": "2026-10-24T19:31:39+0800",
+   "elapsedS": 739.3,
+   "rule": "coverage_ok",
+   "run": {
+    "total": 342,
+    "valid": 342,
+    "invalid": 0
+   },
+   "invalidRows": 0,
+   "invalidForTarget": [],
+   "targetCoverage": 1,
+   "evidenceIds": [
+    "ev-r20261024T213805fb4e-14",
+    "ev-r20261024T213805fb4e-15",
+    "ev-r20261024T213805fb4e-16"
+   ],
+   "note": "pass: coverage_ok onboarding run 2026-10-24T19:31:39+0800 (342 rows, 0 invalid, 739.3 s) names none of the utility's stations; the utility's own station coverage is 1.0000 (rule: coverage >= 0.9)"
+  },
+  "recast_conflicts": [],
+  "not_tested": [
+   "Fuel-cost pass-through inside revenue: a fuel or purchased-power clause moves revenue without moving margin, and revenue is the only series read.",
+   "Rate cases: approved base-rate changes between the two quarters are not read from the filings.",
+   "Data-centre and other large-load growth: customer mix and volume changes beyond weather are not separated from the remainder.",
+   "Mergers, acquisitions and divestitures: changes to the reporting entity between the quarters are not detected.",
+   "The fourth quarter and full-year periods: the frames API has no three-month fourth-quarter frame, so only the first three quarters are compared.",
+   "Weather normals: the comparison is year on year, not against a ten-year normal.",
+   "Service territories simplified: states served are capped at six per utility (the largest systems serve more) and come from a curated reading of the annual report's service-territory text; one or two airport stations stand for each state.",
+   "GHCN quality flags: a day with a non-empty quality flag on either temperature element is dropped rather than corrected; coverage reports how many days remain."
+  ],
+  "memo": {
+   "text": "Revenue under Revenues rose from [masked] million to [masked] million, a like-for-like change of +14.5% (the current quarter from its own filing, the previous quarter as that filing restates it). Heating plus cooling degree days over the utility's 9 stations in 5 states moved from 2,164 to 2,514, a change of +16.2%, with station coverage 1.00. Across 39 peer utilities the sensitivity of revenue growth to the degree- day change is 0.51 (Theil-Sen 0.31), bootstrap range [0.10, 0.86] from 300 resamples at the 10th and 90th percentiles. The weather part is +8.2% [+1.6%, +14.0%], the industry- wide part +2.9% [-1.8%, +8.7%] and the company- specific remainder +3.5% [-8.2%, +14.7%]. Claim verdict: supported; confidence high. DQ gate: pass (the coverage_ok rule names none of the utility's stations and its own coverage meets the rule). The analysis did not test Fuel- cost pass- through inside revenue, Rate cases, Data- centre and other large- load growth, Mergers, acquisitions and divestitures, The fourth quarter and full- year periods, Weather normals, Service territories simplified, GHCN quality flags. The confidence label is high and the DQ gate result is pass.",
+   "source": "model",
+   "words": 184,
+   "attempts": 1,
+   "attempts_detail": [
+    {
+     "attempt": 1,
+     "ok": true,
+     "parseError": null,
+     "schemaErrors": [],
+     "unknownNumbers": [],
+     "wordCount": 184,
+     "metrics": {
+      "label": "measured",
+      "promptTokens": 1280,
+      "evalTokens": 360,
+      "promptEvalMs": 192.322,
+      "evalMs": 2474.598,
+      "loadMs": 3.0002,
+      "totalMs": 2757.173,
+      "wallMs": 2759.0417000000016,
+      "tokensPerSecond": 145.47817463685013
+     },
+     "promptSha256": "378bc6dcec8b2229ef2d2ac3e4366b5d19e5d61d01ea5343e07300958f733249",
+     "error": null
+    }
+   ]
+  },
+  "claims": [
+   {
+    "text": "SEC submissions profile: FIRSTENERGY CORP (CIK 0001031296), SIC 4911 Electric Services, business state OH",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-01"
+    ]
+   },
+   {
+    "text": "Seed list: FIRSTENERGY CORP (FE), SIC 4911 Electric Services, HQ OH; serves OH, PA, NJ, WV, MD (FY2024 Form 10-K Item 1 (Business) service-territory description; hand-curated 2026-10-24, electric service states only, capped at 6); stations USW00014821 JOHN GLENN INTL AP (OH); USW00014820 CLEVELAND (OH); USW00013739 PHILA INTL AP (PA); USW00094823 PITTSBURGH ASOS (PA); USW00014734 NEWARK LIBERTY INTL AP (NJ); USW00093730 ATLANTIC CITY INTL AP (NJ); USW00013866 CHARLESTON - YEAGER AP (WV); USW00093721 BALTIMORE-WASHINGTON INTL AP (MD); USW00093720 SALISBURY-WICOMICO RGNL AP (MD)",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-01"
+    ]
+   },
+   {
+    "text": "frames Revenues CY2025Q1: 1 fact for CIK 0001031296 (FIRSTENERGY CORP., loc OH, period 2025-01-01 to 2025-03-31, accn 0001031296-26-000085)",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-02"
+    ]
+   },
+   {
+    "text": "companyconcept Revenues: 19 facts ending in 2024-2025; CY2025Q1 [masked] in 0001031296-25-000017 (filed 2025-04-30); CY2024Q1 [masked] (comparative in 0001031296-25-000017 equals the original 0001031296-24-000026); like-for-like growth +14.5%",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-03"
+    ]
+   },
+   {
+    "text": "frames_seeds Revenues CY2025Q1: 34 of 43 seed utilities have a fact",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-04"
+    ]
+   },
+   {
+    "text": "frames_seeds Revenues CY2024Q1: 35 of 43 seed utilities have a fact",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-05"
+    ]
+   },
+   {
+    "text": "frames_seeds RevenueFromContractWithCustomerExcludingAssessedTax CY2025Q1: 21 of 43 seed utilities have a fact",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-06"
+    ]
+   },
+   {
+    "text": "frames_seeds RevenueFromContractWithCustomerExcludingAssessedTax CY2024Q1: 23 of 43 seed utilities have a fact",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-07"
+    ]
+   },
+   {
+    "text": "frames_seeds RegulatedAndUnregulatedOperatingRevenue CY2025Q1: 9 of 43 seed utilities have a fact",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-08"
+    ]
+   },
+   {
+    "text": "frames_seeds RegulatedAndUnregulatedOperatingRevenue CY2024Q1: 11 of 43 seed utilities have a fact",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-09"
+    ]
+   },
+   {
+    "text": "Peer set for CY2025Q1 vs CY2024Q1: 39 peers of 42 other seed utilities (4 under RegulatedAndUnregulatedOperatingRevenue, 32 under Revenues, 3 under RevenueFromContractWithCustomerExcludingAssessedTax); SIC in 4911, 4931, 4932; both quarters present under the peer's own first tag; |g| < 60%. Excluded: IDACORP INC: excluded: current period missing (no fact under any of the three tags); MGE ENERGY INC: excluded: SIC 4900 not in 4911, 4931, 4932 (tag RegulatedAndUnregulatedOperatingRevenue); ONCOR ELECTRIC DELIVERY CO LLC: excluded: previous period missing (tag Revenues)",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-10"
+    ]
+   },
+   {
+    "text": "Degree days in Lightning SQL, 2025 Q1: 56 of 56 stations (min coverage 0.9556); statement 19962 ms, cache hit",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-11"
+    ]
+   },
+   {
+    "text": "Degree days in Lightning SQL, 2024 Q1: 56 of 56 stations (min coverage 1.0000); statement 20924 ms, cache hit",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-12"
+    ]
+   },
+   {
+    "text": "Degree-day change per utility (TDD = mean over its stations of HDD + CDD; coverage = min over stations and quarters): FIRSTENERGY CORP 2,164 -> 2,514, +16.2%, coverage 1.00 over 9 stations; 39 peers with weather",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-13"
+    ]
+   },
+   {
+    "text": "DQ gate pass (onboarding+coverage): pass: coverage_ok onboarding run 2026-10-24T19:31:39+0800 (342 rows, 0 invalid, 739.3 s) names none of the utility's stations; the utility's own station coverage is 1.0000 (rule: coverage >= 0.9)",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-16"
+    ]
+   },
+   {
+    "text": "Attribution over 39 peers: beta (OLS slope of g on dw) 0.507 [0.101, 0.864] (Theil-Sen 0.306); weather +8.2% [+1.6%, +14.0%], industry +2.9% [-1.8%, +8.7%], remainder +3.5% [-8.2%, +14.7%] of g +14.5%; bootstrap 300 valid of 300 resamples (seed 7), 10th to 90th percentile; confidence high; claim ratio 0.56 -> supported",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-17"
+    ]
+   },
+   {
+    "text": "Not tested (8 items): Fuel-cost pass-through inside revenue; Rate cases; Data-centre and other large-load growth; Mergers, acquisitions and divestitures; The fourth quarter and full-year periods; Weather normals; Service territories simplified; GHCN quality flags",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-18"
+    ]
+   },
+   {
+    "text": "Claim \"colder weather\": supported (|weather| / |g| = 0.56; supported at 0.5, partly supported at 0.2, same sign required); confidence high",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-19"
+    ]
+   },
+   {
+    "text": "Memo written by nemotron-3-nano:4b (184 words, every number string-matched to a tool output, first try)",
+    "evidenceIds": [
+     "ev-r20261024T213805fb4e-20"
+    ]
+   }
+  ],
+  "gaps": []
+ },
+ "checklist": [
+  {
+   "id": "utility_resolved",
+   "status": "done",
+   "note": null,
+   "evidenceIds": [
+    "ev-r20261024T213805fb4e-01"
+   ]
+  },
+  {
+   "id": "tag_chosen",
+   "status": "done",
+   "note": null,
+   "evidenceIds": [
+    "ev-r20261024T213805fb4e-02"
+   ]
+  },
+  {
+   "id": "revenue_like_for_like",
+   "status": "done",
+   "note": null,
+   "evidenceIds": [
+    "ev-r20261024T213805fb4e-03"
+   ]
+  },
+  {
+   "id": "peers_loaded",
+   "status": "done",
+   "note": null,
+   "evidenceIds": [
+    "ev-r20261024T213805fb4e-04",
+    "ev-r20261024T213805fb4e-05",
+    "ev-r20261024T213805fb4e-06",
+    "ev-r20261024T213805fb4e-07",
+    "ev-r20261024T213805fb4e-08",
+    "ev-r20261024T213805fb4e-09",
+    "ev-r20261024T213805fb4e-10"
+   ]
+  },
+  {
+   "id": "weather_target",
+   "status": "done",
+   "note": null,
+   "evidenceIds": [
+    "ev-r20261024T213805fb4e-11",
+    "ev-r20261024T213805fb4e-12",
+    "ev-r20261024T213805fb4e-13"
+   ]
+  },
+  {
+   "id": "weather_peers",
+   "status": "done",
+   "note": null,
+   "evidenceIds": [
+    "ev-r20261024T213805fb4e-11",
+    "ev-r20261024T213805fb4e-12",
+    "ev-r20261024T213805fb4e-13"
+   ]
+  },
+  {
+   "id": "dq_checked",
+   "status": "done",
+   "note": null,
+   "evidenceIds": [
+    "ev-r20261024T213805fb4e-14",
+    "ev-r20261024T213805fb4e-15",
+    "ev-r20261024T213805fb4e-16"
+   ]
+  },
+  {
+   "id": "attribution_done",
+   "status": "done",
+   "note": null,
+   "evidenceIds": [
+    "ev-r20261024T213805fb4e-17"
+   ]
+  },
+  {
+   "id": "claim_tested",
+   "status": "done",
+   "note": null,
+   "evidenceIds": [
+    "ev-r20261024T213805fb4e-19"
+   ]
+  },
+  {
+   "id": "not_tested_listed",
+   "status": "done",
+   "note": null,
+   "evidenceIds": [
+    "ev-r20261024T213805fb4e-18"
+   ]
+  },
+  {
+   "id": "memo_written",
+   "status": "done",
+   "note": null,
+   "evidenceIds": [
+    "ev-r20261024T213805fb4e-20"
+   ]
+  }
+ ],
+ "checklist_complete": true,
+ "skipped_steps": [],
+ "timeline": [
+  {
+   "chunk": 1,
+   "seq": 1,
+   "source": "model",
+   "tool": "resolve_utility",
+   "input": {
+    "cik": "0001031296"
+   },
+   "thought": "Resolving utility via CIK 0001031296 to get name, SIC, states, SEC profile.",
+   "fallback_reason": null,
+   "ok": true,
+   "fact": "utility: FIRSTENERGY CORP (CIK 0001031296, FE) SIC 4911, HQ OH; 5 states, 9 stations [ev-r20261024T213805fb4e-01]",
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-01"
+   ],
+   "latency_ms": 229
+  },
+  {
+   "chunk": 1,
+   "seq": 2,
+   "source": "model",
+   "tool": "probe_revenue_tag",
+   "input": {
+    "cik": "0001031296",
+    "period": "CY2025Q1"
+   },
+   "thought": "Probe revenue tag for CY2025Q1 to set tag_chosen.",
+   "fallback_reason": null,
+   "ok": true,
+   "fact": "tag: Revenues (probe order Revenues, RFC, RUOR; 0 tag(s) without a fact) [ev-r20261024T213805fb4e-02]",
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-02"
+   ],
+   "latency_ms": 390
+  },
+  {
+   "chunk": 2,
+   "seq": 3,
+   "source": "model",
+   "tool": "get_revenue",
+   "input": {
+    "cik": "0001031296",
+    "tag": "Revenues",
+    "period": "CY2025Q1"
+   },
+   "thought": "Compute like‑for‑like revenue growth for FY2025Q1 using the Revenues tag; this is the first missing checklist item.",
+   "fallback_reason": null,
+   "ok": true,
+   "fact": "revenue Revenues: [masked]M vs [masked]M, g +14.5% (current from 0001031296-25-000017); comparative equals original [ev-r20261024T213805fb4e-03]",
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-03"
+   ],
+   "latency_ms": 246
+  },
+  {
+   "chunk": 2,
+   "seq": 4,
+   "source": "model",
+   "tool": "get_peers",
+   "input": {
+    "period": "CY2025Q1",
+    "cik": "0001031296",
+    "tag": "Revenues"
+   },
+   "thought": "Loading peers for CY2025Q1 revenues.",
+   "fallback_reason": null,
+   "ok": true,
+   "fact": "peers: 39 (4 RUOR, 32 Revenues, 3 RFC); excluded 3: IDACORP INC, MGE ENERGY INC, ONCOR ELECTRIC DELIVERY CO LLC [ev-r20261024T213805fb4e-10]",
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-04",
+    "ev-r20261024T213805fb4e-05",
+    "ev-r20261024T213805fb4e-06",
+    "ev-r20261024T213805fb4e-07",
+    "ev-r20261024T213805fb4e-08",
+    "ev-r20261024T213805fb4e-09",
+    "ev-r20261024T213805fb4e-10"
+   ],
+   "latency_ms": 2469
+  },
+  {
+   "chunk": 3,
+   "seq": 5,
+   "source": "model",
+   "tool": "get_weather",
+   "input": {
+    "cik": "0001031296",
+    "period": "CY2025Q1"
+   },
+   "thought": "Compute degree days for the utility's stations to establish weather_impact target.",
+   "fallback_reason": null,
+   "ok": true,
+   "fact": "weather: TDD 2,164 -> 2,514 (+16.2%), coverage 1.00; 39 peers with dw; 2 SQL calls over 56 stations [ev-r20261024T213805fb4e-13]",
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-11",
+    "ev-r20261024T213805fb4e-12",
+    "ev-r20261024T213805fb4e-13"
+   ],
+   "latency_ms": 41477
+  },
+  {
+   "chunk": 3,
+   "seq": 6,
+   "source": "model",
+   "tool": "dq_gate",
+   "input": {
+    "cik": "0001031296"
+   },
+   "thought": "Check data quality gate for utility coverage.",
+   "fallback_reason": null,
+   "ok": true,
+   "fact": "DQ gate: pass; coverage 1.00; onboarding run 2026-10-24T19:31:39+0800 0 invalid of 342 [ev-r20261024T213805fb4e-16]",
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-14",
+    "ev-r20261024T213805fb4e-15",
+    "ev-r20261024T213805fb4e-16"
+   ],
+   "latency_ms": 12
+  },
+  {
+   "chunk": 4,
+   "seq": 7,
+   "source": "model",
+   "tool": "attribute",
+   "input": {},
+   "thought": "Run attribute to compute weather attribution for CIK 0001031296 CY2025Q1 vs CY2024Q1.",
+   "fallback_reason": null,
+   "ok": true,
+   "fact": "attribution: weather +8.2% [+1.6%, +14.0%], industry +2.9%, remainder +3.5%; beta 0.51 over 39 peers; high; claim supported [ev-r20261024T213805fb4e-17]",
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-17"
+   ],
+   "latency_ms": 235
+  },
+  {
+   "chunk": 4,
+   "seq": 8,
+   "source": "model",
+   "tool": "not_tested",
+   "input": {},
+   "thought": "Need to list what analysis cannot see to address claim_verified.",
+   "fallback_reason": null,
+   "ok": true,
+   "fact": "not tested: 8 items listed [ev-r20261024T213805fb4e-18]",
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-18"
+   ],
+   "latency_ms": 1
+  },
+  {
+   "chunk": 5,
+   "seq": 9,
+   "source": "model",
+   "tool": "finalize",
+   "input": {},
+   "thought": "All checklist items true; claim_verified, memo written.",
+   "fallback_reason": null,
+   "ok": true,
+   "fact": "verdict: supported (high); memo model (184 words, 1 model attempt(s)) [ev-r20261024T213805fb4e-19, ev-r20261024T213805fb4e-20]",
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-19",
+    "ev-r20261024T213805fb4e-20"
+   ],
+   "latency_ms": 2764
+  }
+ ],
+ "markovian": {
+  "run_id": "run-1",
+  "status": "completed",
+  "error": null,
+  "chunk_config": {
+   "chunkSize": 3000,
+   "maxChunks": 10,
+   "carryoverTokens": 800,
+   "overlapTokens": 0
+  },
+  "chunks": 5,
+  "engine_estimate": {
+   "total_tokens_used": 564,
+   "tokens_saved": 0,
+   "efficiency_percent": 0,
+   "label": "estimated"
+  }
+ },
+ "chunks": [
+  {
+   "chunk": 1,
+   "started_at": "2026-10-24T13:38:05.324Z",
+   "wall_ms": 8740,
+   "carryover_in_tokens": 0,
+   "carryover_out_tokens": 206,
+   "carryover_accepted": true,
+   "planner_calls": 2,
+   "tool_calls": 2,
+   "fallback_steps": 0,
+   "prompt_tokens": 3346,
+   "eval_tokens": 963,
+   "first_prompt_tokens": 1421,
+   "first_prompt_tokens_estimated": 1317,
+   "naive_prompt_tokens_estimated": 1274,
+   "tool_model_tokens_in": 0,
+   "tool_model_tokens_out": 0,
+   "tool_latency_ms": 619,
+   "task_complete": false
+  },
+  {
+   "chunk": 2,
+   "started_at": "2026-10-24T13:38:14.064Z",
+   "wall_ms": 12090,
+   "carryover_in_tokens": 206,
+   "carryover_out_tokens": 277,
+   "carryover_accepted": true,
+   "planner_calls": 2,
+   "tool_calls": 2,
+   "fallback_steps": 0,
+   "prompt_tokens": 3303,
+   "eval_tokens": 1226,
+   "first_prompt_tokens": 1574,
+   "first_prompt_tokens_estimated": 1365,
+   "naive_prompt_tokens_estimated": 1987,
+   "tool_model_tokens_in": 0,
+   "tool_model_tokens_out": 0,
+   "tool_latency_ms": 2715,
+   "task_complete": false
+  },
+  {
+   "chunk": 3,
+   "started_at": "2026-10-24T13:38:26.154Z",
+   "wall_ms": 55537,
+   "carryover_in_tokens": 277,
+   "carryover_out_tokens": 284,
+   "carryover_accepted": true,
+   "planner_calls": 2,
+   "tool_calls": 2,
+   "fallback_steps": 0,
+   "prompt_tokens": 3530,
+   "eval_tokens": 1068,
+   "first_prompt_tokens": 1627,
+   "first_prompt_tokens_estimated": 1341,
+   "naive_prompt_tokens_estimated": 2657,
+   "tool_model_tokens_in": 0,
+   "tool_model_tokens_out": 0,
+   "tool_latency_ms": 41489,
+   "task_complete": false
+  },
+  {
+   "chunk": 4,
+   "started_at": "2026-10-24T13:39:21.696Z",
+   "wall_ms": 13050,
+   "carryover_in_tokens": 284,
+   "carryover_out_tokens": 267,
+   "carryover_accepted": true,
+   "planner_calls": 2,
+   "tool_calls": 2,
+   "fallback_steps": 0,
+   "prompt_tokens": 3418,
+   "eval_tokens": 1730,
+   "first_prompt_tokens": 1644,
+   "first_prompt_tokens_estimated": 1336,
+   "naive_prompt_tokens_estimated": 3296,
+   "tool_model_tokens_in": 0,
+   "tool_model_tokens_out": 0,
+   "tool_latency_ms": 236,
+   "task_complete": false
+  },
+  {
+   "chunk": 5,
+   "started_at": "2026-10-24T13:39:34.747Z",
+   "wall_ms": 8028,
+   "carryover_in_tokens": 267,
+   "carryover_out_tokens": 264,
+   "carryover_accepted": null,
+   "planner_calls": 1,
+   "tool_calls": 1,
+   "fallback_steps": 0,
+   "prompt_tokens": 1504,
+   "eval_tokens": 712,
+   "first_prompt_tokens": 1504,
+   "first_prompt_tokens_estimated": 1256,
+   "naive_prompt_tokens_estimated": 3742,
+   "tool_model_tokens_in": 1280,
+   "tool_model_tokens_out": 360,
+   "tool_latency_ms": 2764,
+   "task_complete": true
+  }
+ ],
+ "planner_calls": [
+  {
+   "chunk": 1,
+   "call": 1,
+   "attempts": 1,
+   "valid": true,
+   "valid_first_try": true,
+   "errors": [],
+   "first_errors": [],
+   "think": true,
+   "repair_think_off": false,
+   "chosen": {
+    "tool": "resolve_utility",
+    "input": {
+     "cik": "0001031296"
+    }
+   },
+   "checklist_echo_altered": true,
+   "thought": "Resolving utility via CIK 0001031296 to get name, SIC, states, SEC profile.",
+   "prompt_tokens": 1421,
+   "first_attempt_prompt_tokens": 1421,
+   "eval_tokens": 414,
+   "wall_ms": 3730,
+   "tokens_per_s": 136.15071028575863,
+   "prompt_chars": 5267,
+   "label": "measured"
+  },
+  {
+   "chunk": 1,
+   "call": 2,
+   "attempts": 1,
+   "valid": true,
+   "valid_first_try": true,
+   "errors": [],
+   "first_errors": [],
+   "think": true,
+   "repair_think_off": false,
+   "chosen": {
+    "tool": "probe_revenue_tag",
+    "input": {
+     "cik": "0001031296",
+     "period": "CY2025Q1"
+    }
+   },
+   "checklist_echo_altered": true,
+   "thought": "Probe revenue tag for CY2025Q1 to set tag_chosen.",
+   "prompt_tokens": 1925,
+   "first_attempt_prompt_tokens": 1925,
+   "eval_tokens": 549,
+   "wall_ms": 4387,
+   "tokens_per_s": 135.3825333351746,
+   "prompt_chars": 6543,
+   "label": "measured"
+  },
+  {
+   "chunk": 2,
+   "call": 1,
+   "attempts": 1,
+   "valid": true,
+   "valid_first_try": true,
+   "errors": [],
+   "first_errors": [],
+   "think": true,
+   "repair_think_off": false,
+   "chosen": {
+    "tool": "get_revenue",
+    "input": {
+     "cik": "0001031296",
+     "tag": "Revenues"
+    }
+   },
+   "checklist_echo_altered": true,
+   "thought": "Compute like‑for‑like revenue growth for FY2025Q1 using the Revenues tag; this is the first missing checklist item.",
+   "prompt_tokens": 1574,
+   "first_attempt_prompt_tokens": 1574,
+   "eval_tokens": 469,
+   "wall_ms": 3697,
+   "tokens_per_s": 137.53988363363362,
+   "prompt_chars": 5459,
+   "label": "measured"
+  },
+  {
+   "chunk": 2,
+   "call": 2,
+   "attempts": 1,
+   "valid": true,
+   "valid_first_try": true,
+   "errors": [],
+   "first_errors": [],
+   "think": true,
+   "repair_think_off": false,
+   "chosen": {
+    "tool": "get_peers",
+    "input": {
+     "cik": "0001031296",
+     "period": "CY2025Q1",
+     "tag": "Revenues"
+    }
+   },
+   "checklist_echo_altered": false,
+   "thought": "Loading peers for CY2025Q1 revenues.",
+   "prompt_tokens": 1729,
+   "first_attempt_prompt_tokens": 1729,
+   "eval_tokens": 757,
+   "wall_ms": 5676,
+   "tokens_per_s": 141.29925128195939,
+   "prompt_chars": 5561,
+   "label": "measured"
+  },
+  {
+   "chunk": 3,
+   "call": 1,
+   "attempts": 1,
+   "valid": true,
+   "valid_first_try": true,
+   "errors": [],
+   "first_errors": [],
+   "think": true,
+   "repair_think_off": false,
+   "chosen": {
+    "tool": "get_weather",
+    "input": {
+     "cik": "0001031296",
+     "period": "CY2025Q1"
+    }
+   },
+   "checklist_echo_altered": true,
+   "thought": "Compute degree days for the utility's stations to establish weather_impact target.",
+   "prompt_tokens": 1627,
+   "first_attempt_prompt_tokens": 1627,
+   "eval_tokens": 414,
+   "wall_ms": 3272,
+   "tokens_per_s": 139.654816471982,
+   "prompt_chars": 5362,
+   "label": "measured"
+  },
+  {
+   "chunk": 3,
+   "call": 2,
+   "attempts": 1,
+   "valid": true,
+   "valid_first_try": true,
+   "errors": [],
+   "first_errors": [],
+   "think": true,
+   "repair_think_off": false,
+   "chosen": {
+    "tool": "dq_gate",
+    "input": {
+     "cik": "0001031296"
+    }
+   },
+   "checklist_echo_altered": true,
+   "thought": "Check data quality gate for utility coverage.",
+   "prompt_tokens": 1903,
+   "first_attempt_prompt_tokens": 1903,
+   "eval_tokens": 654,
+   "wall_ms": 10564,
+   "tokens_per_s": 141.13384862294149,
+   "prompt_chars": 6167,
+   "label": "measured"
+  },
+  {
+   "chunk": 4,
+   "call": 1,
+   "attempts": 1,
+   "valid": true,
+   "valid_first_try": true,
+   "errors": [],
+   "first_errors": [],
+   "think": true,
+   "repair_think_off": false,
+   "chosen": {
+    "tool": "attribute",
+    "input": {}
+   },
+   "checklist_echo_altered": true,
+   "thought": "Run attribute to compute weather attribution for CIK 0001031296 CY2025Q1 vs CY2024Q1.",
+   "prompt_tokens": 1644,
+   "first_attempt_prompt_tokens": 1644,
+   "eval_tokens": 350,
+   "wall_ms": 2776,
+   "tokens_per_s": 140.39490278254675,
+   "prompt_chars": 5342,
+   "label": "measured"
+  },
+  {
+   "chunk": 4,
+   "call": 2,
+   "attempts": 1,
+   "valid": true,
+   "valid_first_try": true,
+   "errors": [],
+   "first_errors": [],
+   "think": true,
+   "repair_think_off": false,
+   "chosen": {
+    "tool": "not_tested",
+    "input": {}
+   },
+   "checklist_echo_altered": false,
+   "thought": "Need to list what analysis cannot see to address claim_verified.",
+   "prompt_tokens": 1774,
+   "first_attempt_prompt_tokens": 1774,
+   "eval_tokens": 1380,
+   "wall_ms": 10037,
+   "tokens_per_s": 141.7991392586741,
+   "prompt_chars": 5487,
+   "label": "measured"
+  },
+  {
+   "chunk": 5,
+   "call": 1,
+   "attempts": 1,
+   "valid": true,
+   "valid_first_try": true,
+   "errors": [],
+   "first_errors": [],
+   "think": true,
+   "repair_think_off": false,
+   "chosen": {
+    "tool": "finalize",
+    "input": {}
+   },
+   "checklist_echo_altered": true,
+   "thought": "All checklist items true; claim_verified, memo written.",
+   "prompt_tokens": 1504,
+   "first_attempt_prompt_tokens": 1504,
+   "eval_tokens": 712,
+   "wall_ms": 5264,
+   "tokens_per_s": 143.19052625736165,
+   "prompt_chars": 5022,
+   "label": "measured"
+  }
+ ],
+ "tool_calls": [
+  {
+   "chunk": 1,
+   "seq": 1,
+   "tool": "resolve_utility",
+   "input": {
+    "cik": "0001031296"
+   },
+   "source": "model",
+   "fallback_reason": null,
+   "ok": true,
+   "error": null,
+   "latency_ms": 229,
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-01"
+   ],
+   "resolved": [
+    "utility_resolved"
+   ],
+   "model_tokens": null
+  },
+  {
+   "chunk": 1,
+   "seq": 2,
+   "tool": "probe_revenue_tag",
+   "input": {
+    "cik": "0001031296",
+    "period": "CY2025Q1"
+   },
+   "source": "model",
+   "fallback_reason": null,
+   "ok": true,
+   "error": null,
+   "latency_ms": 390,
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-02"
+   ],
+   "resolved": [
+    "tag_chosen"
+   ],
+   "model_tokens": null
+  },
+  {
+   "chunk": 2,
+   "seq": 3,
+   "tool": "get_revenue",
+   "input": {
+    "cik": "0001031296",
+    "tag": "Revenues",
+    "period": "CY2025Q1"
+   },
+   "source": "model",
+   "fallback_reason": null,
+   "ok": true,
+   "error": null,
+   "latency_ms": 246,
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-03"
+   ],
+   "resolved": [
+    "revenue_like_for_like"
+   ],
+   "model_tokens": null
+  },
+  {
+   "chunk": 2,
+   "seq": 4,
+   "tool": "get_peers",
+   "input": {
+    "period": "CY2025Q1",
+    "cik": "0001031296",
+    "tag": "Revenues"
+   },
+   "source": "model",
+   "fallback_reason": null,
+   "ok": true,
+   "error": null,
+   "latency_ms": 2469,
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-04",
+    "ev-r20261024T213805fb4e-05",
+    "ev-r20261024T213805fb4e-06",
+    "ev-r20261024T213805fb4e-07",
+    "ev-r20261024T213805fb4e-08",
+    "ev-r20261024T213805fb4e-09",
+    "ev-r20261024T213805fb4e-10"
+   ],
+   "resolved": [
+    "peers_loaded"
+   ],
+   "model_tokens": null
+  },
+  {
+   "chunk": 3,
+   "seq": 5,
+   "tool": "get_weather",
+   "input": {
+    "cik": "0001031296",
+    "period": "CY2025Q1"
+   },
+   "source": "model",
+   "fallback_reason": null,
+   "ok": true,
+   "error": null,
+   "latency_ms": 41477,
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-11",
+    "ev-r20261024T213805fb4e-12",
+    "ev-r20261024T213805fb4e-13"
+   ],
+   "resolved": [
+    "weather_target",
+    "weather_peers"
+   ],
+   "model_tokens": null
+  },
+  {
+   "chunk": 3,
+   "seq": 6,
+   "tool": "dq_gate",
+   "input": {
+    "cik": "0001031296"
+   },
+   "source": "model",
+   "fallback_reason": null,
+   "ok": true,
+   "error": null,
+   "latency_ms": 12,
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-14",
+    "ev-r20261024T213805fb4e-15",
+    "ev-r20261024T213805fb4e-16"
+   ],
+   "resolved": [
+    "dq_checked"
+   ],
+   "model_tokens": null
+  },
+  {
+   "chunk": 4,
+   "seq": 7,
+   "tool": "attribute",
+   "input": {},
+   "source": "model",
+   "fallback_reason": null,
+   "ok": true,
+   "error": null,
+   "latency_ms": 235,
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-17"
+   ],
+   "resolved": [
+    "attribution_done"
+   ],
+   "model_tokens": null
+  },
+  {
+   "chunk": 4,
+   "seq": 8,
+   "tool": "not_tested",
+   "input": {},
+   "source": "model",
+   "fallback_reason": null,
+   "ok": true,
+   "error": null,
+   "latency_ms": 1,
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-18"
+   ],
+   "resolved": [
+    "not_tested_listed"
+   ],
+   "model_tokens": null
+  },
+  {
+   "chunk": 5,
+   "seq": 9,
+   "tool": "finalize",
+   "input": {},
+   "source": "model",
+   "fallback_reason": null,
+   "ok": true,
+   "error": null,
+   "latency_ms": 2764,
+   "evidence_ids": [
+    "ev-r20261024T213805fb4e-19",
+    "ev-r20261024T213805fb4e-20"
+   ],
+   "resolved": [
+    "claim_tested",
+    "memo_written"
+   ],
+   "model_tokens": {
+    "in": 1280,
+    "out": 360,
+    "calls": 1
+   }
+  }
+ ],
+ "chart": [
+  {
+   "chunk": 1,
+   "markovian_prompt_tokens_measured": 1421,
+   "markovian_prompt_tokens_estimated": 1317,
+   "naive_prompt_tokens_estimated": 1274,
+   "carryover_tokens_estimated": 0
+  },
+  {
+   "chunk": 2,
+   "markovian_prompt_tokens_measured": 1574,
+   "markovian_prompt_tokens_estimated": 1365,
+   "naive_prompt_tokens_estimated": 1987,
+   "carryover_tokens_estimated": 206
+  },
+  {
+   "chunk": 3,
+   "markovian_prompt_tokens_measured": 1627,
+   "markovian_prompt_tokens_estimated": 1341,
+   "naive_prompt_tokens_estimated": 2657,
+   "carryover_tokens_estimated": 277
+  },
+  {
+   "chunk": 4,
+   "markovian_prompt_tokens_measured": 1644,
+   "markovian_prompt_tokens_estimated": 1336,
+   "naive_prompt_tokens_estimated": 3296,
+   "carryover_tokens_estimated": 284
+  },
+  {
+   "chunk": 5,
+   "markovian_prompt_tokens_measured": 1504,
+   "markovian_prompt_tokens_estimated": 1256,
+   "naive_prompt_tokens_estimated": 3742,
+   "carryover_tokens_estimated": 267
+  }
+ ],
+ "summary": {
+  "chunks": 5,
+  "planner_calls": 9,
+  "planner_valid": 9,
+  "planner_valid_first_try": 9,
+  "planner_repaired": 0,
+  "planner_repairs_think_off": 0,
+  "fallback_steps": 0,
+  "tool_calls": 9,
+  "tool_calls_by_model": 9,
+  "tool_failures": 0,
+  "planner_prompt_tokens": 15101,
+  "planner_eval_tokens": 5699,
+  "tool_model_tokens_in": 1280,
+  "tool_model_tokens_out": 360,
+  "naive_prompt_tokens_estimated": 12956,
+  "markovian_prompt_tokens_estimated": 6615,
+  "saving_vs_naive_estimated": 0.489,
+  "max_carryover_tokens_estimated": 284,
+  "median_planner_tokens_per_s": 140.39490278254675,
+  "labels": {
+   "tokens": "measured (Ollama prompt_eval_count/eval_count)",
+   "baseline": "estimated (chars/4)"
+  }
+ },
+ "telemetry": {
+  "model": "nemotron-3-nano:4b",
+  "think": true,
+  "median_planner_tokens_per_s": 140.39490278254675,
+  "memo_tokens_per_s": 145.47817463685013,
+  "cloud_model_calls": 0,
+  "refused_model_hosts": 0,
+  "refused_gateway_hosts": 0,
+  "memory_context_chars": 845
+ },
+ "memory": {
+  "ids": [
+   "mem-47",
+   "mem-48",
+   "mem-49",
+   "mem-50",
+   "mem-51",
+   "mem-52",
+   "mem-53",
+   "mem-54",
+   "mem-55",
+   "mem-56",
+   "mem-57",
+   "mem-58"
+  ],
+  "facts_total": 58,
+  "conflicts": 0,
+  "skipped_steps": 0
+ },
+ "world": {
+  "events": 721,
+  "entities": {
+   "filing": 90,
+   "quarter": 2,
+   "sic": 4,
+   "state": 43,
+   "station": 56,
+   "utility": 43
+  },
+  "edges": {
+   "reported_in": 135,
+   "represented_by": 56,
+   "serves": 97,
+   "peer_of": 39,
+   "observed_in": 112,
+   "classified_as": 43
+  }
+ },
+ "timings_ms": {
+  "submission": 187,
+  "world.utility": 26,
+  "frames_fact.Revenues": 387,
+  "concept_window": 227,
+  "world.filings": 6,
+  "frames_seeds.Revenues.current": 220,
+  "frames_seeds.Revenues.previous": 234,
+  "frames_seeds.RevenueFromContractWithCustomerExcludingAssessedTax.current": 183,
+  "frames_seeds.RevenueFromContractWithCustomerExcludingAssessedTax.previous": 184,
+  "frames_seeds.RegulatedAndUnregulatedOperatingRevenue.current": 201,
+  "frames_seeds.RegulatedAndUnregulatedOperatingRevenue.previous": 189,
+  "world.peers_filings": 1252,
+  "weather_quarter.current": 20005,
+  "world.weather.current": 245,
+  "weather_quarter.previous": 20959,
+  "world.weather.previous": 263,
+  "world.peers": 228,
+  "memo": 2761
+ },
+ "evidence_ids": [
+  "ev-r20261024T213805fb4e-01",
+  "ev-r20261024T213805fb4e-02",
+  "ev-r20261024T213805fb4e-03",
+  "ev-r20261024T213805fb4e-04",
+  "ev-r20261024T213805fb4e-05",
+  "ev-r20261024T213805fb4e-06",
+  "ev-r20261024T213805fb4e-07",
+  "ev-r20261024T213805fb4e-08",
+  "ev-r20261024T213805fb4e-09",
+  "ev-r20261024T213805fb4e-10",
+  "ev-r20261024T213805fb4e-11",
+  "ev-r20261024T213805fb4e-12",
+  "ev-r20261024T213805fb4e-13",
+  "ev-r20261024T213805fb4e-14",
+  "ev-r20261024T213805fb4e-15",
+  "ev-r20261024T213805fb4e-16",
+  "ev-r20261024T213805fb4e-17",
+  "ev-r20261024T213805fb4e-18",
+  "ev-r20261024T213805fb4e-19",
+  "ev-r20261024T213805fb4e-20"
+ ],
+ "evidence": [
+  {
+   "id": "ev-r20261024T213805fb4e-01",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "zetaris_sql",
+   "claim": "SEC submissions profile: FIRSTENERGY CORP (CIK 0001031296), SIC 4911 Electric Services, business state OH",
+   "template_id": "submission",
+   "params": {
+    "cik10": "0001031296"
+   },
+   "sql": "SELECT cik, name, sic, `sicDescription`, state FROM won.submission_0001031296",
+   "sql_sha256": "9b654cb9dff075730703ccb5123e7e5820bca9c5196fd48ccc0860ac1f412428",
+   "zetaris_object": "won.submission_0001031296",
+   "zetaris_objects": [
+    "won.submission_0001031296"
+   ],
+   "raw_objects": [
+    "won.submission_0001031296"
+   ],
+   "source_url": "https://data.sec.gov/submissions/CIK0001031296.json",
+   "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+   "source_cached_at": null,
+   "sources": [
+    {
+     "object": "won.submission_0001031296",
+     "url": "https://data.sec.gov/submissions/CIK0001031296.json",
+     "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+     "cached_at": null
+    }
+   ],
+   "columns": [
+    "cik",
+    "name",
+    "sic",
+    "sicDescription",
+    "state"
+   ],
+   "rows": [
+    [
+     "0001031296",
+     "FIRSTENERGY CORP",
+     "4911",
+     "Electric Services",
+     "OH"
+    ]
+   ],
+   "row_count": 1,
+   "elapsed_ms": 156,
+   "cache_state": "hit",
+   "queried_at": "2026-10-24T21:38:09+0800",
+   "details": {
+    "wall_ms": 186
+   }
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-02",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "zetaris_sql",
+   "claim": "frames Revenues CY2025Q1: 1 fact for CIK 0001031296 (FIRSTENERGY CORP., loc OH, period 2025-01-01 to 2025-03-31, accn 0001031296-26-000085)",
+   "template_id": "frames_fact",
+   "params": {
+    "tag": "Revenues",
+    "period": "CY2025Q1",
+    "cik10": "0001031296"
+   },
+   "sql": "SELECT cik, `entityName`, loc, `start`, `end`, val, accn FROM won.frames_Revenues_CY2025Q1 WHERE LPAD(CAST(cik AS STRING), 10, '0') = '0001031296'",
+   "sql_sha256": "4246b5451fdb3e7bcabda8548efdd3c72829a7b7711d61f61732f67b0918663a",
+   "zetaris_object": "won.frames_Revenues_CY2025Q1",
+   "zetaris_objects": [
+    "won.frames_Revenues_CY2025Q1"
+   ],
+   "raw_objects": [
+    "won.frames_Revenues_CY2025Q1"
+   ],
+   "source_url": "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2025Q1.json",
+   "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+   "source_cached_at": null,
+   "sources": [
+    {
+     "object": "won.frames_Revenues_CY2025Q1",
+     "url": "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2025Q1.json",
+     "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+     "cached_at": null
+    }
+   ],
+   "columns": [
+    "cik",
+    "entityName",
+    "loc",
+    "start",
+    "end",
+    "val",
+    "accn"
+   ],
+   "rows": [
+    [
+     1031296,
+     "FIRSTENERGY CORP.",
+     "US-OH",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001031296-26-000085"
+    ]
+   ],
+   "row_count": 1,
+   "elapsed_ms": 371,
+   "cache_state": "hit",
+   "queried_at": "2026-10-24T21:38:13+0800",
+   "details": {
+    "wall_ms": 386
+   },
+   "masked": [
+    "rows.val"
+   ]
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-03",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "zetaris_sql",
+   "claim": "companyconcept Revenues: 19 facts ending in 2024-2025; CY2025Q1 [masked] in 0001031296-25-000017 (filed 2025-04-30); CY2024Q1 [masked] (comparative in 0001031296-25-000017 equals the original 0001031296-24-000026); like-for-like growth +14.5%",
+   "template_id": "concept_window",
+   "params": {
+    "cik10": "0001031296",
+    "tag": "Revenues",
+    "year": "2025"
+   },
+   "sql": "SELECT fy, fp, form, filed, accn, `start`, `end`, val FROM won.concept_0001031296_Revenues WHERE CAST(substr(`end`, 1, 4) AS INT) BETWEEN 2025 - 1 AND 2025 ORDER BY `end`, filed, accn",
+   "sql_sha256": "2d404bc696f458069cd21b124f2503db5be9c6c378925dcc2bc997401f732a02",
+   "zetaris_object": "won.concept_0001031296_Revenues",
+   "zetaris_objects": [
+    "won.concept_0001031296_Revenues"
+   ],
+   "raw_objects": [
+    "won.concept_0001031296_Revenues"
+   ],
+   "source_url": "https://data.sec.gov/api/xbrl/companyconcept/CIK0001031296/us-gaap/Revenues.json",
+   "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+   "source_cached_at": null,
+   "sources": [
+    {
+     "object": "won.concept_0001031296_Revenues",
+     "url": "https://data.sec.gov/api/xbrl/companyconcept/CIK0001031296/us-gaap/Revenues.json",
+     "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+     "cached_at": null
+    }
+   ],
+   "columns": [
+    "fy",
+    "fp",
+    "form",
+    "filed",
+    "accn",
+    "start",
+    "end",
+    "val"
+   ],
+   "rows": [
+    [
+     2024,
+     "Q1",
+     "10-Q",
+     "2024-04-25",
+     "0001031296-24-000026",
+     "2024-01-01",
+     "2024-03-31",
+     null
+    ],
+    [
+     2025,
+     "Q1",
+     "10-Q",
+     "2025-04-30",
+     "0001031296-25-000017",
+     "2024-01-01",
+     "2024-03-31",
+     null
+    ],
+    [
+     2024,
+     "Q2",
+     "10-Q",
+     "2024-07-30",
+     "0001031296-24-000043",
+     "2024-01-01",
+     "2024-06-30",
+     null
+    ],
+    [
+     2024,
+     "Q2",
+     "10-Q",
+     "2024-07-30",
+     "0001031296-24-000043",
+     "2024-04-01",
+     "2024-06-30",
+     null
+    ],
+    [
+     2025,
+     "Q2",
+     "10-Q",
+     "2025-07-30",
+     "0001031296-25-000042",
+     "2024-01-01",
+     "2024-06-30",
+     null
+    ],
+    [
+     2025,
+     "Q2",
+     "10-Q",
+     "2025-07-30",
+     "0001031296-25-000042",
+     "2024-04-01",
+     "2024-06-30",
+     null
+    ],
+    [
+     2024,
+     "Q3",
+     "10-Q",
+     "2024-10-29",
+     "0001031296-24-000055",
+     "2024-01-01",
+     "2024-09-30",
+     null
+    ],
+    [
+     2024,
+     "Q3",
+     "10-Q",
+     "2024-10-29",
+     "0001031296-24-000055",
+     "2024-07-01",
+     "2024-09-30",
+     null
+    ],
+    [
+     2025,
+     "Q3",
+     "10-Q",
+     "2025-10-28",
+     "0001031296-25-000085",
+     "2024-01-01",
+     "2024-09-30",
+     null
+    ],
+    [
+     2025,
+     "Q3",
+     "10-Q",
+     "2025-10-28",
+     "0001031296-25-000085",
+     "2024-07-01",
+     "2024-09-30",
+     null
+    ],
+    [
+     2024,
+     "FY",
+     "10-K",
+     "2025-02-27",
+     "0001031296-25-000006",
+     "2024-01-01",
+     "2024-12-31",
+     null
+    ],
+    [
+     2025,
+     "FY",
+     "10-K",
+     "2026-02-18",
+     "0001031296-26-000046",
+     "2024-01-01",
+     "2024-12-31",
+     null
+    ],
+    [
+     2025,
+     "Q1",
+     "10-Q",
+     "2025-04-30",
+     "0001031296-25-000017",
+     "2025-01-01",
+     "2025-03-31",
+     null
+    ],
+    [
+     2026,
+     "Q1",
+     "10-Q",
+     "2026-04-28",
+     "0001031296-26-000085",
+     "2025-01-01",
+     "2025-03-31",
+     null
+    ],
+    [
+     2025,
+     "Q2",
+     "10-Q",
+     "2025-07-30",
+     "0001031296-25-000042",
+     "2025-01-01",
+     "2025-06-30",
+     null
+    ],
+    [
+     2025,
+     "Q2",
+     "10-Q",
+     "2025-07-30",
+     "0001031296-25-000042",
+     "2025-04-01",
+     "2025-06-30",
+     null
+    ],
+    [
+     2025,
+     "Q3",
+     "10-Q",
+     "2025-10-28",
+     "0001031296-25-000085",
+     "2025-01-01",
+     "2025-09-30",
+     null
+    ],
+    [
+     2025,
+     "Q3",
+     "10-Q",
+     "2025-10-28",
+     "0001031296-25-000085",
+     "2025-07-01",
+     "2025-09-30",
+     null
+    ],
+    [
+     2025,
+     "FY",
+     "10-K",
+     "2026-02-18",
+     "0001031296-26-000046",
+     "2025-01-01",
+     "2025-12-31",
+     null
+    ]
+   ],
+   "row_count": 19,
+   "elapsed_ms": 177,
+   "cache_state": "hit",
+   "queried_at": "2026-10-24T21:38:17+0800",
+   "details": {
+    "wall_ms": 226
+   },
+   "masked": [
+    "rows.val"
+   ]
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-04",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "zetaris_sql",
+   "claim": "frames_seeds Revenues CY2025Q1: 34 of 43 seed utilities have a fact",
+   "template_id": "frames_seeds",
+   "params": {
+    "tag": "Revenues",
+    "period": "CY2025Q1"
+   },
+   "sql": "SELECT cik, `entityName`, loc, `start`, `end`, CAST(val AS DOUBLE) AS val, accn FROM won.frames_Revenues_CY2025Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271) ORDER BY cik",
+   "sql_sha256": "33ce55e4089f855387e8d2a9bd00e086b14cff6cfb4970773c56b8f0a31e2112",
+   "zetaris_object": "won.frames_Revenues_CY2025Q1",
+   "zetaris_objects": [
+    "won.frames_Revenues_CY2025Q1"
+   ],
+   "raw_objects": [
+    "won.frames_Revenues_CY2025Q1"
+   ],
+   "source_url": "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2025Q1.json",
+   "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+   "source_cached_at": null,
+   "sources": [
+    {
+     "object": "won.frames_Revenues_CY2025Q1",
+     "url": "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2025Q1.json",
+     "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+     "cached_at": null
+    }
+   ],
+   "columns": [
+    "cik",
+    "entityName",
+    "loc",
+    "start",
+    "end",
+    "val",
+    "accn"
+   ],
+   "rows": [
+    [
+     4904,
+     "AMERICAN ELECTRIC POWER CO INC.",
+     "US-OH",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000004904-26-000034"
+    ],
+    [
+     65984,
+     "ENTERGY CORPORATION",
+     "US-LA",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000065984-26-000222"
+    ],
+    [
+     66756,
+     "ALLETE, Inc.",
+     "US-MN",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000066756-25-000060"
+    ],
+    [
+     72741,
+     "EVERSOURCE ENERGY",
+     "US-MA",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001628280-26-032278"
+    ],
+    [
+     92122,
+     "The Southern Company",
+     "US-GA",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000092122-26-000034"
+    ],
+    [
+     96271,
+     "TAMPA ELECTRIC COMPANY",
+     "US-FL",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001193125-26-213184"
+    ],
+    [
+     100122,
+     "TUCSON ELECTRIC POWER CO",
+     "US-AZ",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000100122-26-000010"
+    ],
+    [
+     104918,
+     "AVISTA CORP",
+     "US-WA",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001193125-26-204658"
+    ],
+    [
+     352541,
+     "ALLIANT ENERGY CORP",
+     "US-WI",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000352541-26-000033"
+    ],
+    [
+     354707,
+     "HAWAIIAN ELECTRIC INDUSTRIES, INC.",
+     "US-HI",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000354707-26-000037"
+    ],
+    [
+     715957,
+     "DOMINION ENERGY, INC.",
+     "US-VA",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001193125-26-200275"
+    ],
+    [
+     764622,
+     "PINNACLE WEST CAPITAL CORPORATION",
+     "US-AZ",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000764622-26-000025"
+    ],
+    [
+     783325,
+     "WEC ENERGY GROUP, INC.",
+     "US-WI",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000783325-26-000052"
+    ],
+    [
+     784977,
+     "PORTLAND GENERAL ELECTRIC COMPANY",
+     "US-OR",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001193125-26-197978"
+    ],
+    [
+     788784,
+     "Public Service Enterprise Group Incorporated",
+     "US-NJ",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001193125-26-206545"
+    ],
+    [
+     811156,
+     "CMS ENERGY CORPORATION",
+     "US-MI",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000811156-26-000024"
+    ],
+    [
+     827052,
+     "EDISON INTERNATIONAL",
+     "US-CA",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000827052-26-000042"
+    ],
+    [
+     922224,
+     "PPL Corporation",
+     "US-PA",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000922224-26-000026"
+    ],
+    [
+     1002910,
+     "Ameren Corporation",
+     "US-MO",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001002910-26-000015"
+    ],
+    [
+     1004980,
+     "PG&E CORP",
+     "US-CA",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001004980-26-000033"
+    ],
+    [
+     1013871,
+     "NRG Energy, Inc",
+     "US-TX",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001013871-26-000012"
+    ],
+    [
+     1021635,
+     "OGE ENERGY CORP.",
+     "US-OK",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001021635-26-000012"
+    ],
+    [
+     1031296,
+     "FIRSTENERGY CORP.",
+     "US-OH",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001031296-26-000085"
+    ],
+    [
+     1047862,
+     "Consolidated Edison, Inc.",
+     "US-NY",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001047862-26-000091"
+    ],
+    [
+     1108426,
+     "TXNM Energy, Inc.",
+     "US-NM",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001108426-26-000026"
+    ],
+    [
+     1109357,
+     "EXELON CORPORATION",
+     "US-IL",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001109357-26-000063"
+    ],
+    [
+     1130310,
+     "CenterPoint Energy, Inc.",
+     "US-TX",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001130310-26-000028"
+    ],
+    [
+     1130464,
+     "Black Hills Corporation",
+     "US-SD",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001193125-26-211037"
+    ],
+    [
+     1193311,
+     "Oncor Electric Delivery Company LLC",
+     "US-TX",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001193311-26-000014"
+    ],
+    [
+     1466593,
+     "OTTER TAIL CORPORATION",
+     "US-MN",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001466593-26-000051"
+    ],
+    [
+     1692819,
+     "Vistra Corp.",
+     "US-TX",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001692819-26-000014"
+    ],
+    [
+     1711269,
+     "EVERGY, INC.",
+     "US-MO",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001711269-26-000057"
+    ],
+    [
+     1868275,
+     "CONSTELLATION ENERGY CORPORATION",
+     "US-MD",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001868275-26-000067"
+    ],
+    [
+     1993004,
+     "NORTHWESTERN ENERGY GROUP, INC.",
+     "US-SD",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001993004-26-000029"
+    ]
+   ],
+   "row_count": 34,
+   "elapsed_ms": 180,
+   "cache_state": "hit",
+   "queried_at": "2026-10-24T21:38:23+0800",
+   "details": {
+    "wall_ms": 220
+   },
+   "masked": [
+    "rows.val"
+   ]
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-05",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "zetaris_sql",
+   "claim": "frames_seeds Revenues CY2024Q1: 35 of 43 seed utilities have a fact",
+   "template_id": "frames_seeds",
+   "params": {
+    "tag": "Revenues",
+    "period": "CY2024Q1"
+   },
+   "sql": "SELECT cik, `entityName`, loc, `start`, `end`, CAST(val AS DOUBLE) AS val, accn FROM won.frames_Revenues_CY2024Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271) ORDER BY cik",
+   "sql_sha256": "e1f73905195018898c5d9f4215b8b85240d92f66408dbecea29d1304e572f551",
+   "zetaris_object": "won.frames_Revenues_CY2024Q1",
+   "zetaris_objects": [
+    "won.frames_Revenues_CY2024Q1"
+   ],
+   "raw_objects": [
+    "won.frames_Revenues_CY2024Q1"
+   ],
+   "source_url": "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2024Q1.json",
+   "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+   "source_cached_at": null,
+   "sources": [
+    {
+     "object": "won.frames_Revenues_CY2024Q1",
+     "url": "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2024Q1.json",
+     "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+     "cached_at": null
+    }
+   ],
+   "columns": [
+    "cik",
+    "entityName",
+    "loc",
+    "start",
+    "end",
+    "val",
+    "accn"
+   ],
+   "rows": [
+    [
+     4904,
+     "AMERICAN ELECTRIC POWER CO INC.",
+     "US-OH",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000004904-25-000061"
+    ],
+    [
+     65984,
+     "ENTERGY CORPORATION",
+     "US-LA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000065984-25-000046"
+    ],
+    [
+     66756,
+     "ALLETE, Inc.",
+     "US-MN",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000066756-25-000060"
+    ],
+    [
+     72741,
+     "EVERSOURCE ENERGY",
+     "US-MA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000072741-25-000011"
+    ],
+    [
+     92122,
+     "The Southern Company",
+     "US-GA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000092122-25-000042"
+    ],
+    [
+     96271,
+     "TAMPA ELECTRIC COMPANY",
+     "US-FL",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000950170-25-066297"
+    ],
+    [
+     100122,
+     "TUCSON ELECTRIC POWER CO",
+     "US-AZ",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000100122-25-000013"
+    ],
+    [
+     104918,
+     "AVISTA CORP",
+     "US-WA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000950170-25-064737"
+    ],
+    [
+     352541,
+     "ALLIANT ENERGY CORP",
+     "US-WI",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000352541-25-000053"
+    ],
+    [
+     354707,
+     "HAWAIIAN ELECTRIC INDUSTRIES, INC.",
+     "US-HI",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000354707-25-000026"
+    ],
+    [
+     715957,
+     "DOMINION ENERGY, INC.",
+     "US-VA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001193125-26-063120"
+    ],
+    [
+     764622,
+     "PINNACLE WEST CAPITAL CORPORATION",
+     "US-AZ",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000764622-25-000047"
+    ],
+    [
+     783325,
+     "WEC ENERGY GROUP, INC.",
+     "US-WI",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000107815-25-000182"
+    ],
+    [
+     784977,
+     "PORTLAND GENERAL ELECTRIC COMPANY",
+     "US-OR",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000784977-25-000074"
+    ],
+    [
+     788784,
+     "Public Service Enterprise Group Incorporated",
+     "US-NJ",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000950170-25-061108"
+    ],
+    [
+     811156,
+     "CMS ENERGY CORPORATION",
+     "US-MI",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000811156-25-000047"
+    ],
+    [
+     827052,
+     "EDISON INTERNATIONAL",
+     "US-CA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000827052-25-000043"
+    ],
+    [
+     922224,
+     "PPL Corporation",
+     "US-PA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000922224-25-000017"
+    ],
+    [
+     1002910,
+     "Ameren Corporation",
+     "US-MO",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001002910-25-000098"
+    ],
+    [
+     1004980,
+     "PG&E CORP",
+     "US-CA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001004980-25-000087"
+    ],
+    [
+     1013871,
+     "NRG ENERGY, INC.",
+     "US-TX",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001013871-25-000013"
+    ],
+    [
+     1021635,
+     "OGE ENERGY CORP.",
+     "US-OK",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000950170-25-060389"
+    ],
+    [
+     1031296,
+     "FIRSTENERGY CORP.",
+     "US-OH",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001031296-25-000017"
+    ],
+    [
+     1032208,
+     "SEMPRA",
+     "US-CA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001032208-24-000015"
+    ],
+    [
+     1047862,
+     "Consolidated Edison, Inc.",
+     "US-NY",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001047862-25-000045"
+    ],
+    [
+     1108426,
+     "TXNM Energy, Inc.",
+     "US-NM",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001108426-25-000033"
+    ],
+    [
+     1109357,
+     "EXELON CORPORATION",
+     "US-IL",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001109357-25-000113"
+    ],
+    [
+     1111711,
+     "NiSource Inc.",
+     "US-IN",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001111711-24-000021"
+    ],
+    [
+     1130310,
+     "CenterPoint Energy, Inc.",
+     "US-TX",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001130310-25-000079"
+    ],
+    [
+     1130464,
+     "Black Hills Corporation",
+     "US-SD",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000950170-25-066572"
+    ],
+    [
+     1466593,
+     "OTTER TAIL CORPORATION",
+     "US-MN",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001466593-25-000083"
+    ],
+    [
+     1692819,
+     "Vistra Corp.",
+     "US-TX",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001692819-25-000035"
+    ],
+    [
+     1711269,
+     "EVERGY, INC.",
+     "US-MO",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001711269-25-000010"
+    ],
+    [
+     1868275,
+     "CONSTELLATION ENERGY CORPORATION",
+     "US-MD",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001868275-25-000044"
+    ],
+    [
+     1993004,
+     "NORTHWESTERN ENERGY GROUP, INC.",
+     "US-SD",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001993004-25-000084"
+    ]
+   ],
+   "row_count": 35,
+   "elapsed_ms": 216,
+   "cache_state": "hit",
+   "queried_at": "2026-10-24T21:38:23+0800",
+   "details": {
+    "wall_ms": 234
+   },
+   "masked": [
+    "rows.val"
+   ]
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-06",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "zetaris_sql",
+   "claim": "frames_seeds RevenueFromContractWithCustomerExcludingAssessedTax CY2025Q1: 21 of 43 seed utilities have a fact",
+   "template_id": "frames_seeds",
+   "params": {
+    "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+    "period": "CY2025Q1"
+   },
+   "sql": "SELECT cik, `entityName`, loc, `start`, `end`, CAST(val AS DOUBLE) AS val, accn FROM won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2025Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271) ORDER BY cik",
+   "sql_sha256": "c89e5b78361023a102b4b0f0869332e463a4b71972c1c959266be15231c8e75f",
+   "zetaris_object": "won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2025Q1",
+   "zetaris_objects": [
+    "won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2025Q1"
+   ],
+   "raw_objects": [
+    "won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2025Q1"
+   ],
+   "source_url": "https://data.sec.gov/api/xbrl/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2025Q1.json",
+   "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+   "source_cached_at": null,
+   "sources": [
+    {
+     "object": "won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2025Q1",
+     "url": "https://data.sec.gov/api/xbrl/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2025Q1.json",
+     "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+     "cached_at": null
+    }
+   ],
+   "columns": [
+    "cik",
+    "entityName",
+    "loc",
+    "start",
+    "end",
+    "val",
+    "accn"
+   ],
+   "rows": [
+    [
+     4904,
+     "AMERICAN ELECTRIC POWER CO INC.",
+     "US-OH",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000004904-26-000034"
+    ],
+    [
+     100122,
+     "TUCSON ELECTRIC POWER CO",
+     "US-AZ",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000100122-26-000010"
+    ],
+    [
+     352541,
+     "ALLIANT ENERGY CORP",
+     "US-WI",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000352541-26-000033"
+    ],
+    [
+     715957,
+     "DOMINION ENERGY, INC.",
+     "US-VA",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001193125-26-200275"
+    ],
+    [
+     755001,
+     "UNITIL CORPORATION",
+     "US-NH",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000755001-26-000010"
+    ],
+    [
+     764622,
+     "PINNACLE WEST CAPITAL CORPORATION",
+     "US-AZ",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000764622-26-000025"
+    ],
+    [
+     811156,
+     "CMS ENERGY CORPORATION",
+     "US-MI",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000811156-26-000024"
+    ],
+    [
+     922224,
+     "PPL Corporation",
+     "US-PA",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000922224-26-000026"
+    ],
+    [
+     1013871,
+     "NRG Energy, Inc",
+     "US-TX",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001013871-26-000012"
+    ],
+    [
+     1021635,
+     "OGE ENERGY CORP.",
+     "US-OK",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001021635-26-000012"
+    ],
+    [
+     1032208,
+     "Sempra",
+     "US-CA",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001032208-26-000030"
+    ],
+    [
+     1047862,
+     "Consolidated Edison, Inc.",
+     "US-NY",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001047862-26-000091"
+    ],
+    [
+     1108426,
+     "TXNM Energy, Inc.",
+     "US-NM",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001108426-26-000026"
+    ],
+    [
+     1111711,
+     "NiSource Inc.",
+     "US-IN",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001111711-26-000045"
+    ],
+    [
+     1130310,
+     "CenterPoint Energy, Inc.",
+     "US-TX",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001130310-26-000028"
+    ],
+    [
+     1130464,
+     "Black Hills Corporation",
+     "US-SD",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001193125-26-211037"
+    ],
+    [
+     1193311,
+     "Oncor Electric Delivery Company LLC",
+     "US-TX",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001193311-26-000014"
+    ],
+    [
+     1466593,
+     "OTTER TAIL CORPORATION",
+     "US-MN",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001466593-26-000051"
+    ],
+    [
+     1692819,
+     "Vistra Corp.",
+     "US-TX",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001692819-26-000014"
+    ],
+    [
+     1711269,
+     "EVERGY, INC.",
+     "US-MO",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001711269-26-000057"
+    ],
+    [
+     1868275,
+     "CONSTELLATION ENERGY CORPORATION",
+     "US-MD",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001868275-26-000067"
+    ]
+   ],
+   "row_count": 21,
+   "elapsed_ms": 170,
+   "cache_state": "hit",
+   "queried_at": "2026-10-24T21:38:24+0800",
+   "details": {
+    "wall_ms": 182
+   },
+   "masked": [
+    "rows.val"
+   ]
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-07",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "zetaris_sql",
+   "claim": "frames_seeds RevenueFromContractWithCustomerExcludingAssessedTax CY2024Q1: 23 of 43 seed utilities have a fact",
+   "template_id": "frames_seeds",
+   "params": {
+    "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+    "period": "CY2024Q1"
+   },
+   "sql": "SELECT cik, `entityName`, loc, `start`, `end`, CAST(val AS DOUBLE) AS val, accn FROM won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2024Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271) ORDER BY cik",
+   "sql_sha256": "225577b9b0c73d9fe028b09d5011b7fbf3f893cfa0124ce16eca5f20b54f4e4e",
+   "zetaris_object": "won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2024Q1",
+   "zetaris_objects": [
+    "won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2024Q1"
+   ],
+   "raw_objects": [
+    "won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2024Q1"
+   ],
+   "source_url": "https://data.sec.gov/api/xbrl/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2024Q1.json",
+   "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+   "source_cached_at": null,
+   "sources": [
+    {
+     "object": "won.frames_RevenueFromContractWithCustomerExcludingAssessedTax_CY2024Q1",
+     "url": "https://data.sec.gov/api/xbrl/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2024Q1.json",
+     "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+     "cached_at": null
+    }
+   ],
+   "columns": [
+    "cik",
+    "entityName",
+    "loc",
+    "start",
+    "end",
+    "val",
+    "accn"
+   ],
+   "rows": [
+    [
+     4904,
+     "AMERICAN ELECTRIC POWER CO INC.",
+     "US-OH",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000004904-25-000061"
+    ],
+    [
+     65984,
+     "ENTERGY CORPORATION",
+     "US-LA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000065984-24-000049"
+    ],
+    [
+     100122,
+     "TUCSON ELECTRIC POWER CO",
+     "US-AZ",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000100122-25-000013"
+    ],
+    [
+     352541,
+     "ALLIANT ENERGY CORP",
+     "US-WI",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000352541-25-000053"
+    ],
+    [
+     715957,
+     "DOMINION ENERGY, INC.",
+     "US-VA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000950170-25-061558"
+    ],
+    [
+     755001,
+     "UNITIL CORPORATION",
+     "US-NH",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000950170-25-064590"
+    ],
+    [
+     764622,
+     "PINNACLE WEST CAPITAL CORPORATION",
+     "US-AZ",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000764622-25-000047"
+    ],
+    [
+     811156,
+     "CMS ENERGY CORPORATION",
+     "US-MI",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000811156-25-000047"
+    ],
+    [
+     922224,
+     "PPL Corporation",
+     "US-PA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000922224-25-000017"
+    ],
+    [
+     1013871,
+     "NRG ENERGY, INC.",
+     "US-TX",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001013871-25-000013"
+    ],
+    [
+     1021635,
+     "OGE ENERGY CORP.",
+     "US-OK",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000950170-25-060389"
+    ],
+    [
+     1032208,
+     "SEMPRA",
+     "US-CA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001032208-25-000027"
+    ],
+    [
+     1047862,
+     "Consolidated Edison, Inc.",
+     "US-NY",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001047862-25-000045"
+    ],
+    [
+     1057877,
+     "IDACORP, Inc.",
+     "US-ID",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001057877-25-000037"
+    ],
+    [
+     1108426,
+     "TXNM Energy, Inc.",
+     "US-NM",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001108426-25-000033"
+    ],
+    [
+     1111711,
+     "NiSource Inc.",
+     "US-IN",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001111711-25-000020"
+    ],
+    [
+     1130310,
+     "CenterPoint Energy, Inc.",
+     "US-TX",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001130310-25-000079"
+    ],
+    [
+     1130464,
+     "Black Hills Corporation",
+     "US-SD",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000950170-25-066572"
+    ],
+    [
+     1193311,
+     "Oncor Electric Delivery Company LLC",
+     "US-TX",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001193311-25-000011"
+    ],
+    [
+     1466593,
+     "OTTER TAIL CORPORATION",
+     "US-MN",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001466593-25-000083"
+    ],
+    [
+     1692819,
+     "Vistra Corp.",
+     "US-TX",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001692819-25-000035"
+    ],
+    [
+     1711269,
+     "EVERGY, INC.",
+     "US-MO",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001711269-25-000010"
+    ],
+    [
+     1868275,
+     "CONSTELLATION ENERGY CORPORATION",
+     "US-MD",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001868275-25-000044"
+    ]
+   ],
+   "row_count": 23,
+   "elapsed_ms": 169,
+   "cache_state": "hit",
+   "queried_at": "2026-10-24T21:38:24+0800",
+   "details": {
+    "wall_ms": 184
+   },
+   "masked": [
+    "rows.val"
+   ]
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-08",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "zetaris_sql",
+   "claim": "frames_seeds RegulatedAndUnregulatedOperatingRevenue CY2025Q1: 9 of 43 seed utilities have a fact",
+   "template_id": "frames_seeds",
+   "params": {
+    "tag": "RegulatedAndUnregulatedOperatingRevenue",
+    "period": "CY2025Q1"
+   },
+   "sql": "SELECT cik, `entityName`, loc, `start`, `end`, CAST(val AS DOUBLE) AS val, accn FROM won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2025Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271) ORDER BY cik",
+   "sql_sha256": "45898512569c72a7181b1042887c67ac9c6e2f077ff8c0a40f184c7fe61fbdc8",
+   "zetaris_object": "won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2025Q1",
+   "zetaris_objects": [
+    "won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2025Q1"
+   ],
+   "raw_objects": [
+    "won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2025Q1"
+   ],
+   "source_url": "https://data.sec.gov/api/xbrl/frames/us-gaap/RegulatedAndUnregulatedOperatingRevenue/USD/CY2025Q1.json",
+   "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+   "source_cached_at": null,
+   "sources": [
+    {
+     "object": "won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2025Q1",
+     "url": "https://data.sec.gov/api/xbrl/frames/us-gaap/RegulatedAndUnregulatedOperatingRevenue/USD/CY2025Q1.json",
+     "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+     "cached_at": null
+    }
+   ],
+   "columns": [
+    "cik",
+    "entityName",
+    "loc",
+    "start",
+    "end",
+    "val",
+    "accn"
+   ],
+   "rows": [
+    [
+     72903,
+     "Xcel Energy Inc.",
+     "US-MN",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000072903-26-000073"
+    ],
+    [
+     352541,
+     "ALLIANT ENERGY CORP",
+     "US-WI",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000352541-26-000033"
+    ],
+    [
+     715957,
+     "DOMINION ENERGY, INC.",
+     "US-VA",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001193125-26-200275"
+    ],
+    [
+     753308,
+     "NEXTERA ENERGY, INC.",
+     "US-FL",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000753308-26-000031"
+    ],
+    [
+     784977,
+     "PORTLAND GENERAL ELECTRIC COMPANY",
+     "US-OR",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001193125-26-197978"
+    ],
+    [
+     936340,
+     "DTE Energy Co",
+     "US-MI",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0000936340-26-000081"
+    ],
+    [
+     1032208,
+     "Sempra",
+     "US-CA",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001032208-26-000030"
+    ],
+    [
+     1161728,
+     "MGE Energy, Inc.",
+     "US-WI",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001193125-26-205678"
+    ],
+    [
+     1326160,
+     "DUKE ENERGY CORPORATION",
+     "US-NC",
+     "2025-01-01",
+     "2025-03-31",
+     null,
+     "0001326160-26-000026"
+    ]
+   ],
+   "row_count": 9,
+   "elapsed_ms": 188,
+   "cache_state": "hit",
+   "queried_at": "2026-10-24T21:38:24+0800",
+   "details": {
+    "wall_ms": 201
+   },
+   "masked": [
+    "rows.val"
+   ]
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-09",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "zetaris_sql",
+   "claim": "frames_seeds RegulatedAndUnregulatedOperatingRevenue CY2024Q1: 11 of 43 seed utilities have a fact",
+   "template_id": "frames_seeds",
+   "params": {
+    "tag": "RegulatedAndUnregulatedOperatingRevenue",
+    "period": "CY2024Q1"
+   },
+   "sql": "SELECT cik, `entityName`, loc, `start`, `end`, CAST(val AS DOUBLE) AS val, accn FROM won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2024Q1 WHERE CAST(cik AS BIGINT) IN (1326160, 92122, 753308, 4904, 72903, 65984, 1711269, 1002910, 811156, 936340, 783325, 352541, 922224, 1031296, 788784, 1047862, 72741, 1109357, 827052, 1004980, 1032208, 764622, 784977, 1057877, 1993004, 1130464, 104918, 1021635, 1130310, 1692819, 1013871, 354707, 66756, 1466593, 1161728, 755001, 1108426, 715957, 1868275, 1111711, 1193311, 100122, 96271) ORDER BY cik",
+   "sql_sha256": "32c45abe4127f93a85ba129c6f1ee8310dd8ad2398302fcd351c879ee7960ca7",
+   "zetaris_object": "won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2024Q1",
+   "zetaris_objects": [
+    "won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2024Q1"
+   ],
+   "raw_objects": [
+    "won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2024Q1"
+   ],
+   "source_url": "https://data.sec.gov/api/xbrl/frames/us-gaap/RegulatedAndUnregulatedOperatingRevenue/USD/CY2024Q1.json",
+   "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+   "source_cached_at": null,
+   "sources": [
+    {
+     "object": "won.frames_RegulatedAndUnregulatedOperatingRevenue_CY2024Q1",
+     "url": "https://data.sec.gov/api/xbrl/frames/us-gaap/RegulatedAndUnregulatedOperatingRevenue/USD/CY2024Q1.json",
+     "licence": "SEC EDGAR (US government work, public domain); fair-access policy: at most 10 requests per second with a declared User-Agent; queried live, never redistributed",
+     "cached_at": null
+    }
+   ],
+   "columns": [
+    "cik",
+    "entityName",
+    "loc",
+    "start",
+    "end",
+    "val",
+    "accn"
+   ],
+   "rows": [
+    [
+     72903,
+     "Xcel Energy Inc.",
+     "US-MN",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000072903-25-000088"
+    ],
+    [
+     352541,
+     "ALLIANT ENERGY CORP",
+     "US-WI",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000352541-25-000053"
+    ],
+    [
+     715957,
+     "DOMINION ENERGY, INC.",
+     "US-VA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000950170-25-061558"
+    ],
+    [
+     753308,
+     "NEXTERA ENERGY, INC.",
+     "US-FL",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000753308-25-000024"
+    ],
+    [
+     755001,
+     "UNITIL CORPORATION",
+     "US-NH",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000950170-24-053926"
+    ],
+    [
+     784977,
+     "PORTLAND GENERAL ELECTRIC COMPANY",
+     "US-OR",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000784977-25-000074"
+    ],
+    [
+     936340,
+     "DTE Energy Co",
+     "US-MI",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000936340-25-000097"
+    ],
+    [
+     1032208,
+     "SEMPRA",
+     "US-CA",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001032208-25-000027"
+    ],
+    [
+     1057877,
+     "IDACORP, Inc.",
+     "US-ID",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001057877-25-000037"
+    ],
+    [
+     1161728,
+     "MGE Energy, Inc.",
+     "US-WI",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0000950170-25-065302"
+    ],
+    [
+     1326160,
+     "DUKE ENERGY CORPORATION",
+     "US-NC",
+     "2024-01-01",
+     "2024-03-31",
+     null,
+     "0001326160-25-000150"
+    ]
+   ],
+   "row_count": 11,
+   "elapsed_ms": 164,
+   "cache_state": "hit",
+   "queried_at": "2026-10-24T21:38:24+0800",
+   "details": {
+    "wall_ms": 188
+   },
+   "masked": [
+    "rows.val"
+   ]
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-10",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "tool",
+   "claim": "Peer set for CY2025Q1 vs CY2024Q1: 39 peers of 42 other seed utilities (4 under RegulatedAndUnregulatedOperatingRevenue, 32 under Revenues, 3 under RevenueFromContractWithCustomerExcludingAssessedTax); SIC in 4911, 4931, 4932; both quarters present under the peer's own first tag; |g| < 60%. Excluded: IDACORP INC: excluded: current period missing (no fact under any of the three tags); MGE ENERGY INC: excluded: SIC 4900 not in 4911, 4931, 4932 (tag RegulatedAndUnregulatedOperatingRevenue); ONCOR ELECTRIC DELIVERY CO LLC: excluded: previous period missing (tag Revenues)",
+   "derived_from": [
+    "ev-r20261024T213805fb4e-04",
+    "ev-r20261024T213805fb4e-05",
+    "ev-r20261024T213805fb4e-06",
+    "ev-r20261024T213805fb4e-07",
+    "ev-r20261024T213805fb4e-08",
+    "ev-r20261024T213805fb4e-09",
+    "ev-r20261024T213805fb4e-10"
+   ],
+   "details": {
+    "tool": "peer_set",
+    "peers": [
+     {
+      "cik": "0001326160",
+      "name": "Duke Energy CORP",
+      "tag": "RegulatedAndUnregulatedOperatingRevenue",
+      "g": 0.07534871594316256,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001326160-26-000026",
+      "previous_accn": "0001326160-25-000150"
+     },
+     {
+      "cik": "0000092122",
+      "name": "SOUTHERN CO",
+      "tag": "Revenues",
+      "g": 0.1698766175142943,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000092122-26-000034",
+      "previous_accn": "0000092122-25-000042"
+     },
+     {
+      "cik": "0000753308",
+      "name": "NEXTERA ENERGY INC",
+      "tag": "RegulatedAndUnregulatedOperatingRevenue",
+      "g": 0.09003664281975222,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000753308-26-000031",
+      "previous_accn": "0000753308-25-000024"
+     },
+     {
+      "cik": "0000004904",
+      "name": "AMERICAN ELECTRIC POWER CO INC",
+      "tag": "Revenues",
+      "g": 0.08701275444216726,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000004904-26-000034",
+      "previous_accn": "0000004904-25-000061"
+     },
+     {
+      "cik": "0000072903",
+      "name": "XCEL ENERGY INC",
+      "tag": "RegulatedAndUnregulatedOperatingRevenue",
+      "g": 0.0704302548643464,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000072903-26-000073",
+      "previous_accn": "0000072903-25-000088"
+     },
+     {
+      "cik": "0000065984",
+      "name": "ENTERGY CORP /DE/",
+      "tag": "Revenues",
+      "g": 0.018695153702031182,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000065984-26-000222",
+      "previous_accn": "0000065984-25-000046"
+     },
+     {
+      "cik": "0001711269",
+      "name": "Evergy, Inc.",
+      "tag": "Revenues",
+      "g": 0.03268219383921863,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001711269-26-000057",
+      "previous_accn": "0001711269-25-000010"
+     },
+     {
+      "cik": "0001002910",
+      "name": "AMEREN CORP",
+      "tag": "Revenues",
+      "g": 0.15473568281938327,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001002910-26-000015",
+      "previous_accn": "0001002910-25-000098"
+     },
+     {
+      "cik": "0000811156",
+      "name": "CMS ENERGY CORP",
+      "tag": "Revenues",
+      "g": 0.12454044117647059,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000811156-26-000024",
+      "previous_accn": "0000811156-25-000047"
+     },
+     {
+      "cik": "0000936340",
+      "name": "DTE ENERGY CO",
+      "tag": "RegulatedAndUnregulatedOperatingRevenue",
+      "g": 0.37037037037037035,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000936340-26-000081",
+      "previous_accn": "0000936340-25-000097"
+     },
+     {
+      "cik": "0000783325",
+      "name": "WEC ENERGY GROUP, INC.",
+      "tag": "Revenues",
+      "g": 0.17509887321841652,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000783325-26-000052",
+      "previous_accn": "0000107815-25-000182"
+     },
+     {
+      "cik": "0000352541",
+      "name": "ALLIANT ENERGY CORP",
+      "tag": "Revenues",
+      "g": 0.09408341416100872,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000352541-26-000033",
+      "previous_accn": "0000352541-25-000053"
+     },
+     {
+      "cik": "0000922224",
+      "name": "PPL Corp",
+      "tag": "Revenues",
+      "g": 0.08680555555555555,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000922224-26-000026",
+      "previous_accn": "0000922224-25-000017"
+     },
+     {
+      "cik": "0000788784",
+      "name": "PUBLIC SERVICE ENTERPRISE GROUP INC",
+      "tag": "Revenues",
+      "g": 0.1673913043478261,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001193125-26-206545",
+      "previous_accn": "0000950170-25-061108"
+     },
+     {
+      "cik": "0001047862",
+      "name": "CONSOLIDATED EDISON INC",
+      "tag": "Revenues",
+      "g": 0.12102803738317756,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001047862-26-000091",
+      "previous_accn": "0001047862-25-000045"
+     },
+     {
+      "cik": "0000072741",
+      "name": "EVERSOURCE ENERGY",
+      "tag": "Revenues",
+      "g": 0.23578764168848412,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001628280-26-032278",
+      "previous_accn": "0000072741-25-000011"
+     },
+     {
+      "cik": "0001109357",
+      "name": "EXELON CORP",
+      "tag": "Revenues",
+      "g": 0.11103756412377958,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001109357-26-000063",
+      "previous_accn": "0001109357-25-000113"
+     },
+     {
+      "cik": "0000827052",
+      "name": "EDISON INTERNATIONAL",
+      "tag": "Revenues",
+      "g": -0.06547327121137812,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000827052-26-000042",
+      "previous_accn": "0000827052-25-000043"
+     },
+     {
+      "cik": "0001004980",
+      "name": "PG&E Corp",
+      "tag": "Revenues",
+      "g": 0.02081556048455895,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001004980-26-000033",
+      "previous_accn": "0001004980-25-000087"
+     },
+     {
+      "cik": "0001032208",
+      "name": "SEMPRA",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "g": -0.004327833378414931,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001032208-26-000030",
+      "previous_accn": "0001032208-25-000027"
+     },
+     {
+      "cik": "0000764622",
+      "name": "PINNACLE WEST CAPITAL CORP",
+      "tag": "Revenues",
+      "g": 0.08465586227766383,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000764622-26-000025",
+      "previous_accn": "0000764622-25-000047"
+     },
+     {
+      "cik": "0000784977",
+      "name": "PORTLAND GENERAL ELECTRIC CO /OR/",
+      "tag": "Revenues",
+      "g": -0.001076426264800861,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001193125-26-197978",
+      "previous_accn": "0000784977-25-000074"
+     },
+     {
+      "cik": "0001993004",
+      "name": "NorthWestern Energy Group, Inc.",
+      "tag": "Revenues",
+      "g": -0.01832785657484506,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001993004-26-000029",
+      "previous_accn": "0001993004-25-000084"
+     },
+     {
+      "cik": "0001130464",
+      "name": "BLACK HILLS CORP /SD/",
+      "tag": "Revenues",
+      "g": 0.10848017621145374,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001193125-26-211037",
+      "previous_accn": "0000950170-25-066572"
+     },
+     {
+      "cik": "0000104918",
+      "name": "AVISTA CORP",
+      "tag": "Revenues",
+      "g": 0.013136288998357963,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001193125-26-204658",
+      "previous_accn": "0000950170-25-064737"
+     },
+     {
+      "cik": "0001021635",
+      "name": "OGE ENERGY CORP.",
+      "tag": "Revenues",
+      "g": 0.2528485254691689,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001021635-26-000012",
+      "previous_accn": "0000950170-25-060389"
+     },
+     {
+      "cik": "0001130310",
+      "name": "CENTERPOINT ENERGY INC",
+      "tag": "Revenues",
+      "g": 0.11450381679389313,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001130310-26-000028",
+      "previous_accn": "0001130310-25-000079"
+     },
+     {
+      "cik": "0001692819",
+      "name": "Vistra Corp.",
+      "tag": "Revenues",
+      "g": 0.28781925343811393,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001692819-26-000014",
+      "previous_accn": "0001692819-25-000035"
+     },
+     {
+      "cik": "0001013871",
+      "name": "NRG ENERGY, INC.",
+      "tag": "Revenues",
+      "g": 0.15560640732265446,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001013871-26-000012",
+      "previous_accn": "0001013871-25-000013"
+     },
+     {
+      "cik": "0000354707",
+      "name": "HAWAIIAN ELECTRIC INDUSTRIES INC",
+      "tag": "Revenues",
+      "g": -0.060534283484887895,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000354707-26-000037",
+      "previous_accn": "0000354707-25-000026"
+     },
+     {
+      "cik": "0000066756",
+      "name": "ALLETE INC",
+      "tag": "Revenues",
+      "g": -0.007686585668237045,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000066756-25-000060",
+      "previous_accn": "0000066756-25-000060"
+     },
+     {
+      "cik": "0001466593",
+      "name": "Otter Tail Corp",
+      "tag": "Revenues",
+      "g": -0.028527737219971143,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001466593-26-000051",
+      "previous_accn": "0001466593-25-000083"
+     },
+     {
+      "cik": "0000755001",
+      "name": "UNITIL CORP",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "g": -0.04420817011751539,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000755001-26-000010",
+      "previous_accn": "0000950170-25-064590"
+     },
+     {
+      "cik": "0001108426",
+      "name": "TXNM ENERGY INC",
+      "tag": "Revenues",
+      "g": 0.10509823130995681,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001108426-26-000026",
+      "previous_accn": "0001108426-25-000033"
+     },
+     {
+      "cik": "0000715957",
+      "name": "DOMINION ENERGY, INC",
+      "tag": "Revenues",
+      "g": 0.1222466960352423,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001193125-26-200275",
+      "previous_accn": "0001193125-26-063120"
+     },
+     {
+      "cik": "0001868275",
+      "name": "Constellation Energy Corp",
+      "tag": "Revenues",
+      "g": 0.1017691933127739,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001868275-26-000067",
+      "previous_accn": "0001868275-25-000044"
+     },
+     {
+      "cik": "0001111711",
+      "name": "NISOURCE INC.",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "g": 0.30827754108338407,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001111711-26-000045",
+      "previous_accn": "0001111711-25-000020"
+     },
+     {
+      "cik": "0000100122",
+      "name": "TUCSON ELECTRIC POWER CO",
+      "tag": "Revenues",
+      "g": -0.19220065554073276,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0000100122-26-000010",
+      "previous_accn": "0000100122-25-000013"
+     },
+     {
+      "cik": "0000096271",
+      "name": "TAMPA ELECTRIC CO",
+      "tag": "Revenues",
+      "g": 0.1843065693430657,
+      "rev_current": null,
+      "rev_previous": null,
+      "current_accn": "0001193125-26-213184",
+      "previous_accn": "0000950170-25-066297"
+     }
+    ],
+    "excluded": [
+     {
+      "cik": "0001057877",
+      "reason": "IDACORP INC: excluded: current period missing (no fact under any of the three tags)"
+     },
+     {
+      "cik": "0001161728",
+      "reason": "MGE ENERGY INC: excluded: SIC 4900 not in 4911, 4931, 4932 (tag RegulatedAndUnregulatedOperatingRevenue)"
+     },
+     {
+      "cik": "0001193311",
+      "reason": "ONCOR ELECTRIC DELIVERY CO LLC: excluded: previous period missing (tag Revenues)"
+     }
+    ],
+    "by_tag": {
+     "RegulatedAndUnregulatedOperatingRevenue": 4,
+     "Revenues": 32,
+     "RevenueFromContractWithCustomerExcludingAssessedTax": 3
+    }
+   },
+   "queried_at": "2026-10-24T21:38:24+08:00"
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-11",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "zetaris_sql",
+   "claim": "Degree days in Lightning SQL, 2025 Q1: 56 of 56 stations (min coverage 0.9556); statement 19962 ms, cache hit",
+   "template_id": "weather_quarter",
+   "params": {
+    "year": "2025",
+    "quarter": "1",
+    "station_list": "USW00003017,USW00003927,USW00003940,USW00012839,USW00012842,USW00012916,USW00012960,USW00013722,USW00013737,USW00013739,USW00013781,USW00013866,USW00013874,USW00013876,USW00013883,USW00013963,USW00013967,USW00013994,USW00013996,USW00014734,USW00014739,USW00014740,USW00014745,USW00014765,USW00014820,USW00014821,USW00014836,USW00014837,USW00014839,USW00014842,USW00014913,USW00014922,USW00014933,USW00014944,USW00022521,USW00023050,USW00023174,USW00023183,USW00023234,USW00024011,USW00024018,USW00024033,USW00024090,USW00024131,USW00024229,USW00024233,USW00093720,USW00093721,USW00093730,USW00093817,USW00093819,USW00093821,USW00094728,USW00094823,USW00094846,USW00094847"
+   },
+   "sql": "SELECT x.ID AS station_id, 2025 AS year, 1 AS quarter, SUM(GREATEST(0, 65 - (((x.DATA_VALUE + n.DATA_VALUE) / 2.0) / 10.0 * 9.0 / 5.0 + 32))) AS hdd, SUM(GREATEST(0, (((x.DATA_VALUE + n.DATA_VALUE) / 2.0) / 10.0 * 9.0 / 5.0 + 32) - 65)) AS cdd, COUNT(*) AS days_observed, CASE 1 WHEN 1 THEN CASE WHEN 2025 % 4 = 0 THEN 91 ELSE 90 END WHEN 2 THEN 91 ELSE 92 END AS days_in_quarter, COUNT(*) / CAST(CASE 1 WHEN 1 THEN CASE WHEN 2025 % 4 = 0 THEN 91 ELSE 90 END WHEN 2 THEN 91 ELSE 92 END AS DOUBLE) AS coverage FROM won.ghcn_2025_tmax x JOIN won.ghcn_2025_tmin n ON n.ID = x.ID AND n.DATE = x.DATE WHERE x.ID IN ('USW00003017', 'USW00003927', 'USW00003940', 'USW00012839', 'USW00012842', 'USW00012916', 'USW00012960', 'USW00013722', 'USW00013737', 'USW00013739', 'USW00013781', 'USW00013866', 'USW00013874', 'USW00013876', 'USW00013883', 'USW00013963', 'USW00013967', 'USW00013994', 'USW00013996', 'USW00014734', 'USW00014739', 'USW00014740', 'USW00014745', 'USW00014765', 'USW00014820', 'USW00014821', 'USW00014836', 'USW00014837', 'USW00014839', 'USW00014842', 'USW00014913', 'USW00014922', 'USW00014933', 'USW00014944', 'USW00022521', 'USW00023050', 'USW00023174', 'USW00023183', 'USW00023234', 'USW00024011', 'USW00024018', 'USW00024033', 'USW00024090', 'USW00024131', 'USW00024229', 'USW00024233', 'USW00093720', 'USW00093721', 'USW00093730', 'USW00093817', 'USW00093819', 'USW00093821', 'USW00094728', 'USW00094823', 'USW00094846', 'USW00094847') AND CAST(substr(x.DATE, 5, 2) AS INT) BETWEEN 3 * 1 - 2 AND 3 * 1 AND (x.Q_FLAG IS NULL OR x.Q_FLAG = '') AND (n.Q_FLAG IS NULL OR n.Q_FLAG = '') GROUP BY x.ID ORDER BY x.ID",
+   "sql_sha256": "b56eb3d9b8f43b7e6c1eb3b6a6dc42546c0579094414793ddffd506356e3f5f0",
+   "zetaris_object": "won.ghcn_2025_tmax",
+   "zetaris_objects": [
+    "won.ghcn_2025_tmax",
+    "won.ghcn_2025_tmin"
+   ],
+   "raw_objects": [
+    "won.ghcn_2025_tmax",
+    "won.ghcn_2025_tmin"
+   ],
+   "source_url": "s3a://noaa-ghcn-pds/parquet/by_year/YEAR=2025/ELEMENT=TMAX/",
+   "licence": "NOAA GHCN-Daily on the AWS Open Data public bucket (US government work, public domain; cite NOAA NCEI)",
+   "source_cached_at": null,
+   "sources": [
+    {
+     "object": "won.ghcn_2025_tmax",
+     "url": "s3a://noaa-ghcn-pds/parquet/by_year/YEAR=2025/ELEMENT=TMAX/",
+     "licence": "NOAA GHCN-Daily on the AWS Open Data public bucket (US government work, public domain; cite NOAA NCEI)",
+     "cached_at": null
+    },
+    {
+     "object": "won.ghcn_2025_tmin",
+     "url": "s3a://noaa-ghcn-pds/parquet/by_year/YEAR=2025/ELEMENT=TMIN/",
+     "licence": "NOAA GHCN-Daily on the AWS Open Data public bucket (US government work, public domain; cite NOAA NCEI)",
+     "cached_at": null
+    }
+   ],
+   "columns": [
+    "station_id",
+    "year",
+    "quarter",
+    "hdd",
+    "cdd",
+    "days_observed",
+    "days_in_quarter",
+    "coverage"
+   ],
+   "rows": [
+    [
+     "USW00003017",
+     2025,
+     1,
+     2748.51,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00003927",
+     2025,
+     1,
+     1246.74,
+     90.69,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00003940",
+     2025,
+     1,
+     1131.6,
+     100.92,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00012839",
+     2025,
+     1,
+     49.95,
+     620.82,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00012842",
+     2025,
+     1,
+     293.64,
+     299.94,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00012916",
+     2025,
+     1,
+     696.96,
+     189.09,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00012960",
+     2025,
+     1,
+     753.54,
+     238.29,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00013722",
+     2025,
+     1,
+     1538.88,
+     28.41,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00013737",
+     2025,
+     1,
+     1737.42,
+     29.49,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00013739",
+     2025,
+     1,
+     2364.69,
+     1.02,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00013781",
+     2025,
+     1,
+     2406.93,
+     6,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00013866",
+     2025,
+     1,
+     2338.29,
+     7.11,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00013874",
+     2025,
+     1,
+     1302,
+     24.54,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00013876",
+     2025,
+     1,
+     1401.42,
+     38.01,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00013883",
+     2025,
+     1,
+     1346.94,
+     37.62,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00013963",
+     2025,
+     1,
+     1617.72,
+     32.64,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00013967",
+     2025,
+     1,
+     1939.74,
+     16.08,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00013994",
+     2025,
+     1,
+     2316.6,
+     20.25,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00013996",
+     2025,
+     1,
+     2781.18,
+     9,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00014734",
+     2025,
+     1,
+     2379.6,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00014739",
+     2025,
+     1,
+     2780.19,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00014740",
+     2025,
+     1,
+     2789.28,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00014745",
+     2025,
+     1,
+     3413.7,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00014765",
+     2025,
+     1,
+     2783.7,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00014820",
+     2025,
+     1,
+     2965.17,
+     0.03,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00014821",
+     2025,
+     1,
+     2727.06,
+     5.55,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00014836",
+     2025,
+     1,
+     3025.38,
+     0,
+     86,
+     90,
+     0.9555555555555556
+    ],
+    [
+     "USW00014837",
+     2025,
+     1,
+     3379.95,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00014839",
+     2025,
+     1,
+     3294.9,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00014842",
+     2025,
+     1,
+     2849.58,
+     3.6,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00014913",
+     2025,
+     1,
+     4292.1,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00014922",
+     2025,
+     1,
+     3666.42,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00014933",
+     2025,
+     1,
+     3088.35,
+     3.96,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00014944",
+     2025,
+     1,
+     3523.23,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00022521",
+     2025,
+     1,
+     0,
+     990.99,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00023050",
+     2025,
+     1,
+     1869.96,
+     2.01,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00023174",
+     2025,
+     1,
+     712.47,
+     3,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00023183",
+     2025,
+     1,
+     378.09,
+     198.9,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00023234",
+     2025,
+     1,
+     1021.62,
+     3,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00024011",
+     2025,
+     1,
+     4113.9,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00024018",
+     2025,
+     1,
+     3127.14,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00024033",
+     2025,
+     1,
+     3323.52,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00024090",
+     2025,
+     1,
+     3408.03,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00024131",
+     2025,
+     1,
+     2433.15,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00024229",
+     2025,
+     1,
+     1794.3,
+     3.57,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00024233",
+     2025,
+     1,
+     2043.18,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00093720",
+     2025,
+     1,
+     2333.34,
+     14.04,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00093721",
+     2025,
+     1,
+     2305.08,
+     18.45,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00093730",
+     2025,
+     1,
+     2423.7,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00093817",
+     2025,
+     1,
+     2351.22,
+     14.46,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00093819",
+     2025,
+     1,
+     2652.36,
+     4.44,
+     89,
+     90,
+     0.9888888888888889
+    ],
+    [
+     "USW00093821",
+     2025,
+     1,
+     2138.31,
+     20.52,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00094728",
+     2025,
+     1,
+     2444.13,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00094823",
+     2025,
+     1,
+     2741.85,
+     3.6,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00094846",
+     2025,
+     1,
+     2999.88,
+     0,
+     90,
+     90,
+     1
+    ],
+    [
+     "USW00094847",
+     2025,
+     1,
+     3056.58,
+     0,
+     90,
+     90,
+     1
+    ]
+   ],
+   "row_count": 56,
+   "elapsed_ms": 19962,
+   "cache_state": "hit",
+   "queried_at": "2026-10-24T21:38:29+0800",
+   "details": {
+    "wall_ms": 20004
+   }
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-12",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "zetaris_sql",
+   "claim": "Degree days in Lightning SQL, 2024 Q1: 56 of 56 stations (min coverage 1.0000); statement 20924 ms, cache hit",
+   "template_id": "weather_quarter",
+   "params": {
+    "year": "2024",
+    "quarter": "1",
+    "station_list": "USW00003017,USW00003927,USW00003940,USW00012839,USW00012842,USW00012916,USW00012960,USW00013722,USW00013737,USW00013739,USW00013781,USW00013866,USW00013874,USW00013876,USW00013883,USW00013963,USW00013967,USW00013994,USW00013996,USW00014734,USW00014739,USW00014740,USW00014745,USW00014765,USW00014820,USW00014821,USW00014836,USW00014837,USW00014839,USW00014842,USW00014913,USW00014922,USW00014933,USW00014944,USW00022521,USW00023050,USW00023174,USW00023183,USW00023234,USW00024011,USW00024018,USW00024033,USW00024090,USW00024131,USW00024229,USW00024233,USW00093720,USW00093721,USW00093730,USW00093817,USW00093819,USW00093821,USW00094728,USW00094823,USW00094846,USW00094847"
+   },
+   "sql": "SELECT x.ID AS station_id, 2024 AS year, 1 AS quarter, SUM(GREATEST(0, 65 - (((x.DATA_VALUE + n.DATA_VALUE) / 2.0) / 10.0 * 9.0 / 5.0 + 32))) AS hdd, SUM(GREATEST(0, (((x.DATA_VALUE + n.DATA_VALUE) / 2.0) / 10.0 * 9.0 / 5.0 + 32) - 65)) AS cdd, COUNT(*) AS days_observed, CASE 1 WHEN 1 THEN CASE WHEN 2024 % 4 = 0 THEN 91 ELSE 90 END WHEN 2 THEN 91 ELSE 92 END AS days_in_quarter, COUNT(*) / CAST(CASE 1 WHEN 1 THEN CASE WHEN 2024 % 4 = 0 THEN 91 ELSE 90 END WHEN 2 THEN 91 ELSE 92 END AS DOUBLE) AS coverage FROM won.ghcn_2024_tmax x JOIN won.ghcn_2024_tmin n ON n.ID = x.ID AND n.DATE = x.DATE WHERE x.ID IN ('USW00003017', 'USW00003927', 'USW00003940', 'USW00012839', 'USW00012842', 'USW00012916', 'USW00012960', 'USW00013722', 'USW00013737', 'USW00013739', 'USW00013781', 'USW00013866', 'USW00013874', 'USW00013876', 'USW00013883', 'USW00013963', 'USW00013967', 'USW00013994', 'USW00013996', 'USW00014734', 'USW00014739', 'USW00014740', 'USW00014745', 'USW00014765', 'USW00014820', 'USW00014821', 'USW00014836', 'USW00014837', 'USW00014839', 'USW00014842', 'USW00014913', 'USW00014922', 'USW00014933', 'USW00014944', 'USW00022521', 'USW00023050', 'USW00023174', 'USW00023183', 'USW00023234', 'USW00024011', 'USW00024018', 'USW00024033', 'USW00024090', 'USW00024131', 'USW00024229', 'USW00024233', 'USW00093720', 'USW00093721', 'USW00093730', 'USW00093817', 'USW00093819', 'USW00093821', 'USW00094728', 'USW00094823', 'USW00094846', 'USW00094847') AND CAST(substr(x.DATE, 5, 2) AS INT) BETWEEN 3 * 1 - 2 AND 3 * 1 AND (x.Q_FLAG IS NULL OR x.Q_FLAG = '') AND (n.Q_FLAG IS NULL OR n.Q_FLAG = '') GROUP BY x.ID ORDER BY x.ID",
+   "sql_sha256": "861109012737bc4c2cf589e1065eba07f67e1f2d742a7af648703aedfcd7d522",
+   "zetaris_object": "won.ghcn_2024_tmax",
+   "zetaris_objects": [
+    "won.ghcn_2024_tmax",
+    "won.ghcn_2024_tmin"
+   ],
+   "raw_objects": [
+    "won.ghcn_2024_tmax",
+    "won.ghcn_2024_tmin"
+   ],
+   "source_url": "s3a://noaa-ghcn-pds/parquet/by_year/YEAR=2024/ELEMENT=TMAX/",
+   "licence": "NOAA GHCN-Daily on the AWS Open Data public bucket (US government work, public domain; cite NOAA NCEI)",
+   "source_cached_at": null,
+   "sources": [
+    {
+     "object": "won.ghcn_2024_tmax",
+     "url": "s3a://noaa-ghcn-pds/parquet/by_year/YEAR=2024/ELEMENT=TMAX/",
+     "licence": "NOAA GHCN-Daily on the AWS Open Data public bucket (US government work, public domain; cite NOAA NCEI)",
+     "cached_at": null
+    },
+    {
+     "object": "won.ghcn_2024_tmin",
+     "url": "s3a://noaa-ghcn-pds/parquet/by_year/YEAR=2024/ELEMENT=TMIN/",
+     "licence": "NOAA GHCN-Daily on the AWS Open Data public bucket (US government work, public domain; cite NOAA NCEI)",
+     "cached_at": null
+    }
+   ],
+   "columns": [
+    "station_id",
+    "year",
+    "quarter",
+    "hdd",
+    "cdd",
+    "days_observed",
+    "days_in_quarter",
+    "coverage"
+   ],
+   "rows": [
+    [
+     "USW00003017",
+     2024,
+     1,
+     2658.93,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00003927",
+     2024,
+     1,
+     1079.13,
+     87.9,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00003940",
+     2024,
+     1,
+     1061.13,
+     37.14,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00012839",
+     2024,
+     1,
+     19.5,
+     649.71,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00012842",
+     2024,
+     1,
+     237.18,
+     292.38,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00012916",
+     2024,
+     1,
+     600.84,
+     121.62,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00012960",
+     2024,
+     1,
+     640.23,
+     158.76,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00013722",
+     2024,
+     1,
+     1333.5,
+     9.99,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00013737",
+     2024,
+     1,
+     1528.89,
+     14.49,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00013739",
+     2024,
+     1,
+     2110.47,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00013781",
+     2024,
+     1,
+     2223.69,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00013866",
+     2024,
+     1,
+     1984.38,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00013874",
+     2024,
+     1,
+     1185.78,
+     8.43,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00013876",
+     2024,
+     1,
+     1232.22,
+     17.79,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00013883",
+     2024,
+     1,
+     1167.18,
+     13.59,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00013963",
+     2024,
+     1,
+     1336.23,
+     45.21,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00013967",
+     2024,
+     1,
+     1738.95,
+     9.18,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00013994",
+     2024,
+     1,
+     1918.83,
+     18.15,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00013996",
+     2024,
+     1,
+     2230.68,
+     4.47,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014734",
+     2024,
+     1,
+     2101.83,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014739",
+     2024,
+     1,
+     2561.73,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014740",
+     2024,
+     1,
+     2557.95,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014745",
+     2024,
+     1,
+     2991.93,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014765",
+     2024,
+     1,
+     2572.8,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014820",
+     2024,
+     1,
+     2485.77,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014821",
+     2024,
+     1,
+     2311.35,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014836",
+     2024,
+     1,
+     2816.79,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014837",
+     2024,
+     1,
+     2992.56,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014839",
+     2024,
+     1,
+     2722.47,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014842",
+     2024,
+     1,
+     2464.89,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014913",
+     2024,
+     1,
+     3641.28,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014922",
+     2024,
+     1,
+     3094.26,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014933",
+     2024,
+     1,
+     2666.49,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00014944",
+     2024,
+     1,
+     3112.44,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00022521",
+     2024,
+     1,
+     0,
+     825.69,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00023050",
+     2024,
+     1,
+     1943.52,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00023174",
+     2024,
+     1,
+     738.93,
+     1.5,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00023183",
+     2024,
+     1,
+     475.47,
+     94.17,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00023234",
+     2024,
+     1,
+     949.14,
+     0.48,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00024011",
+     2024,
+     1,
+     3692.22,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00024018",
+     2024,
+     1,
+     2963.31,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00024033",
+     2024,
+     1,
+     3037.83,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00024090",
+     2024,
+     1,
+     3113.52,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00024131",
+     2024,
+     1,
+     2286.51,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00024229",
+     2024,
+     1,
+     1777.74,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00024233",
+     2024,
+     1,
+     1878.54,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00093720",
+     2024,
+     1,
+     1941.27,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00093721",
+     2024,
+     1,
+     2031.54,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00093730",
+     2024,
+     1,
+     2209.56,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00093817",
+     2024,
+     1,
+     1981.05,
+     15.48,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00093819",
+     2024,
+     1,
+     2323.71,
+     0.03,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00093821",
+     2024,
+     1,
+     1826.07,
+     10.98,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00094728",
+     2024,
+     1,
+     2111.82,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00094823",
+     2024,
+     1,
+     2299.38,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00094846",
+     2024,
+     1,
+     2586.03,
+     0,
+     91,
+     91,
+     1
+    ],
+    [
+     "USW00094847",
+     2024,
+     1,
+     2670.09,
+     0,
+     91,
+     91,
+     1
+    ]
+   ],
+   "row_count": 56,
+   "elapsed_ms": 20924,
+   "cache_state": "hit",
+   "queried_at": "2026-10-24T21:38:49+0800",
+   "details": {
+    "wall_ms": 20959
+   }
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-13",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "tool",
+   "claim": "Degree-day change per utility (TDD = mean over its stations of HDD + CDD; coverage = min over stations and quarters): FIRSTENERGY CORP 2,164 -> 2,514, +16.2%, coverage 1.00 over 9 stations; 39 peers with weather",
+   "derived_from": [
+    "ev-r20261024T213805fb4e-11",
+    "ev-r20261024T213805fb4e-12",
+    "ev-r20261024T213805fb4e-13"
+   ],
+   "details": {
+    "tool": "degree_days",
+    "target": {
+     "cik": "0001031296",
+     "current": {
+      "cik": "0001031296",
+      "year": 2025,
+      "quarter": 1,
+      "tdd": 2514.286666666667,
+      "coverage": 1,
+      "stations_used": [
+       "USW00014821",
+       "USW00014820",
+       "USW00013739",
+       "USW00094823",
+       "USW00014734",
+       "USW00093730",
+       "USW00013866",
+       "USW00093721",
+       "USW00093720"
+      ],
+      "stations_missing": []
+     },
+     "previous": {
+      "cik": "0001031296",
+      "year": 2024,
+      "quarter": 1,
+      "tdd": 2163.9500000000003,
+      "coverage": 1,
+      "stations_used": [
+       "USW00014821",
+       "USW00014820",
+       "USW00013739",
+       "USW00094823",
+       "USW00014734",
+       "USW00093730",
+       "USW00013866",
+       "USW00093721",
+       "USW00093720"
+      ],
+      "stations_missing": []
+     },
+     "delta_w": 0.1618968398838543,
+     "coverage": 1
+    },
+    "peers": [
+     {
+      "cik": "0001326160",
+      "tdd_current": 1899.48,
+      "tdd_previous": 1630.83,
+      "delta_w": 0.16473206894648743,
+      "coverage": 0.9888888888888889,
+      "stations": [
+       "USW00013722",
+       "USW00013883",
+       "USW00012839",
+       "USW00012842",
+       "USW00093819",
+       "USW00093817",
+       "USW00014821",
+       "USW00014820",
+       "USW00093821"
+      ]
+     },
+     {
+      "cik": "0000092122",
+      "tdd_current": 1332.8300000000002,
+      "tdd_previous": 1180.8300000000002,
+      "delta_w": 0.12872301686102147,
+      "coverage": 1,
+      "stations": [
+       "USW00013874",
+       "USW00013876",
+       "USW00003940"
+      ]
+     },
+     {
+      "cik": "0000753308",
+      "tdd_current": 632.1750000000001,
+      "tdd_previous": 599.385,
+      "delta_w": 0.054706073725568835,
+      "coverage": 1,
+      "stations": [
+       "USW00012839",
+       "USW00012842"
+      ]
+     },
+     {
+      "cik": "0000004904",
+      "tdd_current": 2124.186666666667,
+      "tdd_previous": 1817.6999999999998,
+      "delta_w": 0.16861234893913582,
+      "coverage": 0.9888888888888889,
+      "stations": [
+       "USW00014821",
+       "USW00014820",
+       "USW00003927",
+       "USW00012960",
+       "USW00013737",
+       "USW00013866",
+       "USW00093819",
+       "USW00093817",
+       "USW00013967"
+      ]
+     },
+     {
+      "cik": "0000072903",
+      "tdd_current": 2855.2233333333334,
+      "tdd_previous": 2523.4733333333334,
+      "delta_w": 0.13146562542104664,
+      "coverage": 1,
+      "stations": [
+       "USW00014922",
+       "USW00014913",
+       "USW00003017",
+       "USW00003927",
+       "USW00012960",
+       "USW00023050",
+       "USW00014839",
+       "USW00014837",
+       "USW00024011"
+      ]
+     },
+     {
+      "cik": "0000065984",
+      "tdd_current": 1219.638,
+      "tdd_previous": 1033.6380000000001,
+      "delta_w": 0.17994694467502137,
+      "coverage": 1,
+      "stations": [
+       "USW00013963",
+       "USW00012916",
+       "USW00003940",
+       "USW00003927",
+       "USW00012960"
+      ]
+     },
+     {
+      "cik": "0001711269",
+      "tdd_current": 2563.515,
+      "tdd_previous": 2086.0649999999996,
+      "delta_w": 0.228875897922644,
+      "coverage": 1,
+      "stations": [
+       "USW00013996",
+       "USW00013994"
+      ]
+     },
+     {
+      "cik": "0001002910",
+      "tdd_current": 2729.97,
+      "tdd_previous": 2329.2999999999997,
+      "delta_w": 0.17201305113124118,
+      "coverage": 1,
+      "stations": [
+       "USW00013994",
+       "USW00094846",
+       "USW00014842"
+      ]
+     },
+     {
+      "cik": "0000811156",
+      "tdd_current": 3040.98,
+      "tdd_previous": 2743.44,
+      "delta_w": 0.10845507829586211,
+      "coverage": 0.9555555555555556,
+      "stations": [
+       "USW00094847",
+       "USW00014836"
+      ]
+     },
+     {
+      "cik": "0000936340",
+      "tdd_current": 3040.98,
+      "tdd_previous": 2743.44,
+      "delta_w": 0.10845507829586211,
+      "coverage": 0.9555555555555556,
+      "stations": [
+       "USW00094847",
+       "USW00014836"
+      ]
+     },
+     {
+      "cik": "0000783325",
+      "tdd_current": 3189.2025000000003,
+      "tdd_previous": 2800.4775,
+      "delta_w": 0.13880668564557308,
+      "coverage": 0.9555555555555556,
+      "stations": [
+       "USW00014839",
+       "USW00014837",
+       "USW00094847",
+       "USW00014836"
+      ]
+     },
+     {
+      "cik": "0000352541",
+      "tdd_current": 3255.72,
+      "tdd_previous": 2793.8399999999997,
+      "delta_w": 0.16532084872433644,
+      "coverage": 1,
+      "stations": [
+       "USW00014933",
+       "USW00014839",
+       "USW00014837"
+      ]
+     },
+     {
+      "cik": "0000922224",
+      "tdd_current": 2513.4224999999997,
+      "tdd_previous": 2204.925,
+      "delta_w": 0.13991292220823814,
+      "coverage": 1,
+      "stations": [
+       "USW00013739",
+       "USW00094823",
+       "USW00093821",
+       "USW00014765"
+      ]
+     },
+     {
+      "cik": "0000788784",
+      "tdd_current": 2401.6499999999996,
+      "tdd_previous": 2155.6949999999997,
+      "delta_w": 0.1140954541342815,
+      "coverage": 1,
+      "stations": [
+       "USW00014734",
+       "USW00093730"
+      ]
+     },
+     {
+      "cik": "0001047862",
+      "tdd_current": 2444.13,
+      "tdd_previous": 2111.82,
+      "delta_w": 0.15735716112168646,
+      "coverage": 1,
+      "stations": [
+       "USW00094728"
+      ]
+     },
+     {
+      "cik": "0000072741",
+      "tdd_current": 2994.39,
+      "tdd_previous": 2703.8700000000003,
+      "delta_w": 0.10744599407515874,
+      "coverage": 1,
+      "stations": [
+       "USW00014740",
+       "USW00014739",
+       "USW00014745"
+      ]
+     },
+     {
+      "cik": "0001109357",
+      "tdd_current": 2539.0400000000004,
+      "tdd_previous": 2218.74,
+      "delta_w": 0.14436121402237337,
+      "coverage": 1,
+      "stations": [
+       "USW00094846",
+       "USW00014842",
+       "USW00013739",
+       "USW00094823",
+       "USW00093721",
+       "USW00093720",
+       "USW00014734",
+       "USW00093730",
+       "USW00013781"
+      ]
+     },
+     {
+      "cik": "0000827052",
+      "tdd_current": 870.0450000000001,
+      "tdd_previous": 845.025,
+      "delta_w": 0.029608591461791185,
+      "coverage": 1,
+      "stations": [
+       "USW00023174",
+       "USW00023234"
+      ]
+     },
+     {
+      "cik": "0001004980",
+      "tdd_current": 870.0450000000001,
+      "tdd_previous": 845.025,
+      "delta_w": 0.029608591461791185,
+      "coverage": 1,
+      "stations": [
+       "USW00023174",
+       "USW00023234"
+      ]
+     },
+     {
+      "cik": "0001032208",
+      "tdd_current": 870.0450000000001,
+      "tdd_previous": 845.025,
+      "delta_w": 0.029608591461791185,
+      "coverage": 1,
+      "stations": [
+       "USW00023174",
+       "USW00023234"
+      ]
+     },
+     {
+      "cik": "0000764622",
+      "tdd_current": 576.99,
+      "tdd_previous": 569.64,
+      "delta_w": 0.01290288603328422,
+      "coverage": 1,
+      "stations": [
+       "USW00023183"
+      ]
+     },
+     {
+      "cik": "0000784977",
+      "tdd_current": 1797.87,
+      "tdd_previous": 1777.74,
+      "delta_w": 0.01132336562151939,
+      "coverage": 1,
+      "stations": [
+       "USW00024229"
+      ]
+     },
+     {
+      "cik": "0001993004",
+      "tdd_current": 3418.26,
+      "tdd_previous": 3087.9300000000003,
+      "delta_w": 0.10697457520086268,
+      "coverage": 1,
+      "stations": [
+       "USW00024033",
+       "USW00014944",
+       "USW00024090"
+      ]
+     },
+     {
+      "cik": "0001130464",
+      "tdd_current": 3201.7275,
+      "tdd_previous": 2962.05,
+      "delta_w": 0.08091608851977508,
+      "coverage": 1,
+      "stations": [
+       "USW00014944",
+       "USW00024090",
+       "USW00024018",
+       "USW00003017"
+      ]
+     },
+     {
+      "cik": "0000104918",
+      "tdd_current": 2238.165,
+      "tdd_previous": 2082.525,
+      "delta_w": 0.07473619764468607,
+      "coverage": 1,
+      "stations": [
+       "USW00024233",
+       "USW00024131"
+      ]
+     },
+     {
+      "cik": "0001021635",
+      "tdd_current": 1955.82,
+      "tdd_previous": 1748.13,
+      "delta_w": 0.1188069537162567,
+      "coverage": 1,
+      "stations": [
+       "USW00013967"
+      ]
+     },
+     {
+      "cik": "0001130310",
+      "tdd_current": 1837.9350000000002,
+      "tdd_previous": 1571.5725,
+      "delta_w": 0.16948788554139257,
+      "coverage": 0.9888888888888889,
+      "stations": [
+       "USW00003927",
+       "USW00012960",
+       "USW00093819",
+       "USW00093817"
+      ]
+     },
+     {
+      "cik": "0001692819",
+      "tdd_current": 2373.91125,
+      "tdd_previous": 2027.9887500000002,
+      "delta_w": 0.17057417108452888,
+      "coverage": 1,
+      "stations": [
+       "USW00003927",
+       "USW00012960",
+       "USW00094846",
+       "USW00014842",
+       "USW00013739",
+       "USW00094823",
+       "USW00014821",
+       "USW00014820"
+      ]
+     },
+     {
+      "cik": "0001013871",
+      "tdd_current": 1164.63,
+      "tdd_previous": 983.0100000000001,
+      "delta_w": 0.184759056367687,
+      "coverage": 1,
+      "stations": [
+       "USW00003927",
+       "USW00012960"
+      ]
+     },
+     {
+      "cik": "0000354707",
+      "tdd_current": 990.99,
+      "tdd_previous": 825.69,
+      "delta_w": 0.200196199542201,
+      "coverage": 1,
+      "stations": [
+       "USW00022521"
+      ]
+     },
+     {
+      "cik": "0000066756",
+      "tdd_current": 3658.3424999999997,
+      "tdd_previous": 3112.6425,
+      "delta_w": 0.1753172746308,
+      "coverage": 1,
+      "stations": [
+       "USW00014922",
+       "USW00014913",
+       "USW00014839",
+       "USW00014837"
+      ]
+     },
+     {
+      "cik": "0001466593",
+      "tdd_current": 3800.736,
+      "tdd_previous": 3330.744,
+      "delta_w": 0.14110721208234547,
+      "coverage": 1,
+      "stations": [
+       "USW00014922",
+       "USW00014913",
+       "USW00024011",
+       "USW00014944",
+       "USW00024090"
+      ]
+     },
+     {
+      "cik": "0000755001",
+      "tdd_current": 3096.9449999999997,
+      "tdd_previous": 2776.83,
+      "delta_w": 0.11528073378636783,
+      "coverage": 1,
+      "stations": [
+       "USW00014745",
+       "USW00014739"
+      ]
+     },
+     {
+      "cik": "0001108426",
+      "tdd_current": 1400.41,
+      "tdd_previous": 1303.18,
+      "delta_w": 0.07460980064150771,
+      "coverage": 1,
+      "stations": [
+       "USW00023050",
+       "USW00003927",
+       "USW00012960"
+      ]
+     },
+     {
+      "cik": "0000715957",
+      "tdd_current": 1572.9199999999998,
+      "tdd_previous": 1355.88,
+      "delta_w": 0.16007316281676823,
+      "coverage": 1,
+      "stations": [
+       "USW00013737",
+       "USW00013722",
+       "USW00013883"
+      ]
+     },
+     {
+      "cik": "0001868275",
+      "tdd_current": 2582.7514285714287,
+      "tdd_previous": 2220.7714285714287,
+      "delta_w": 0.16299741402601411,
+      "coverage": 1,
+      "stations": [
+       "USW00094846",
+       "USW00014842",
+       "USW00013739",
+       "USW00094823",
+       "USW00093721",
+       "USW00093720",
+       "USW00094728"
+      ]
+     },
+     {
+      "cik": "0001111711",
+      "tdd_current": 2511.2400000000002,
+      "tdd_previous": 2160.1349999999998,
+      "delta_w": 0.16253845245783274,
+      "coverage": 0.9888888888888889,
+      "stations": [
+       "USW00093819",
+       "USW00093817"
+      ]
+     },
+     {
+      "cik": "0000100122",
+      "tdd_current": 576.99,
+      "tdd_previous": 569.64,
+      "delta_w": 0.01290288603328422,
+      "coverage": 1,
+      "stations": [
+       "USW00023183"
+      ]
+     },
+     {
+      "cik": "0000096271",
+      "tdd_current": 632.1750000000001,
+      "tdd_previous": 599.385,
+      "delta_w": 0.054706073725568835,
+      "coverage": 1,
+      "stations": [
+       "USW00012839",
+       "USW00012842"
+      ]
+     }
+    ],
+    "without": [],
+    "station_union": [
+     "USW00003017",
+     "USW00003927",
+     "USW00003940",
+     "USW00012839",
+     "USW00012842",
+     "USW00012916",
+     "USW00012960",
+     "USW00013722",
+     "USW00013737",
+     "USW00013739",
+     "USW00013781",
+     "USW00013866",
+     "USW00013874",
+     "USW00013876",
+     "USW00013883",
+     "USW00013963",
+     "USW00013967",
+     "USW00013994",
+     "USW00013996",
+     "USW00014734",
+     "USW00014739",
+     "USW00014740",
+     "USW00014745",
+     "USW00014765",
+     "USW00014820",
+     "USW00014821",
+     "USW00014836",
+     "USW00014837",
+     "USW00014839",
+     "USW00014842",
+     "USW00014913",
+     "USW00014922",
+     "USW00014933",
+     "USW00014944",
+     "USW00022521",
+     "USW00023050",
+     "USW00023174",
+     "USW00023183",
+     "USW00023234",
+     "USW00024011",
+     "USW00024018",
+     "USW00024033",
+     "USW00024090",
+     "USW00024131",
+     "USW00024229",
+     "USW00024233",
+     "USW00093720",
+     "USW00093721",
+     "USW00093730",
+     "USW00093817",
+     "USW00093819",
+     "USW00093821",
+     "USW00094728",
+     "USW00094823",
+     "USW00094846",
+     "USW00094847"
+    ],
+    "calls": 2
+   },
+   "queried_at": "2026-10-24T21:39:10+08:00"
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-14",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "dq",
+   "claim": "Onboarding DQ dq_run_coverage on lightning.metastore.weatherornot.weather_or_not_usl.weather_quarter (2026-10-24T19:31:39+0800, 557.2 s): 1 row(s)",
+   "template_id": "dq_run_coverage",
+   "params": {},
+   "sql": "RUN DQ coverage_ok TABLE lightning.metastore.weatherornot.weather_or_not_usl.weather_quarter",
+   "sql_sha256": "381303d9e998841f55b402b1b6ba43ef87762372c2b2f9a1a8d056323264b0e8",
+   "zetaris_object": "lightning.metastore.weatherornot.weather_or_not_usl.weather_quarter",
+   "zetaris_objects": [
+    "lightning.metastore.weatherornot.weather_or_not_usl.weather_quarter"
+   ],
+   "raw_objects": [
+    "won.ghcn_2025_tmax",
+    "won.ghcn_2025_tmin",
+    "won.ghcn_2024_tmax",
+    "won.ghcn_2024_tmin"
+   ],
+   "source_url": "zetaris-usl:weather_or_not_usl",
+   "licence": "Weather-or-Not USL (governed copies of the SEC and NOAA objects above)",
+   "source_cached_at": null,
+   "columns": [
+    "name",
+    "table",
+    "type",
+    "total_record",
+    "valid_record",
+    "invalid_record"
+   ],
+   "rows": [
+    [
+     "coverage_ok",
+     "weather_quarter",
+     "Custom Data Quality",
+     342,
+     342,
+     0
+    ]
+   ],
+   "row_count": 1,
+   "elapsed_ms": 557200,
+   "cache_state": "onboarding run (reused)",
+   "dq_source": "zetaris_dq",
+   "reused": true,
+   "queried_at": "2026-10-24T19:31:39+0800",
+   "details": {
+    "file": "dq/latest.json",
+    "ran_at": "2026-10-24T19:31:39+0800",
+    "ok": true
+   }
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-15",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "dq",
+   "claim": "Onboarding DQ dq_invalid on lightning.metastore.weatherornot.weather_or_not_usl.weather_quarter (2026-10-24T19:40:57+0800, 181.7 s): 0 row(s)",
+   "template_id": "dq_invalid",
+   "params": {},
+   "sql": "SHOW DQ INVALID RECORD coverage_ok TABLE lightning.metastore.weatherornot.weather_or_not_usl.weather_quarter",
+   "sql_sha256": "6092b2c0008c9b4accaf163ade2bb2b3f8164a748e38ab351541261a39de7fa6",
+   "zetaris_object": "lightning.metastore.weatherornot.weather_or_not_usl.weather_quarter",
+   "zetaris_objects": [
+    "lightning.metastore.weatherornot.weather_or_not_usl.weather_quarter"
+   ],
+   "raw_objects": [
+    "won.ghcn_2025_tmax",
+    "won.ghcn_2025_tmin",
+    "won.ghcn_2024_tmax",
+    "won.ghcn_2024_tmin"
+   ],
+   "source_url": "zetaris-usl:weather_or_not_usl",
+   "licence": "Weather-or-Not USL (governed copies of the SEC and NOAA objects above)",
+   "source_cached_at": null,
+   "columns": [
+    "station_id",
+    "year",
+    "quarter",
+    "hdd",
+    "cdd",
+    "days_observed",
+    "coverage"
+   ],
+   "rows": [],
+   "row_count": 0,
+   "elapsed_ms": 181700,
+   "cache_state": "onboarding run (reused)",
+   "dq_source": "zetaris_dq",
+   "reused": true,
+   "queried_at": "2026-10-24T19:40:57+0800",
+   "details": {
+    "file": "dq/latest.json",
+    "ran_at": "2026-10-24T19:31:39+0800",
+    "ok": true
+   }
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-16",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "tool",
+   "claim": "DQ gate pass (onboarding+coverage): pass: coverage_ok onboarding run 2026-10-24T19:31:39+0800 (342 rows, 0 invalid, 739.3 s) names none of the utility's stations; the utility's own station coverage is 1.0000 (rule: coverage >= 0.9)",
+   "derived_from": [
+    "ev-r20261024T213805fb4e-14",
+    "ev-r20261024T213805fb4e-15",
+    "ev-r20261024T213805fb4e-11",
+    "ev-r20261024T213805fb4e-12",
+    "ev-r20261024T213805fb4e-13"
+   ],
+   "details": {
+    "tool": "dq_gate",
+    "label": "pass",
+    "basis": "onboarding+coverage",
+    "ran_at": "2026-10-24T19:31:39+0800",
+    "elapsed_s": 739.3,
+    "run": {
+     "total": 342,
+     "valid": 342,
+     "invalid": 0,
+     "elapsed_s": 557.2,
+     "columns": [
+      "name",
+      "table",
+      "type",
+      "total_record",
+      "valid_record",
+      "invalid_record"
+     ],
+     "row": [
+      "coverage_ok",
+      "weather_quarter",
+      "Custom Data Quality",
+      342,
+      342,
+      0
+     ]
+    },
+    "invalid_rows": 0,
+    "invalid_for_target": [],
+    "target_coverage": 1,
+    "stations": [
+     "USW00014821",
+     "USW00014820",
+     "USW00013739",
+     "USW00094823",
+     "USW00014734",
+     "USW00093730",
+     "USW00013866",
+     "USW00093721",
+     "USW00093720"
+    ]
+   },
+   "queried_at": "2026-10-24T21:39:21+08:00"
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-17",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "tool",
+   "claim": "Attribution over 39 peers: beta (OLS slope of g on dw) 0.507 [0.101, 0.864] (Theil-Sen 0.306); weather +8.2% [+1.6%, +14.0%], industry +2.9% [-1.8%, +8.7%], remainder +3.5% [-8.2%, +14.7%] of g +14.5%; bootstrap 300 valid of 300 resamples (seed 7), 10th to 90th percentile; confidence high; claim ratio 0.56 -> supported",
+   "derived_from": [
+    "ev-r20261024T213805fb4e-03",
+    "ev-r20261024T213805fb4e-10",
+    "ev-r20261024T213805fb4e-13"
+   ],
+   "details": {
+    "tool": "attribution",
+    "attribution": {
+     "target": {
+      "cik": "0001031296",
+      "g": 0.14542135686035898,
+      "dw": 0.1618968398838543,
+      "coverage": 1
+     },
+     "peers": 39,
+     "beta": 0.5065257246036571,
+     "theil_sen": 0.3056936800029751,
+     "weather": 0.08200491413321155,
+     "industry": 0.028653842758497555,
+     "remainder": 0.034762599968649874,
+     "ranges": {
+      "beta": {
+       "lo": 0.10121282138746253,
+       "hi": 0.8639498318971774
+      },
+      "weather": {
+       "lo": 0.01638603593835917,
+       "hi": 0.13987074760234017
+      },
+      "industry": {
+       "lo": -0.018138934895090393,
+       "hi": 0.08719808771518327
+      },
+      "remainder": {
+       "lo": -0.08164747845716445,
+       "hi": 0.1471742558170902
+      }
+     },
+     "bootstrap": {
+      "resamples": 300,
+      "valid": 300,
+      "skipped_zero_variance": 0,
+      "seed": 7
+     },
+     "coverage": 1,
+     "confidence": "high",
+     "claim": {
+      "ratio": 0.5639124534641556,
+      "verdict": "supported"
+     }
+    },
+    "peers": [
+     {
+      "cik": "0001326160",
+      "name": "Duke Energy CORP",
+      "tag": "RegulatedAndUnregulatedOperatingRevenue",
+      "g": 0.07534871594316256,
+      "dw": 0.16473206894648743,
+      "coverage": 0.9888888888888889
+     },
+     {
+      "cik": "0000092122",
+      "name": "SOUTHERN CO",
+      "tag": "Revenues",
+      "g": 0.1698766175142943,
+      "dw": 0.12872301686102147,
+      "coverage": 1
+     },
+     {
+      "cik": "0000753308",
+      "name": "NEXTERA ENERGY INC",
+      "tag": "RegulatedAndUnregulatedOperatingRevenue",
+      "g": 0.09003664281975222,
+      "dw": 0.054706073725568835,
+      "coverage": 1
+     },
+     {
+      "cik": "0000004904",
+      "name": "AMERICAN ELECTRIC POWER CO INC",
+      "tag": "Revenues",
+      "g": 0.08701275444216726,
+      "dw": 0.16861234893913582,
+      "coverage": 0.9888888888888889
+     },
+     {
+      "cik": "0000072903",
+      "name": "XCEL ENERGY INC",
+      "tag": "RegulatedAndUnregulatedOperatingRevenue",
+      "g": 0.0704302548643464,
+      "dw": 0.13146562542104664,
+      "coverage": 1
+     },
+     {
+      "cik": "0000065984",
+      "name": "ENTERGY CORP /DE/",
+      "tag": "Revenues",
+      "g": 0.018695153702031182,
+      "dw": 0.17994694467502137,
+      "coverage": 1
+     },
+     {
+      "cik": "0001711269",
+      "name": "Evergy, Inc.",
+      "tag": "Revenues",
+      "g": 0.03268219383921863,
+      "dw": 0.228875897922644,
+      "coverage": 1
+     },
+     {
+      "cik": "0001002910",
+      "name": "AMEREN CORP",
+      "tag": "Revenues",
+      "g": 0.15473568281938327,
+      "dw": 0.17201305113124118,
+      "coverage": 1
+     },
+     {
+      "cik": "0000811156",
+      "name": "CMS ENERGY CORP",
+      "tag": "Revenues",
+      "g": 0.12454044117647059,
+      "dw": 0.10845507829586211,
+      "coverage": 0.9555555555555556
+     },
+     {
+      "cik": "0000936340",
+      "name": "DTE ENERGY CO",
+      "tag": "RegulatedAndUnregulatedOperatingRevenue",
+      "g": 0.37037037037037035,
+      "dw": 0.10845507829586211,
+      "coverage": 0.9555555555555556
+     },
+     {
+      "cik": "0000783325",
+      "name": "WEC ENERGY GROUP, INC.",
+      "tag": "Revenues",
+      "g": 0.17509887321841652,
+      "dw": 0.13880668564557308,
+      "coverage": 0.9555555555555556
+     },
+     {
+      "cik": "0000352541",
+      "name": "ALLIANT ENERGY CORP",
+      "tag": "Revenues",
+      "g": 0.09408341416100872,
+      "dw": 0.16532084872433644,
+      "coverage": 1
+     },
+     {
+      "cik": "0000922224",
+      "name": "PPL Corp",
+      "tag": "Revenues",
+      "g": 0.08680555555555555,
+      "dw": 0.13991292220823814,
+      "coverage": 1
+     },
+     {
+      "cik": "0000788784",
+      "name": "PUBLIC SERVICE ENTERPRISE GROUP INC",
+      "tag": "Revenues",
+      "g": 0.1673913043478261,
+      "dw": 0.1140954541342815,
+      "coverage": 1
+     },
+     {
+      "cik": "0001047862",
+      "name": "CONSOLIDATED EDISON INC",
+      "tag": "Revenues",
+      "g": 0.12102803738317756,
+      "dw": 0.15735716112168646,
+      "coverage": 1
+     },
+     {
+      "cik": "0000072741",
+      "name": "EVERSOURCE ENERGY",
+      "tag": "Revenues",
+      "g": 0.23578764168848412,
+      "dw": 0.10744599407515874,
+      "coverage": 1
+     },
+     {
+      "cik": "0001109357",
+      "name": "EXELON CORP",
+      "tag": "Revenues",
+      "g": 0.11103756412377958,
+      "dw": 0.14436121402237337,
+      "coverage": 1
+     },
+     {
+      "cik": "0000827052",
+      "name": "EDISON INTERNATIONAL",
+      "tag": "Revenues",
+      "g": -0.06547327121137812,
+      "dw": 0.029608591461791185,
+      "coverage": 1
+     },
+     {
+      "cik": "0001004980",
+      "name": "PG&E Corp",
+      "tag": "Revenues",
+      "g": 0.02081556048455895,
+      "dw": 0.029608591461791185,
+      "coverage": 1
+     },
+     {
+      "cik": "0001032208",
+      "name": "SEMPRA",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "g": -0.004327833378414931,
+      "dw": 0.029608591461791185,
+      "coverage": 1
+     },
+     {
+      "cik": "0000764622",
+      "name": "PINNACLE WEST CAPITAL CORP",
+      "tag": "Revenues",
+      "g": 0.08465586227766383,
+      "dw": 0.01290288603328422,
+      "coverage": 1
+     },
+     {
+      "cik": "0000784977",
+      "name": "PORTLAND GENERAL ELECTRIC CO /OR/",
+      "tag": "Revenues",
+      "g": -0.001076426264800861,
+      "dw": 0.01132336562151939,
+      "coverage": 1
+     },
+     {
+      "cik": "0001993004",
+      "name": "NorthWestern Energy Group, Inc.",
+      "tag": "Revenues",
+      "g": -0.01832785657484506,
+      "dw": 0.10697457520086268,
+      "coverage": 1
+     },
+     {
+      "cik": "0001130464",
+      "name": "BLACK HILLS CORP /SD/",
+      "tag": "Revenues",
+      "g": 0.10848017621145374,
+      "dw": 0.08091608851977508,
+      "coverage": 1
+     },
+     {
+      "cik": "0000104918",
+      "name": "AVISTA CORP",
+      "tag": "Revenues",
+      "g": 0.013136288998357963,
+      "dw": 0.07473619764468607,
+      "coverage": 1
+     },
+     {
+      "cik": "0001021635",
+      "name": "OGE ENERGY CORP.",
+      "tag": "Revenues",
+      "g": 0.2528485254691689,
+      "dw": 0.1188069537162567,
+      "coverage": 1
+     },
+     {
+      "cik": "0001130310",
+      "name": "CENTERPOINT ENERGY INC",
+      "tag": "Revenues",
+      "g": 0.11450381679389313,
+      "dw": 0.16948788554139257,
+      "coverage": 0.9888888888888889
+     },
+     {
+      "cik": "0001692819",
+      "name": "Vistra Corp.",
+      "tag": "Revenues",
+      "g": 0.28781925343811393,
+      "dw": 0.17057417108452888,
+      "coverage": 1
+     },
+     {
+      "cik": "0001013871",
+      "name": "NRG ENERGY, INC.",
+      "tag": "Revenues",
+      "g": 0.15560640732265446,
+      "dw": 0.184759056367687,
+      "coverage": 1
+     },
+     {
+      "cik": "0000354707",
+      "name": "HAWAIIAN ELECTRIC INDUSTRIES INC",
+      "tag": "Revenues",
+      "g": -0.060534283484887895,
+      "dw": 0.200196199542201,
+      "coverage": 1
+     },
+     {
+      "cik": "0000066756",
+      "name": "ALLETE INC",
+      "tag": "Revenues",
+      "g": -0.007686585668237045,
+      "dw": 0.1753172746308,
+      "coverage": 1
+     },
+     {
+      "cik": "0001466593",
+      "name": "Otter Tail Corp",
+      "tag": "Revenues",
+      "g": -0.028527737219971143,
+      "dw": 0.14110721208234547,
+      "coverage": 1
+     },
+     {
+      "cik": "0000755001",
+      "name": "UNITIL CORP",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "g": -0.04420817011751539,
+      "dw": 0.11528073378636783,
+      "coverage": 1
+     },
+     {
+      "cik": "0001108426",
+      "name": "TXNM ENERGY INC",
+      "tag": "Revenues",
+      "g": 0.10509823130995681,
+      "dw": 0.07460980064150771,
+      "coverage": 1
+     },
+     {
+      "cik": "0000715957",
+      "name": "DOMINION ENERGY, INC",
+      "tag": "Revenues",
+      "g": 0.1222466960352423,
+      "dw": 0.16007316281676823,
+      "coverage": 1
+     },
+     {
+      "cik": "0001868275",
+      "name": "Constellation Energy Corp",
+      "tag": "Revenues",
+      "g": 0.1017691933127739,
+      "dw": 0.16299741402601411,
+      "coverage": 1
+     },
+     {
+      "cik": "0001111711",
+      "name": "NISOURCE INC.",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "g": 0.30827754108338407,
+      "dw": 0.16253845245783274,
+      "coverage": 0.9888888888888889
+     },
+     {
+      "cik": "0000100122",
+      "name": "TUCSON ELECTRIC POWER CO",
+      "tag": "Revenues",
+      "g": -0.19220065554073276,
+      "dw": 0.01290288603328422,
+      "coverage": 1
+     },
+     {
+      "cik": "0000096271",
+      "name": "TAMPA ELECTRIC CO",
+      "tag": "Revenues",
+      "g": 0.1843065693430657,
+      "dw": 0.054706073725568835,
+      "coverage": 1
+     }
+    ]
+   },
+   "queried_at": "2026-10-24T21:39:24+08:00"
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-18",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "tool",
+   "claim": "Not tested (8 items): Fuel-cost pass-through inside revenue; Rate cases; Data-centre and other large-load growth; Mergers, acquisitions and divestitures; The fourth quarter and full-year periods; Weather normals; Service territories simplified; GHCN quality flags",
+   "derived_from": [],
+   "details": {
+    "tool": "not_tested",
+    "items": [
+     "Fuel-cost pass-through inside revenue: a fuel or purchased-power clause moves revenue without moving margin, and revenue is the only series read.",
+     "Rate cases: approved base-rate changes between the two quarters are not read from the filings.",
+     "Data-centre and other large-load growth: customer mix and volume changes beyond weather are not separated from the remainder.",
+     "Mergers, acquisitions and divestitures: changes to the reporting entity between the quarters are not detected.",
+     "The fourth quarter and full-year periods: the frames API has no three-month fourth-quarter frame, so only the first three quarters are compared.",
+     "Weather normals: the comparison is year on year, not against a ten-year normal.",
+     "Service territories simplified: states served are capped at six per utility (the largest systems serve more) and come from a curated reading of the annual report's service-territory text; one or two airport stations stand for each state.",
+     "GHCN quality flags: a day with a non-empty quality flag on either temperature element is dropped rather than corrected; coverage reports how many days remain."
+    ]
+   },
+   "queried_at": "2026-10-24T21:39:34+08:00"
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-19",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "tool",
+   "claim": "Claim \"colder weather\": supported (|weather| / |g| = 0.56; supported at 0.5, partly supported at 0.2, same sign required); confidence high",
+   "derived_from": [
+    "ev-r20261024T213805fb4e-17",
+    "ev-r20261024T213805fb4e-16"
+   ],
+   "details": {
+    "tool": "claim_verdict",
+    "verdict": {
+     "claim": "colder weather",
+     "verdict": "supported",
+     "ratio": 0.5639124534641556,
+     "confidence": "high",
+     "withheld_reason": null
+    }
+   },
+   "queried_at": "2026-10-24T21:39:40+08:00"
+  },
+  {
+   "id": "ev-r20261024T213805fb4e-20",
+   "run_id": "r20261024T213805fb4e",
+   "kind": "model",
+   "claim": "Memo written by nemotron-3-nano:4b (184 words, every number string-matched to a tool output, first try)",
+   "model": {
+    "name": "nemotron-3-nano:4b",
+    "think": false,
+    "prompt_sha256": "378bc6dcec8b2229ef2d2ac3e4366b5d19e5d61d01ea5343e07300958f733249",
+    "tokens_in": 1280,
+    "tokens_out": 360,
+    "attempts": 1,
+    "eval_ms": 2474.598,
+    "tokens_per_s": 145.47817463685013,
+    "label": "measured"
+   },
+   "derived_from": [
+    "ev-r20261024T213805fb4e-19",
+    "ev-r20261024T213805fb4e-17",
+    "ev-r20261024T213805fb4e-03",
+    "ev-r20261024T213805fb4e-18"
+   ],
+   "details": {
+    "tool": "memo",
+    "source": "model",
+    "attempts": [
+     {
+      "attempt": 1,
+      "ok": true,
+      "parseError": null,
+      "schemaErrors": [],
+      "unknownNumbers": [],
+      "wordCount": 184,
+      "metrics": {
+       "label": "measured",
+       "promptTokens": 1280,
+       "evalTokens": 360,
+       "promptEvalMs": 192.322,
+       "evalMs": 2474.598,
+       "loadMs": 3.0002,
+       "totalMs": 2757.173,
+       "wallMs": 2759.0417000000016,
+       "tokensPerSecond": 145.47817463685013
+      },
+      "promptSha256": "378bc6dcec8b2229ef2d2ac3e4366b5d19e5d61d01ea5343e07300958f733249",
+      "error": null
+     }
+    ],
+    "allowed": [
+     {
+      "label": "year",
+      "text": "2025"
+     },
+     {
+      "label": "previous year",
+      "text": "2024"
+     },
+     {
+      "label": "quarter number",
+      "text": "1"
+     },
+     {
+      "label": "revenue current, millions of USD",
+      "text": "[masked]"
+     },
+     {
+      "label": "revenue previous, millions of USD",
+      "text": "[masked]"
+     },
+     {
+      "label": "like-for-like growth g",
+      "text": "+14.5%"
+     },
+     {
+      "label": "stations",
+      "text": "9"
+     },
+     {
+      "label": "states served",
+      "text": "5"
+     },
+     {
+      "label": "degree-day change",
+      "text": "+16.2%"
+     },
+     {
+      "label": "TDD previous",
+      "text": "2,164"
+     },
+     {
+      "label": "TDD current",
+      "text": "2,514"
+     },
+     {
+      "label": "coverage",
+      "text": "1.00"
+     },
+     {
+      "label": "peers",
+      "text": "39"
+     },
+     {
+      "label": "beta",
+      "text": "0.51"
+     },
+     {
+      "label": "beta range low",
+      "text": "0.10"
+     },
+     {
+      "label": "beta range high",
+      "text": "0.86"
+     },
+     {
+      "label": "Theil-Sen slope",
+      "text": "0.31"
+     },
+     {
+      "label": "resamples",
+      "text": "300"
+     },
+     {
+      "label": "percentile low",
+      "text": "10"
+     },
+     {
+      "label": "percentile high",
+      "text": "90"
+     },
+     {
+      "label": "weather part",
+      "text": "+8.2%"
+     },
+     {
+      "label": "weather range low",
+      "text": "+1.6%"
+     },
+     {
+      "label": "weather range high",
+      "text": "+14.0%"
+     },
+     {
+      "label": "industry part",
+      "text": "+2.9%"
+     },
+     {
+      "label": "industry range low",
+      "text": "-1.8%"
+     },
+     {
+      "label": "industry range high",
+      "text": "+8.7%"
+     },
+     {
+      "label": "remainder",
+      "text": "+3.5%"
+     },
+     {
+      "label": "remainder range low",
+      "text": "-8.2%"
+     },
+     {
+      "label": "remainder range high",
+      "text": "+14.7%"
+     }
+    ],
+    "findings": [
+     "Revenue under Revenues rose from [masked] million to [masked] million, a like-for-like change of +14.5% (the current quarter from its own filing, the previous quarter as that filing restates it).",
+     "Heating plus cooling degree days over the utility's 9 stations in 5 states moved from 2,164 to 2,514, a change of +16.2%, with station coverage 1.00.",
+     "Across 39 peer utilities the sensitivity of revenue growth to the degree-day change is 0.51 (Theil-Sen 0.31), bootstrap range [0.10, 0.86] from 300 resamples at the 10th and 90th percentiles.",
+     "The weather part is +8.2% [+1.6%, +14.0%], the industry-wide part +2.9% [-1.8%, +8.7%] and the company-specific remainder +3.5% [-8.2%, +14.7%].",
+     "Excluded from the peer set: IDACORP INC: excluded: current period missing; MGE ENERGY INC: excluded: outside the peer SIC set; ONCOR ELECTRIC DELIVERY CO LLC: excluded: previous period missing.",
+     "Claim verdict: supported; confidence high.",
+     "DQ gate: pass (the coverage_ok rule names none of the utility's stations and its own coverage meets the rule)."
+    ]
+   },
+   "queried_at": "2026-10-24T21:39:42+08:00"
+  }
+ ],
+ "evidence_file": null,
+ "quality": {
+  "e_cov": 1,
+  "claims": 19,
+  "e_complete": 1,
+  "records": 20,
+  "incomplete_records": {}
+ },
+ "saved": {
+  "source": "cli",
+  "at": "2026-10-24T13:39:42.779Z"
+ },
+ "sample": {
+  "note": "A real run of 24 Oct 2026 (FirstEnergy, CY2025Q1 against CY2024Q1, claim \"colder weather\"; 97.5 s, 5 Markovian chunks, 9 planner calls, all valid on the first reply), committed so the card and the evidence drawer open without Zetaris or a GPU. Every revenue level is masked (the val column of the SEC rows, the peers' levels, the two levels on the card and in the memo); growth rates, degree days, the attribution, the SQL text and its sha256, the accession numbers and the NOAA weather rows are as recorded. Memory and Graph stay empty: H-MEM and the World Model are not committed.",
+  "masked": "every revenue level",
+  "source": "scripts/make_sample_run.py"
+ }
+}

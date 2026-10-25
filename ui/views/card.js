@@ -12,7 +12,7 @@ import { replayRows } from "./stream.js";
 const PARTS = [
   { key: "weather", name: "Weather", what: "the degree-day change times the peer sensitivity" },
   { key: "industry", name: "Industry-wide", what: "the median peer growth after its own weather part" },
-  { key: "remainder", name: "Company-specific remainder", what: "what neither weather nor the industry explains" },
+  { key: "remainder", name: "Company-specific remainder", what: "what neither weather nor the industry explains; its range is the change minus the weather and industry bounds" },
 ];
 
 /** The verdict in one sentence, with the claim's own words. */
@@ -23,13 +23,29 @@ export function verdictSentence(card) {
   const w = a.weather;
   const r = a.ranges?.weather;
   const name = card?.utility?.name ?? "the utility";
-  if (v.withheld_reason) return `${name}'s revenue change of ${fmtPct(g)} cannot be attributed: ${v.withheld_reason}.`;
   const dir = typeof g === "number" ? (g >= 0 ? "rose" : "fell") : "changed";
+  if (v.withheld_reason) {
+    return typeof g === "number" ? `${name}'s revenue ${dir} ${fmtPct(g)} year on year; no verdict is given: ${v.withheld_reason}.` : `${name}: no verdict is given: ${v.withheld_reason}.`;
+  }
   const verdict = String(v.verdict ?? "").replaceAll("_", " ");
   return `${name}'s revenue ${dir} ${fmtPct(g)} year on year; weather is consistent with ${fmtPct(w)} of that ${r ? fmtRange(r.lo, r.hi) : ""}, so the claim "${v.claim ?? ""}" is ${verdict} with ${v.confidence ?? "unstated"} confidence.`;
 }
 
-/** A horizontal range glyph: the point and its 10th to 90th percentile range on a shared axis. */
+/**
+ * The overshoot flag (display only; the verdict rule is unchanged): when the weather part is more
+ * than twice the whole change with the same sign, weather alone would have moved revenue several
+ * times as much as it moved, so the negative remainder is the part to read. Null otherwise.
+ */
+export function overshootNote(card) {
+  const a = card?.attribution;
+  const g = card?.growth?.g;
+  const ratio = card?.verdict?.ratio ?? a?.claim?.ratio;
+  if (!a || typeof g !== "number" || typeof a.weather !== "number" || typeof ratio !== "number") return null;
+  if (!(ratio > 2) || Math.sign(a.weather) !== Math.sign(g)) return null;
+  return `Overshoot: the weather part (${fmtPct(a.weather)}) is ${fmtNum(ratio, 1)} times the whole change (${fmtPct(g)}). Weather alone would have moved revenue ${fmtNum(ratio, 1)} times as much as it moved, so something the method does not see pulled the other way: read the remainder (${fmtPct(a.remainder)}) before the verdict.`;
+}
+
+/** A horizontal range glyph: the point and its range on a shared axis. */
 function rangeGlyph(point, lo, hi, axis, label) {
   const W = 220;
   const H = 18;
@@ -63,7 +79,7 @@ function splitBlock(run, ev) {
   }).join("");
   const bs = a.bootstrap ?? {};
   return `<section class="panel split" aria-labelledby="split-h">
-    <div class="split__head"><h2 class="panel__h" id="split-h">The change, split three ways</h2>${confidenceChip(a.confidence ?? run.card?.verdict?.confidence)} <span class="panel__note">of a ${numBtn(run.run_id, ev.growth, `<span class="fig">${esc(fmtPct(g))}</span>`, "like-for-like revenue growth")} like-for-like change; ranges are the 10th to 90th percentile of ${numBtn(run.run_id, ev.attribution, esc(fmtNum(bs.valid)), "valid bootstrap resamples")} of ${numBtn(run.run_id, ev.attribution, esc(fmtNum(bs.resamples)), "bootstrap resamples")} peer resamples (seed ${esc(bs.seed ?? "")})</span></div>
+    <div class="split__head"><h2 class="panel__h" id="split-h">The change, split three ways</h2>${confidenceChip(a.confidence ?? run.card?.verdict?.confidence)} <span class="panel__note">of a ${numBtn(run.run_id, ev.growth, `<span class="fig">${esc(fmtPct(g))}</span>`, "like-for-like revenue growth")} like-for-like change; the weather and industry ranges are the 10th to 90th percentile of ${numBtn(run.run_id, ev.attribution, esc(fmtNum(bs.valid)), "valid bootstrap resamples")} of ${numBtn(run.run_id, ev.attribution, esc(fmtNum(bs.resamples)), "bootstrap resamples")} peer resamples (seed ${esc(bs.seed ?? "")}); the remainder range combines their bounds (the change minus the weather and industry highs, to the change minus their lows), so it is wider than a percentile</span></div>
     <div class="parts">${parts}</div>
     <p class="split__beta small">Peer sensitivity beta (OLS slope of growth on the degree-day change over ${numBtn(run.run_id, ev.peers, esc(fmtNum(a.peers)), "peers used")} peers) ${numBtn(run.run_id, ev.attribution, `<span class="fig fig--s">${esc(fmtNum(a.beta, 3))}</span>`, "beta")} <span class="muted">(range ${numBtn(run.run_id, ev.attribution, esc(fmtNum(a.ranges?.beta?.lo, 3)), "beta range low")} to ${numBtn(run.run_id, ev.attribution, esc(fmtNum(a.ranges?.beta?.hi, 3)), "beta range high")}; Theil-Sen ${numBtn(run.run_id, ev.attribution, esc(fmtNum(a.theil_sen, 3)), "Theil-Sen slope")})</span>. Confidence ${esc(a.confidence ?? "")}${CONF_RULE[a.confidence] ? `: ${esc(CONF_RULE[a.confidence])}` : ""}; station coverage ${numBtn(run.run_id, ev.weather, esc(fmtNum(a.coverage, 3)), "station coverage")}.</p>
   </section>`;
@@ -74,7 +90,8 @@ function claimBlock(run, ev) {
   return `<section class="panel claim" aria-labelledby="claim-h">
     <h2 class="panel__h" id="claim-h">Claim <q>${esc(v.claim ?? run.claim ?? "")}</q></h2>
     <p class="claim__row">${verdictChip(v.verdict, { large: true })} ${confidenceChip(v.confidence)}</p>
-    <p>Weather over growth, |weather| / |g| = ${numBtn(run.run_id, ev.verdict, `<span class="fig fig--s">${esc(fmtNum(v.ratio, 2))}</span>`, "claim ratio")}: supported at 0.5 or more, partly supported at 0.2, the same sign required. ${v.withheld_reason ? `<span class="warn-text">Withheld: ${esc(v.withheld_reason)}</span>` : ""}</p>
+    <p>Weather over growth, |weather| / |g| = ${numBtn(run.run_id, ev.verdict, `<span class="fig fig--s">${esc(fmtNum(v.ratio, 2))}</span>`, "claim ratio")}: supported at 0.5 or more, partly supported at 0.2, the same sign required; the rule has no upper bound. ${v.withheld_reason ? `<span class="warn-text">Withheld: ${esc(v.withheld_reason)}</span>` : ""}</p>
+    ${overshootNote(run.card) ? `<p class="msg msg--warn" data-overshoot="yes">${esc(overshootNote(run.card))}</p>` : ""}
     <p class="small muted">The wording is "consistent with": the split is a statistical attribution over the peer set, not a causal proof.</p>
   </section>`;
 }
@@ -83,11 +100,12 @@ function growthBlock(run, ev) {
   const g = run.card?.growth ?? {};
   const conflicts = Array.isArray(run.card?.recast_conflicts) ? run.card.recast_conflicts : [];
   const sameAccn = g.previous_comparative_accn && g.previous_comparative_accn === g.current_accn;
+  const level = (v) => (typeof v === "number" ? fmtMillions(v) : g.levels_masked ? "masked" : "n/a");
   return `<section class="panel growth" aria-labelledby="growth-h">
-    <h2 class="panel__h" id="growth-h">Revenue, like for like <span class="panel__note">tag ${tagShort(g.tag)}</span></h2>
+    <h2 class="panel__h" id="growth-h">Revenue, like for like <span class="panel__note">tag ${tagShort(g.tag)}${g.levels_masked ? "; revenue levels masked in this committed sample" : ""}</span></h2>
     <div class="growth__nums">
-      <div><span class="k">${esc(run.period)}</span>${numBtn(run.run_id, ev.growth, `<span class="fig">${esc(fmtMillions(g.rev_current))}</span>`, "current quarter revenue")}</div>
-      <div><span class="k">${esc(run.previous_period)}</span>${numBtn(run.run_id, ev.growth, `<span class="fig">${esc(fmtMillions(g.rev_previous))}</span>`, "previous quarter revenue")}</div>
+      <div><span class="k">${esc(run.period)}</span>${numBtn(run.run_id, ev.growth, `<span class="fig">${esc(level(g.rev_current))}</span>`, "current quarter revenue")}</div>
+      <div><span class="k">${esc(run.previous_period)}</span>${numBtn(run.run_id, ev.growth, `<span class="fig">${esc(level(g.rev_previous))}</span>`, "previous quarter revenue")}</div>
       <div><span class="k">change</span>${numBtn(run.run_id, ev.growth, `<span class="fig">${esc(fmtPct(g.g))}</span>`, "like-for-like growth")}</div>
     </div>
     <dl class="kv accns">
@@ -162,9 +180,9 @@ function dqBlock(run, ev) {
   return `<section class="panel dq" aria-labelledby="dq-h">
     <h2 class="panel__h" id="dq-h">Data-quality gate ${dqChip(d.label)}</h2>
     <dl class="kv">
-      <div class="kv__row"><dt>Rule</dt><dd><code>${esc(d.rule)}</code> <span class="muted">(${esc(d.basis)})</span></dd></div>
-      <div class="kv__row"><dt>Onboarding run</dt><dd>${esc(fmtTime(d.ranAt, true))}, ${numBtn(run.run_id, ev.dq, esc(fmtMs(Number(d.elapsedS) * 1000)), "DQ run time")}</dd></div>
-      <div class="kv__row"><dt>Rows</dt><dd>${numBtn(run.run_id, ev.dq, esc(fmtNum(d.run?.total)), "DQ rows checked")} checked, ${numBtn(run.run_id, ev.dq, esc(fmtNum(d.run?.valid)), "DQ valid rows")} valid, ${numBtn(run.run_id, ev.dq, esc(fmtNum(d.run?.invalid)), "DQ invalid rows")} invalid</dd></div>
+      <div class="kv__row"><dt>Rule</dt><dd><code>${esc(d.rule ?? "coverage_ok")}</code> <span class="muted">(${esc(d.basis)})</span></dd></div>
+      <div class="kv__row"><dt>Onboarding run</dt><dd>${d.ranAt ? `${esc(fmtTime(d.ranAt, true))}${typeof d.elapsedS === "number" ? `, ${numBtn(run.run_id, ev.dq, esc(fmtMs(d.elapsedS * 1000)), "DQ run time")}` : ""}` : `<span class="warn-text">none on disk</span>`}</dd></div>
+      ${d.run ? `<div class="kv__row"><dt>Rows</dt><dd>${numBtn(run.run_id, ev.dq, esc(fmtNum(d.run.total)), "DQ rows checked")} checked, ${numBtn(run.run_id, ev.dq, esc(fmtNum(d.run.valid)), "DQ valid rows")} valid, ${numBtn(run.run_id, ev.dq, esc(fmtNum(d.run.invalid)), "DQ invalid rows")} invalid</dd></div>` : ""}
       <div class="kv__row"><dt>This utility</dt><dd>coverage ${numBtn(run.run_id, ev.dq, esc(fmtNum(d.targetCoverage, 4)), "target coverage")}${invalid.length ? `; <span class="warn-text">${esc(fmtNum(invalid.length))} invalid row${invalid.length === 1 ? "" : "s"} name its stations</span>` : "; none of its stations is named by an invalid row"}</dd></div>
     </dl>
     ${invalid.length ? `<ul class="excluded">${invalid.map((r) => `<li><code>${esc(JSON.stringify(r))}</code></li>`).join("")}</ul>` : ""}
@@ -196,26 +214,34 @@ function checklistStrip(run) {
   return `<ul class="checklist" aria-label="Checklist">${items.map((c) => `<li class="cl cl--${esc(c.status)}" title="${esc(c.note ?? "")}">${esc(String(c.id).replaceAll("_", " "))}${c.note ? ` <span class="cl__note">(${esc(c.note)})</span>` : ""}</li>`).join("")}</ul>`;
 }
 
-/** Pure: the whole card for one saved run. */
+/** What stopped a run that has no attribution: the gaps and the checklist items that failed. */
+function withheldBlock(run) {
+  const v = run.card?.verdict ?? {};
+  const gaps = Array.isArray(run.card?.gaps) ? run.card.gaps : [];
+  const failed = (Array.isArray(run.checklist) ? run.checklist : []).filter((c) => c.status === "failed");
+  return `<section class="panel panel--alert" aria-labelledby="withheld-h">
+    <h2 class="panel__h" id="withheld-h">No answer for this question <span class="panel__note">the split, the claim test and the ranges need every step below</span></h2>
+    <p>${esc(v.withheld_reason ? `Reason: ${v.withheld_reason}.` : "The run ended before an attribution.")}</p>
+    ${failed.length ? `<h3 class="sub-h">Checklist items that failed (${esc(fmtNum(failed.length))})</h3><ul class="excluded">${failed.map((c) => `<li><strong>${esc(String(c.id).replaceAll("_", " "))}</strong>${c.note ? `: ${esc(c.note)}` : ""}</li>`).join("")}</ul>` : ""}
+    ${gaps.length ? `<h3 class="sub-h">Gaps recorded</h3><ul class="excluded">${gaps.map((g) => `<li>${esc(g)}</li>`).join("")}</ul>` : ""}
+  </section>`;
+}
+
+/** The banner of the committed sample run (docs/sample-run/): what it is and what was masked. */
+function sampleBanner(run) {
+  if (!run.sample) return "";
+  return `<p class="msg msg--ok" data-sample="yes"><strong>Committed sample run.</strong> ${esc(run.sample.note ?? "A saved run committed with the repository so the card opens without Zetaris or a GPU.")}</p>`;
+}
+
+/** Pure: the whole card for one saved run; a run with no attribution gets the withheld layout (no empty slots). */
 export function renderCard(run) {
   const ev = sectionEvidence(run);
   const u = run.card?.utility ?? {};
   const skipped = Array.isArray(run.skipped_steps) ? run.skipped_steps : run.skipped_steps ? [run.skipped_steps] : [];
-  return `
-    <header class="card-head">
-      <div>
-        <p class="card-head__kicker">${esc(run.period)} vs ${esc(run.previous_period)} <span class="muted">·</span> claim <q>${esc(run.claim)}</q></p>
-        <h1 class="card-head__name">${esc(u.name ?? run.cik)} <span class="card-head__tick">${u.ticker ? esc(u.ticker) : ""}</span></h1>
-        <p class="card-head__meta">CIK <code>${esc(u.cik ?? run.cik)}</code> · SIC ${esc(u.sic ?? "")} · HQ ${esc(u.hq_state ?? "")} · run <code>${idHtml(run.run_id)}</code> · ${esc(fmtTime(run.started_at))} · ${esc(fmtMs(run.wall_ms))} · ${esc(fmtNum(run.markovian?.chunks ?? (run.chunks ?? []).length))} chunks${run.saved?.source ? ` · saved by the ${esc(run.saved.source)}` : ""} ${tag("replay of a saved run", "replay")}</p>
-      </div>
-      <div class="card-head__acts"><a class="btn btn--small" href="#/memory/${esc(run.run_id)}">Memory and why</a> <a class="btn btn--small" href="#/graph/${esc(u.cik ?? run.cik)}">Graph</a></div>
-    </header>
-    <section class="verdict panel panel--verdict" aria-labelledby="verdict-h">
-      <h2 class="sr-only" id="verdict-h">Verdict</h2>
-      <p class="verdict__sentence">${esc(verdictSentence(run.card))}</p>
-      <p class="verdict__meta">${verdictChip(run.card?.verdict?.verdict)} ${confidenceChip(run.card?.verdict?.confidence)} ${dqChip(run.card?.dq?.label)} ${skipped.length ? tag(`${skipped.length} step${skipped.length === 1 ? "" : "s"} skipped from memory`, "memory") : ""} <span class="small muted">Every figure below is a button: it opens the evidence that produced it.</span></p>
-    </section>
-    ${splitBlock(run, ev)}
+  const hasAttribution = !!run.card?.attribution && typeof run.card.attribution.weather === "number";
+  const shoot = overshootNote(run.card);
+  const main = hasAttribution
+    ? `${splitBlock(run, ev)}
     <div class="card-grid">
       <div class="card-main">
         ${claimBlock(run, ev)}
@@ -229,7 +255,38 @@ export function renderCard(run) {
         ${notTestedBlock(run, ev)}
         ${memoBlock(run, ev)}
       </div>
-    </div>
+    </div>`
+    : `${withheldBlock(run)}
+    <div class="card-grid">
+      <div class="card-main">
+        ${run.card?.growth && typeof run.card.growth.g === "number" ? growthBlock(run, ev) : ""}
+        ${conflictsBlock(run)}
+        ${run.card?.weather && typeof run.card.weather.delta_w === "number" ? weatherBlock(run, ev) : ""}
+        ${run.card?.peers && Number(run.card.peers.count) > 0 ? peersBlock(run, ev) : ""}
+      </div>
+      <div class="card-side">
+        ${run.card?.dq ? dqBlock(run, ev) : ""}
+        ${notTestedBlock(run, ev)}
+        ${run.card?.memo?.text ? memoBlock(run, ev) : ""}
+      </div>
+    </div>`;
+  return `
+    <header class="card-head">
+      <div>
+        <p class="card-head__kicker">${esc(run.period)} vs ${esc(run.previous_period)} <span class="muted">·</span> claim <q>${esc(run.claim)}</q></p>
+        <h1 class="card-head__name">${esc(u.name ?? run.cik)} <span class="card-head__tick">${u.ticker ? esc(u.ticker) : ""}</span></h1>
+        <p class="card-head__meta">CIK <code>${esc(u.cik ?? run.cik)}</code> · SIC ${esc(u.sic ?? "")} · HQ ${esc(u.hq_state ?? "")} · run <code>${idHtml(run.run_id)}</code> · ${esc(fmtTime(run.started_at))} · ${esc(fmtMs(run.wall_ms))} · ${esc(fmtNum(run.markovian?.chunks ?? (run.chunks ?? []).length))} chunks${run.saved?.source ? ` · saved by the ${esc(run.saved.source)}` : ""} ${tag("replay of a saved run", "replay")}</p>
+      </div>
+      <div class="card-head__acts"><a class="btn btn--small" href="#/memory/${esc(run.run_id)}">Memory and why</a> <a class="btn btn--small" href="#/graph/${esc(u.cik ?? run.cik)}">Graph</a></div>
+    </header>
+    ${sampleBanner(run)}
+    <section class="verdict panel panel--verdict" aria-labelledby="verdict-h">
+      <h2 class="sr-only" id="verdict-h">Verdict</h2>
+      <p class="verdict__sentence">${esc(verdictSentence(run.card))}</p>
+      <p class="verdict__meta">${verdictChip(run.card?.verdict?.verdict)} ${run.card?.verdict?.confidence ? confidenceChip(run.card.verdict.confidence) : ""} ${run.card?.dq ? dqChip(run.card.dq.label) : ""} ${skipped.length ? tag(`${skipped.length} step${skipped.length === 1 ? "" : "s"} skipped from memory`, "memory") : ""} <span class="small muted">Every figure below is a button: it opens the evidence that produced it.</span></p>
+      ${shoot ? `<p class="small warn-text" data-overshoot="head">${esc(shoot)}</p>` : ""}
+    </section>
+    ${main}
     <section class="panel" aria-labelledby="steps-h">
       <h2 class="panel__h" id="steps-h">How the answer was reached <span class="panel__note">${esc(fmtNum((run.planner_calls ?? []).length))} planner calls, ${esc(fmtNum((run.timeline ?? []).length))} tool steps</span></h2>
       ${checklistStrip(run)}

@@ -171,7 +171,7 @@ export interface TimelineEntry {
 
 export type LoopEvent =
   | { type: "chunk_start"; chunk: number; carryover_tokens: number }
-  | { type: "planner"; chunk: number; call: number; valid: boolean; attempts: number; tool: string | null; thought: string | null; prompt_tokens: number; eval_tokens: number; tokens_per_s: number | null }
+  | { type: "planner"; chunk: number; call: number; valid: boolean; attempts: number; tool: string | null; thought: string | null; prompt_tokens: number; eval_tokens: number; tokens_per_s: number | null; unreachable?: boolean }
   | { type: "tool"; chunk: number; seq: number; tool: string; source: "model" | "fallback"; fallback_reason: string | null; ok: boolean; fact: string; evidence_ids: string[]; latency_ms: number }
   | { type: "chunk_end"; chunk: number; state_tokens: number; complete: boolean };
 
@@ -402,7 +402,7 @@ export class PlannerSession {
           estimateTokens(`${system}\n${user}`),
           naiveEstimate,
         );
-        this.emit({ type: "planner", chunk: this.chunk, call, valid: out !== null, attempts: plan.results.length, tool: out?.action?.tool ?? null, thought: out?.thought ?? null, prompt_tokens: m.prompt, eval_tokens: m.eval, tokens_per_s: m.tps });
+        this.emit({ type: "planner", chunk: this.chunk, call, valid: out !== null, attempts: plan.results.length, tool: out?.action?.tool ?? null, thought: out?.thought ?? null, prompt_tokens: m.prompt, eval_tokens: m.eval, tokens_per_s: m.tps, unreachable: out === null && plan.results.length === 0 && plan.callError !== null });
       }
       for (const r of plan.results) this.naive.add(r.content);
 
@@ -430,7 +430,9 @@ export class PlannerSession {
           ? "deterministic run (no model wired)"
           : out
             ? `the model chose no action while ${ctx.checklist.pending().length} checklist item(s) are open`
-            : `planner reply invalid after a repair round (${plan.errors.slice(0, 2).join("; ")})`;
+            : plan.results.length === 0 && plan.callError
+              ? `model unreachable: no reply to either attempt (${plan.callError})`
+              : `planner reply invalid after a repair round (${plan.errors.slice(0, 2).join("; ")})`;
       }
       if (!d) break;
 

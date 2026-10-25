@@ -48,7 +48,7 @@ interface Harness {
   world: WeatherWorld;
 }
 
-function harness(opts: { registrar?: boolean; missingFrames?: Set<string>; missingConcept?: boolean; dq?: string | null; hmem?: HMEM; world?: WeatherWorld } = {}): Harness {
+function harness(opts: { registrar?: boolean; missingFrames?: Set<string>; missingConcept?: boolean; dq?: string | null; now?: string; hmem?: HMEM; world?: WeatherWorld } = {}): Harness {
   const seeds = syntheticSeeds();
   const gw = fakeGateway(syntheticResolver(seeds, { missingFrames: opts.missingFrames, missingConcept: opts.missingConcept }));
   const hmem = opts.hmem ?? new HMEM({ actor: "won-agent", clock });
@@ -61,6 +61,7 @@ function harness(opts: { registrar?: boolean; missingFrames?: Set<string>; missi
     hmem,
     world,
     dqFile: opts.dq === null ? path.join(os.tmpdir(), "won-no-such-dq.json") : (opts.dq ?? dqFile()),
+    now: () => Date.parse(opts.now ?? "2026-10-25T00:00:00Z"),
     ...(opts.registrar
       ? {
           registrar: {
@@ -237,13 +238,45 @@ describe("the tool chain on the synthetic question (no model: every step is the 
     expect(r.checklist_complete).toBe(true);
   });
 
-  it("passes on the coverage column alone when the onboarding file is missing, and says so", async () => {
+  it("fails closed when the onboarding file is missing: DQ unknown, the verdict withheld, and says so", async () => {
     const h = harness({ dq: null });
     const r = await run(h);
-    expect(r.card.dq!.label).toBe("pass");
+    expect(r.card.dq!.label).toBe("unknown");
     expect(r.card.dq!.basis).toBe("coverage only");
+    expect(r.card.dq!.note).toMatch(/^DQ unknown: no onboarding result/u);
+    expect(r.card.verdict!.verdict).toBe("withheld");
+    expect(r.card.verdict!.withheld_reason).toMatch(/^DQ unknown/u);
+    expect(r.card.attribution).not.toBeNull();
     expect(r.card.gaps.join("\n")).toMatch(/no DQ onboarding result/u);
     expect(r.evidence.filter((e) => e.kind === "dq")).toHaveLength(0);
+    expect(r.checklist_complete).toBe(true);
+  });
+
+  it("fails closed on a stale onboarding result (older than the age limit) and on an unreadable file", async () => {
+    const stale = await run(harness({ now: "2026-12-01T00:00:00Z" }));
+    expect(stale.card.dq!.label).toBe("unknown");
+    expect(stale.card.dq!.note).toMatch(/days old \(limit 30\)/u);
+    expect(stale.card.verdict!.verdict).toBe("withheld");
+    const fresh = await run(harness({ now: "2026-11-20T00:00:00Z" }));
+    expect(fresh.card.dq!.label).toBe("pass");
+    expect(fresh.card.verdict!.verdict).not.toBe("withheld");
+    const dir = mkdtempSync(path.join(os.tmpdir(), "won-dq-bad-"));
+    const bad = path.join(dir, "latest.json");
+    writeFileSync(bad, "{ not json");
+    const unreadable = await run(harness({ dq: bad }));
+    expect(unreadable.card.dq!.label).toBe("unknown");
+    expect(unreadable.card.dq!.note).toMatch(/unreadable/u);
+    expect(unreadable.card.verdict!.verdict).toBe("withheld");
+  });
+
+  it("names an unreachable gateway as the reason a verdict is withheld", async () => {
+    const h = harness();
+    h.deps.gateway = Object.create(h.deps.gateway, {
+      template: { value: async () => Promise.reject(new TypeError("fetch failed")) },
+    }) as ToolDeps["gateway"];
+    const r = await run(h);
+    expect(r.card.verdict!.verdict).toBe("withheld");
+    expect(r.card.verdict!.withheld_reason).toMatch(/^gateway unreachable/u);
   });
 
   it("registers a missing frames period through the registrar, then probes again", async () => {

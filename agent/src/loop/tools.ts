@@ -51,6 +51,10 @@ export interface ToolDeps {
   registrar?: RegistrarPort;
   /** data/dq/latest.json written by scripts/dq_onboard.py. */
   dqFile?: string;
+  /** Oldest onboarding DQ result the gate accepts, in days (default DQ_MAX_AGE_DAYS). */
+  dqMaxAgeDays?: number;
+  /** The clock the DQ freshness check reads (tests pin it). */
+  now?: () => number;
   log?: (line: string) => void;
 }
 
@@ -101,7 +105,8 @@ export interface WeatherResult {
 }
 
 export interface DqResult {
-  label: "pass" | "withheld";
+  /** "unknown": no onboarding result, an unreadable one, or one older than the age limit; the verdict is withheld. */
+  label: "pass" | "withheld" | "unknown";
   basis: "onboarding+coverage" | "coverage only";
   ranAt: string | null;
   elapsedS: number | null;
@@ -966,6 +971,8 @@ interface DqFile {
 }
 
 export const DQ_FILE = fileURLToPath(new URL("dq/latest.json", DATA_DIR_URL));
+/** The gate accepts an onboarding DQ result at most this many days old; older, missing or unreadable gives "DQ unknown". */
+export const DQ_MAX_AGE_DAYS = 30;
 
 const dqTool = def("dq_gate", {
   optional: false,
@@ -978,10 +985,12 @@ const dqTool = def("dq_gate", {
     const ids: string[] = [];
     const lines: string[] = [];
     let dq: DqFile | null = null;
+    let unreadable = false;
     if (existsSync(file)) {
       try {
         dq = JSON.parse(readFileSync(file, "utf8")) as DqFile;
       } catch (e) {
+        unreadable = true;
         ctx.gaps.push(`DQ onboarding file unreadable: ${(e as Error).message.slice(0, 120)}`);
       }
     }
@@ -1020,13 +1029,27 @@ const dqTool = def("dq_gate", {
       invalidForTarget = (dq.invalid_rows ?? []).filter((r) => stations.has(String(r.station_id)) && years.has(Number(r.year)) && Number(r.quarter) === ctx.quarter);
     }
     const belowRule = w.target.coverage < 0.9;
-    const label: DqResult["label"] = invalidForTarget.length || belowRule ? "withheld" : "pass";
+    const maxAgeDays = deps.dqMaxAgeDays ?? DQ_MAX_AGE_DAYS;
+    const ranMs = dq?.ran_at ? Date.parse(dq.ran_at) : Number.NaN;
+    const ageDays = Number.isFinite(ranMs) ? ((deps.now ?? Date.now)() - ranMs) / 86_400_000 : null;
+    const unknownWhy = !dq
+      ? unreadable
+        ? "the onboarding file dq/latest.json is unreadable"
+        : "no onboarding result at dq/latest.json under the data directory (scripts/dq_onboard.py writes it)"
+      : ageDays === null
+        ? "the onboarding result carries no run time"
+        : ageDays > maxAgeDays
+          ? `the onboarding result is ${ageDays.toFixed(1)} days old (limit ${maxAgeDays})`
+          : null;
+    const label: DqResult["label"] = invalidForTarget.length || belowRule ? "withheld" : unknownWhy ? "unknown" : "pass";
     const basis: DqResult["basis"] = dq ? "onboarding+coverage" : "coverage only";
-    if (!dq) ctx.gaps.push(`no DQ onboarding result at ${file} (scripts/dq_onboard.py); the gate rests on the utility's own coverage column`);
+    if (!dq && !unreadable) ctx.gaps.push("no DQ onboarding result at dq/latest.json (scripts/dq_onboard.py); the gate fails closed and the verdict is withheld");
     const note =
       label === "withheld"
         ? `withheld: ${invalidForTarget.length ? `${invalidForTarget.length} invalid coverage_ok row(s) concern the utility's stations` : ""}${invalidForTarget.length && belowRule ? "; " : ""}${belowRule ? `the utility's own coverage ${w.target.coverage.toFixed(4)} is below 0.9` : ""}`
-        : `pass: ${dq ? `coverage_ok onboarding run ${dq.ran_at ?? "?"} (${dq.run?.total ?? "?"} rows, ${dq.run?.invalid ?? "?"} invalid, ${dq.elapsed_s ?? "?"} s) names none of the utility's stations` : "no onboarding result on disk"}; the utility's own station coverage is ${w.target.coverage.toFixed(4)} (rule: coverage >= 0.9)`;
+        : label === "unknown"
+          ? `DQ unknown: ${unknownWhy}; the verdict is withheld until a fresh coverage_ok onboarding run is on disk (the utility's own station coverage is ${w.target.coverage.toFixed(4)})`
+          : `pass: coverage_ok onboarding run ${dq!.ran_at ?? "?"} (${dq!.run?.total ?? "?"} rows, ${dq!.run?.invalid ?? "?"} invalid, ${dq!.elapsed_s ?? "?"} s) names none of the utility's stations; the utility's own station coverage is ${w.target.coverage.toFixed(4)} (rule: coverage >= 0.9)`;
     const tev = deps.evidence.add({
       kind: "tool",
       claim: `DQ gate ${label} (${basis}): ${note}`,
@@ -1057,7 +1080,7 @@ const dqTool = def("dq_gate", {
       key: `dq|${ctx.cik}|${ctx.period}|${label}`,
       tags: ["kind:dq"],
     });
-    ctx.checklist.set("dq_checked", "done", label === "withheld" ? "withheld" : null, ids);
+    ctx.checklist.set("dq_checked", "done", label === "withheld" ? "withheld" : label === "unknown" ? "DQ unknown" : null, ids);
     return { ok: true, evidenceIds: ids, fact: fact(`DQ gate: ${label}; coverage ${w.target.coverage.toFixed(2)}${dq ? `; onboarding run ${dq.ran_at} ${dq.run?.invalid ?? "?"} invalid of ${dq.run?.total ?? "?"}` : "; no onboarding file"}`, [tev.id]), digest: digest("dq_gate", [...lines, tev.claim]) };
   },
 });
@@ -1076,7 +1099,7 @@ const attributeTool = def("attribute", {
     const r = a.ranges;
     const ev = deps.evidence.add({
       kind: "tool",
-      claim: `Attribution over ${a.peers} peers: beta (OLS slope of g on dw) ${num(a.beta, 3)} [${num(r.beta.lo, 3)}, ${num(r.beta.hi, 3)}] (Theil-Sen ${a.theil_sen === null ? "n/a" : num(a.theil_sen, 3)}); weather ${pct(a.weather)} [${pct(r.weather.lo)}, ${pct(r.weather.hi)}], industry ${pct(a.industry)} [${pct(r.industry.lo)}, ${pct(r.industry.hi)}], remainder ${pct(a.remainder)} [${pct(r.remainder.lo)}, ${pct(r.remainder.hi)}] of g ${pct(rev.growth)}; bootstrap ${a.bootstrap.valid} valid of ${a.bootstrap.resamples} resamples (seed ${a.bootstrap.seed}), 10th to 90th percentile; confidence ${a.confidence}; claim ratio ${a.claim.ratio === null ? "n/a" : num(a.claim.ratio)} -> ${a.claim.verdict}`,
+      claim: `Attribution over ${a.peers} peers: beta (OLS slope of g on dw) ${num(a.beta, 3)} [${num(r.beta.lo, 3)}, ${num(r.beta.hi, 3)}] (Theil-Sen ${a.theil_sen === null ? "n/a" : num(a.theil_sen, 3)}); weather ${pct(a.weather)} [${pct(r.weather.lo)}, ${pct(r.weather.hi)}], industry ${pct(a.industry)} [${pct(r.industry.lo)}, ${pct(r.industry.hi)}], remainder ${pct(a.remainder)} [${pct(r.remainder.lo)}, ${pct(r.remainder.hi)}] of g ${pct(rev.growth)}; bootstrap ${a.bootstrap.valid} valid of ${a.bootstrap.resamples} resamples (seed ${a.bootstrap.seed}), beta, weather and industry ranges 10th to 90th percentile, the remainder range their combined bounds; confidence ${a.confidence}; claim ratio ${a.claim.ratio === null ? "n/a" : num(a.claim.ratio)} -> ${a.claim.verdict}`,
       derived_from: [ctx.revenueEvidenceId!, ...ctx.peerEvidenceIds.slice(-1), ...w.evidenceIds.slice(-1)],
       details: { tool: "attribution", attribution: a, peers: ctx.peers.map((p) => ({ cik: p.cik, name: p.name, tag: p.tag, g: p.g, dw: p.dw, coverage: p.coverage })) },
     });
@@ -1192,6 +1215,11 @@ export function memoMaterial(ctx: QuestionContext): { allowed: AllowedNumber[]; 
   return { allowed, findings };
 }
 
+/** A tool failed because the gateway did not answer at all (connection refused or reset), not with an HTTP error. */
+export function gatewayUnreachable(ctx: Pick<QuestionContext, "gaps">): boolean {
+  return ctx.gaps.some((g) => /fetch failed|ECONNREFUSED|ECONNRESET|socket hang up|UND_ERR_CONNECT/iu.test(g));
+}
+
 const finalizeTool = def("finalize", {
   optional: false,
   available: (ctx) => ctx.checklist.readyForFinal() && pending(ctx, "memo_written"),
@@ -1201,10 +1229,14 @@ const finalizeTool = def("finalize", {
     const a = ctx.attribution;
     let verdict: Verdict;
     if (!a) {
-      const why = ctx.revenue ? "no attribution (weather or peers missing)" : "no like-for-like revenue";
+      const why = gatewayUnreachable(ctx)
+        ? "gateway unreachable: nothing could be read through Zetaris"
+        : ctx.revenue
+          ? "no attribution (weather or peers missing)"
+          : "no like-for-like revenue";
       verdict = { claim: ctx.claim, verdict: "withheld", ratio: null, confidence: null, withheld_reason: why };
-    } else if (ctx.dq?.label === "withheld") {
-      verdict = { claim: ctx.claim, verdict: "withheld", ratio: a.claim.ratio, confidence: a.confidence, withheld_reason: `DQ gate: ${ctx.dq.note}` };
+    } else if (ctx.dq?.label === "withheld" || ctx.dq?.label === "unknown") {
+      verdict = { claim: ctx.claim, verdict: "withheld", ratio: a.claim.ratio, confidence: a.confidence, withheld_reason: ctx.dq.label === "unknown" ? ctx.dq.note : `DQ gate: ${ctx.dq.note}` };
     } else {
       verdict = { claim: ctx.claim, verdict: a.claim.verdict, ratio: a.claim.ratio, confidence: a.confidence, withheld_reason: null };
     }

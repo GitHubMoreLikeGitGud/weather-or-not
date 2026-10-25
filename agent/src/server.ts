@@ -16,9 +16,9 @@
 //
 // Adapted from ClearShelf (same author, Apache-2.0).
 
-import { createReadStream, existsSync, readFileSync, statSync } from "node:fs";
+import { createReadStream, existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import http, { type IncomingMessage, type ServerResponse } from "node:http";
-import { extname, resolve, sep } from "node:path";
+import { extname, join, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { DATA_DIR, DATA_PATHS, loadConfig, REPO_ROOT_URL } from "./config.ts";
 import { analystApproval, APPROVAL_SURFACE, APPROVER, ContractError, ContractVerifier, loadContractSecret } from "./contract/scout.ts";
@@ -27,7 +27,7 @@ import type { LoopEvent } from "./loop/generator.ts";
 import type { RunResult } from "./loop/investigate.ts";
 import { num, pct } from "./loop/tools.ts";
 import type { RecastSide } from "./memory/recastConflicts.ts";
-import type { SavedRun } from "./ops/runStore.ts";
+import type { RunIndexEntry, SavedRun } from "./ops/runStore.ts";
 import { ask as runAsk, openRuntime, type AskOutcome, type AskRequest, type Runtime } from "./runtime.ts";
 import { findUtility } from "./seeds.ts";
 import { PARAM_PATTERNS } from "./zetaris/client.ts";
@@ -111,6 +111,10 @@ export interface ServerDeps {
   uiDir?: string | null;
   /** <data>/eval/report.json for GET /api/eval; null serves none. */
   evalReport?: string | null;
+  /** The committed report (docs/eval-report.json) served, labelled, when the data directory has none; null serves none. */
+  committedEvalReport?: string | null;
+  /** docs/sample-run/: committed saved runs (revenue levels masked) listed and opened read-only next to the data directory's runs; null lists none. */
+  sampleDir?: string | null;
   /** <data>/evidence/ for records a saved run does not carry inline; null reads none. */
   evidenceDir?: string | null;
   log?: (line: string) => void;
@@ -241,7 +245,7 @@ export function renderMemoMarkdown(run: RunResult | SavedRun, records: EvidenceR
   if (c.attribution) {
     const a = c.attribution;
     const r = a.ranges;
-    out.push(`## Attribution (${a.peers} peers; beta ${num(a.beta, 3)} [${num(r.beta.lo, 3)}, ${num(r.beta.hi, 3)}]; bootstrap ${a.bootstrap.valid}/${a.bootstrap.resamples}, seed ${a.bootstrap.seed}; ranges 10th to 90th percentile)`);
+    out.push(`## Attribution (${a.peers} peers; beta ${num(a.beta, 3)} [${num(r.beta.lo, 3)}, ${num(r.beta.hi, 3)}]; bootstrap ${a.bootstrap.valid}/${a.bootstrap.resamples}, seed ${a.bootstrap.seed}; weather and industry ranges 10th to 90th percentile, the remainder range combines their bounds)`);
     out.push("");
     out.push("| Part | Point | Range |");
     out.push("|---|---|---|");
@@ -304,6 +308,41 @@ export function renderMemoMarkdown(run: RunResult | SavedRun, records: EvidenceR
   return out.join("\n");
 }
 
+/** The committed sample runs under docs/sample-run/ (<run_id>.json, each a whole saved run): read-only, never written. */
+export function loadSampleRuns(dir: string | null): Map<string, SavedRun> {
+  const out = new Map<string, SavedRun>();
+  if (!dir || !existsSync(dir)) return out;
+  for (const f of readdirSync(dir)) {
+    const m = /^(r\d{8}T\d{6}[0-9a-f]{4})\.json$/u.exec(f);
+    if (!m) continue;
+    try {
+      const run = JSON.parse(readFileSync(join(dir, f), "utf8")) as SavedRun;
+      if (run.run_id === m[1]) out.set(run.run_id, run);
+    } catch {
+      // an unreadable sample is skipped
+    }
+  }
+  return out;
+}
+
+function sampleEntry(r: SavedRun): RunIndexEntry & { sample: true } {
+  return {
+    run_id: r.run_id,
+    cik: r.cik,
+    period: r.period,
+    claim: r.claim,
+    utility: r.card.utility?.name ?? null,
+    verdict: r.card.verdict?.verdict ?? null,
+    confidence: r.card.verdict?.confidence ?? null,
+    started_at: r.started_at,
+    wall_ms: r.wall_ms,
+    chunks: r.markovian.chunks,
+    memo_source: r.card.memo?.source ?? null,
+    source: r.saved?.source ?? "cli",
+    sample: true,
+  };
+}
+
 export interface WonServer {
   server: http.Server;
   bus: EventBus;
@@ -321,6 +360,14 @@ export function createServer(deps: ServerDeps): WonServer {
   const uiDir = deps.uiDir === undefined ? fileURLToPath(new URL("ui/", REPO_ROOT_URL)) : deps.uiDir;
   const evalReport = deps.evalReport === undefined ? DATA_PATHS.evalReport : deps.evalReport;
   const evidenceDir = deps.evidenceDir === undefined ? DATA_PATHS.evidence : deps.evidenceDir;
+  const committedEval = deps.committedEvalReport === undefined ? fileURLToPath(new URL("docs/eval-report.json", REPO_ROOT_URL)) : deps.committedEvalReport;
+  const samples = loadSampleRuns(deps.sampleDir === undefined ? fileURLToPath(new URL("docs/sample-run/", REPO_ROOT_URL)) : deps.sampleDir);
+  /** The data directory's runs, then the committed samples whose ids it does not hold. */
+  const allRuns = (): (RunIndexEntry & { sample?: true })[] => {
+    const real = rt.runs.list();
+    const ids = new Set(real.map((r) => r.run_id));
+    return [...real, ...[...samples.values()].filter((s) => !ids.has(s.run_id)).map(sampleEntry)];
+  };
   let verifier: ContractVerifier | null = deps.verifier ?? null;
   const verifierOf = (): ContractVerifier => {
     // The secret is read on first use, so a server without .env.local still serves reads.
@@ -343,7 +390,7 @@ export function createServer(deps: ServerDeps): WonServer {
 
   function runOf(id: string): SavedRun {
     if (!RUN_ID.test(id)) throw new HttpError(400, "bad run id", "bad_id");
-    const r = rt.runs.load(id);
+    const r = rt.runs.load(id) ?? samples.get(id) ?? null;
     if (!r) throw new HttpError(404, `no saved run ${id}`, "not_found");
     return r;
   }
@@ -415,6 +462,7 @@ export function createServer(deps: ServerDeps): WonServer {
         gateway_templates: gatewayTemplates,
         gateway_error: gatewayError,
         runs: rt.runs.list().length,
+        sample_runs: samples.size,
         data_dir: DATA_DIR,
         busy_run_id: busy,
         sse_listeners: bus.listeners,
@@ -446,6 +494,16 @@ export function createServer(deps: ServerDeps): WonServer {
       }
       const think = typeof b.think === "boolean" ? b.think : undefined;
       if (busy) return send(res, 409, { error: `a run is in progress (${busy}); one model job at a time`, code: "busy", busy_run_id: busy });
+      // Every step reads through the gateway: without it a question can only end withheld, so it is refused up front.
+      let gatewayWhy: string | null = null;
+      try {
+        const h = await rt.gateway.health();
+        if (h.ok !== true) gatewayWhy = "the gateway's /health did not report ok";
+      } catch (e) {
+        gatewayWhy = (e as Error).message.slice(0, 200);
+      }
+      if (gatewayWhy) return send(res, 503, { error: `gateway unreachable at ${rt.gateway.baseUrl} (${gatewayWhy}); a question needs the gateway and Zetaris (Quickstart B). Saved runs still open.`, code: "gateway_unreachable" });
+      if (busy) return send(res, 409, { error: `a run is in progress (${busy}); one model job at a time`, code: "busy", busy_run_id: busy });
       const runId = newRunId();
       busy = runId;
       const startedAt = new Date().toISOString();
@@ -469,7 +527,7 @@ export function createServer(deps: ServerDeps): WonServer {
       return send(res, 202, { run_id: runId, cik, period, claim, utility: utilityName, started_at: startedAt, state: "running" });
     }
 
-    if (m === "GET" && p === "/api/runs") return send(res, 200, { runs: rt.runs.list(), busy_run_id: busy });
+    if (m === "GET" && p === "/api/runs") return send(res, 200, { runs: allRuns(), busy_run_id: busy });
 
     if (m === "GET" && p === "/api/seeds") {
       const list = rt.runs.list();
@@ -528,10 +586,12 @@ export function createServer(deps: ServerDeps): WonServer {
 
     if (m === "GET" && p === "/api/telemetry") {
       const list = rt.runs.list();
-      const latest = list[0] ? rt.runs.load(list[0].run_id) : null;
+      const sampleLatest = [...samples.values()].sort((a, b) => b.started_at.localeCompare(a.started_at))[0] ?? null;
+      const latest = list[0] ? rt.runs.load(list[0].run_id) : sampleLatest;
       return send(res, 200, {
         model: rt.ollama?.model ?? null,
         runs: list.length,
+        sample: !list[0] && !!latest,
         busy_run_id: busy,
         run_id: latest?.run_id ?? null,
         cik: latest?.cik ?? null,
@@ -547,14 +607,19 @@ export function createServer(deps: ServerDeps): WonServer {
     }
 
     if (m === "GET" && p === "/api/eval") {
-      if (!evalReport || !existsSync(evalReport)) throw new HttpError(404, "no evaluation report yet (eval/report.json under the data directory)", "not_found");
+      const own = evalReport && existsSync(evalReport) ? evalReport : null;
+      const file = own ?? (committedEval && existsSync(committedEval) ? committedEval : null);
+      if (!file) throw new HttpError(404, "no evaluation report yet (eval/report.json under the data directory)", "not_found");
       let body: unknown;
       try {
-        body = JSON.parse(readFileSync(evalReport, "utf8"));
+        body = JSON.parse(readFileSync(file, "utf8"));
       } catch (e) {
         throw new HttpError(500, `evaluation report is not valid JSON: ${(e as Error).message.slice(0, 120)}`, "bad_report");
       }
-      return send(res, 200, { file: "eval/report.json", updated_at: new Date(statSync(evalReport).mtimeMs).toISOString(), report: body });
+      if (own) return send(res, 200, { file: "eval/report.json", committed: false, updated_at: new Date(statSync(own).mtimeMs).toISOString(), report: body });
+      const gen = (body as { generated_at?: unknown }).generated_at;
+      const day = typeof gen === "string" && Number.isFinite(Date.parse(gen)) ? new Date(gen).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }) : null;
+      return send(res, 200, { file: "docs/eval-report.json", committed: true, label: `committed report${day ? ` of ${day}` : ""}: the data directory has no eval/report.json yet`, updated_at: typeof gen === "string" ? gen : null, report: body });
     }
 
     if (m === "POST" && p === "/api/approvals/sign") {

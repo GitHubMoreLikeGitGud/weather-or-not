@@ -129,7 +129,7 @@ async function health() {
   if (!el) return;
   if (r.ok) {
     const d = r.data ?? {};
-    el.innerHTML = `${d.model ? `<span>${esc(d.model)}</span>` : ""}${typeof d.gateway_templates === "number" ? `<span>${esc(d.gateway_templates)} gateway templates</span>` : ""}${typeof d.runs === "number" ? `<span>${esc(d.runs)} saved runs</span>` : ""}`;
+    el.innerHTML = `${d.model ? `<span>${esc(d.model)}</span>` : ""}${typeof d.gateway_templates === "number" ? `<span>${esc(d.gateway_templates)} gateway templates</span>` : ""}${typeof d.runs === "number" ? `<span>${esc(d.runs)} saved runs${d.sample_runs ? ` + ${esc(d.sample_runs)} committed sample` : ""}</span>` : ""}`;
   } else {
     el.innerHTML = `<span class="warn-text">server not reachable</span>`;
   }

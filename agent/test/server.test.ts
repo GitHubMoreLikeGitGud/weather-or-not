@@ -3,10 +3,11 @@
 // WON_DATA_DIR points at a temporary directory for the whole file; config.ts resolves its paths
 // at import time, so every runtime import below is dynamic and comes after the assignment.
 
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import http from "node:http";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 import type { RunResult } from "../src/loop/investigate.ts";
 import type { AskFn, ServerRuntime, WonServer } from "../src/server.ts";
@@ -23,6 +24,7 @@ const { VECTOR_SECRET } = await import("./fixtures/contract-vector.ts");
 const RUN = "r20260101T0000000001";
 const CIK = "0000000001";
 const CONFLICT = "rc-0123456789ab";
+const SAMPLE_RUN = "r20261024T213805fb4e";
 
 function syntheticRun(id: string, over: Partial<Pick<RunResult, "cik" | "period" | "claim">> = {}): RunResult {
   const ev1 = `ev-${id}-01`;
@@ -192,7 +194,7 @@ afterEach(async () => {
   app = null;
 });
 
-async function start(o: { ask?: AskFn; defaultVerifier?: boolean } = {}) {
+async function start(o: { ask?: AskFn; defaultVerifier?: boolean; committedEval?: string; sampleDir?: string } = {}) {
   const root = mkdtempSync(join(tmpdir(), "won-server-"));
   const uiDir = join(root, "ui");
   mkdirSync(uiDir);
@@ -201,7 +203,7 @@ async function start(o: { ask?: AskFn; defaultVerifier?: boolean } = {}) {
   writeFileSync(join(root, "secret.txt"), "not served");
   const fake = fakeRuntime(root);
   const verifier = o.defaultVerifier ? undefined : new ContractVerifier(VECTOR_SECRET, "server", join(root, "contracts"));
-  app = createServer({ runtime: fake.rt, ask: o.ask ?? fakeAsk(), verifier, uiDir });
+  app = createServer({ runtime: fake.rt, ask: o.ask ?? fakeAsk(), verifier, uiDir, committedEvalReport: o.committedEval ?? null, sampleDir: o.sampleDir ?? null });
   const port = await app.listen(0);
   return { ...fake, root, port, base: `http://127.0.0.1:${port}`, verifierLog: join(root, "contracts", "verifier-server.jsonl"), usedLedger: join(root, "contracts", "used-server.jsonl") };
 }
@@ -388,11 +390,87 @@ describe("server: reads", () => {
     expect(hit.body).toMatchObject({ file: "eval/report.json", report: { synthetic: true } });
   });
 
+  it("GET /api/eval falls back to the committed docs/eval-report.json, labelled, while the data directory has none", async () => {
+    const committed = fileURLToPath(new URL("../../docs/eval-report.json", import.meta.url));
+    const { base } = await start({ committedEval: committed });
+    const own = DATA_PATHS.evalReport;
+    const hadOwn = existsSync(own);
+    if (hadOwn) rmSync(own);
+    const r = await call(base, "/api/eval");
+    expect(r.status).toBe(200);
+    expect(r.body).toMatchObject({ file: "docs/eval-report.json", committed: true, label: "committed report of 24 Oct 2026: the data directory has no eval/report.json yet" });
+    expect(r.body.report.totals).toBeTypeOf("object");
+    expect(Array.isArray(r.body.report.runs)).toBe(true);
+  });
+
+  it("lists and opens the committed sample run read-only, after the data directory's own runs", async () => {
+    const sampleDir = fileURLToPath(new URL("../../docs/sample-run/", import.meta.url));
+    const { base } = await start({ sampleDir });
+    const list = await call(base, "/api/runs");
+    expect(list.body.runs.map((x: { run_id: string }) => x.run_id)).toEqual([RUN, SAMPLE_RUN]);
+    expect(list.body.runs[1]).toMatchObject({ run_id: SAMPLE_RUN, cik: "0001031296", period: "CY2025Q1", verdict: "supported", confidence: "high", sample: true });
+    const run = await call(base, `/api/run/${SAMPLE_RUN}`);
+    expect(run.status).toBe(200);
+    expect(run.body.sample.note).toMatch(/masked/u);
+    expect(run.body.card.growth).toMatchObject({ rev_current: null, rev_previous: null, levels_masked: true });
+    const ev = await call(base, `/api/run/${SAMPLE_RUN}/evidence/ev-${SAMPLE_RUN}-11`);
+    expect(ev.status).toBe(200);
+    expect(ev.body.template_id).toBe("weather_quarter");
+    expect(ev.body.sql).toMatch(/^SELECT/u);
+    expect((await call(base, "/api/health")).body.sample_runs).toBe(1);
+  });
+
+  it("the committed sample run carries no revenue level: every val of a revenue template and every peer level is null", () => {
+    const run = JSON.parse(readFileSync(fileURLToPath(new URL(`../../docs/sample-run/${SAMPLE_RUN}.json`, import.meta.url)), "utf8")) as Record<string, any>;
+    let checked = 0;
+    for (const e of run.evidence as Record<string, any>[]) {
+      if (["frames_fact", "concept_window", "frames_seeds"].includes(e.template_id)) {
+        const i = (e.columns as string[]).indexOf("val");
+        for (const row of e.rows as unknown[][]) {
+          expect(row[i]).toBeNull();
+          checked += 1;
+        }
+      }
+      for (const p of (e.details?.peers ?? []) as Record<string, unknown>[]) {
+        expect(p.rev_current ?? null).toBeNull();
+        expect(p.rev_previous ?? null).toBeNull();
+      }
+    }
+    expect(checked).toBeGreaterThan(100);
+    const text = JSON.stringify(run);
+    expect(text).not.toMatch(/\d{1,3}(?:,\d{3})+\.\d million/u);
+    expect(text).not.toMatch(/[A-Za-z]:\\\\|\/Users\/|@[a-z0-9-]+\.[a-z]{2,}/iu);
+  });
+
   it("GET /api/seeds lists the seed utilities with their latest run per period", async () => {
     const { base } = await start();
     const r = await call(base, "/api/seeds");
     expect(r.status).toBe(200);
     expect(r.body.utilities[0]).toMatchObject({ cik: CIK, ticker: "SYN", latest_run_id: { CY2025Q1: RUN } });
+  });
+});
+
+describe("server: the degraded path (no gateway)", () => {
+  it("refuses POST /api/ask with 503 gateway_unreachable when the gateway does not answer; nothing runs or is saved", async () => {
+    const s = await start();
+    let asked = 0;
+    await app!.close();
+    const rt = { ...s.rt, gateway: { baseUrl: "http://127.0.0.1:9", health: async () => Promise.reject(new TypeError("fetch failed")) } } as unknown as ServerRuntime;
+    app = createServer({ runtime: rt, ask: async () => {
+      asked += 1;
+      throw new Error("must not run");
+    }, uiDir: null });
+    const port = await app.listen(0);
+    const base = `http://127.0.0.1:${port}`;
+    const health = await call(base, "/api/health");
+    expect(health.body).toMatchObject({ gateway_ok: false, gateway_error: "fetch failed" });
+    const r = await call(base, "/api/ask", { cik: CIK, period: "CY2025Q1" });
+    expect(r.status).toBe(503);
+    expect(r.body.code).toBe("gateway_unreachable");
+    expect(r.body.error).toMatch(/^gateway unreachable at http:\/\/127\.0\.0\.1:9 \(fetch failed\)/u);
+    expect(app!.busy).toBeNull();
+    expect(asked).toBe(0);
+    expect((await call(base, "/api/runs")).body.runs.filter((x: { sample?: boolean }) => !x.sample)).toHaveLength(1);
   });
 });
 

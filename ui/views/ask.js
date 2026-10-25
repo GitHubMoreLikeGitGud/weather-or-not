@@ -47,11 +47,18 @@ function utilityOptions(seeds, runs) {
   return opts;
 }
 
+/** Ask is off while the gateway is down: every step reads through it, so a question could only end withheld. */
+export function gatewayDownNote(health = {}) {
+  const where = health.gateway ? ` at <code>${esc(health.gateway)}</code>` : "";
+  const why = health.gateway_error ? ` <span class="small muted">(${esc(health.gateway_error)})</span>` : "";
+  return `<p class="msg msg--warn" role="status"><strong>Gateway unreachable${where}.</strong>${why} Ask needs the gateway, Zetaris and the local model (README, Quickstart B), so it is switched off. Saved runs still open below, including the committed sample run.</p>`;
+}
+
 export function renderRunsTable(runs) {
   if (!runs.length) return `<p class="muted">No saved runs yet. Ask a question above, or run the CLI's <code>ask</code> command.</p>`;
   return `<div class="table-wrap"><table class="runs"><thead><tr><th scope="col">Started</th><th scope="col">Utility</th><th scope="col">Period</th><th scope="col">Claim</th><th scope="col">Verdict</th><th scope="col">Chunks</th><th scope="col">Wall</th><th scope="col">Memo</th><th scope="col"><span class="sr-only">Open</span></th></tr></thead><tbody>${runs
     .map(
-      (r) => `<tr data-run-row="${esc(r.run_id)}"><td class="tnum">${esc(fmtTime(r.started_at))}</td><td><strong>${esc(r.utility ?? r.cik)}</strong><br><code class="small">${esc(r.cik)}</code></td><td class="tnum">${esc(r.period)}</td><td><q>${esc(r.claim)}</q></td><td>${verdictChip(r.verdict)} ${confidenceChip(r.confidence, { bare: true })}</td><td class="tnum">${esc(fmtNum(r.chunks))}</td><td class="tnum">${esc(fmtMs(r.wall_ms))}</td><td>${r.memo_source ? tag(`${r.memo_source} memo`, r.memo_source === "model" ? "model" : "neutral") : ""}</td><td><a class="btn btn--small" href="#/card/${esc(r.run_id)}">Open card</a> <button type="button" class="btn btn--small btn--ghost" data-replay="${esc(r.run_id)}">Timeline</button></td></tr>`,
+      (r) => `<tr data-run-row="${esc(r.run_id)}"><td class="tnum">${esc(fmtTime(r.started_at))}</td><td><strong>${esc(r.utility ?? r.cik)}</strong><br><code class="small">${esc(r.cik)}</code>${r.sample ? ` ${tag("committed sample run, revenue levels masked", "replay")}` : ""}</td><td class="tnum">${esc(r.period)}</td><td><q>${esc(r.claim)}</q></td><td>${verdictChip(r.verdict)} ${confidenceChip(r.confidence, { bare: true })}</td><td class="tnum">${esc(fmtNum(r.chunks))}</td><td class="tnum">${esc(fmtMs(r.wall_ms))}</td><td>${r.memo_source ? tag(`${r.memo_source} memo`, r.memo_source === "model" ? "model" : "neutral") : ""}</td><td><a class="btn btn--small" href="#/card/${esc(r.run_id)}">Open card</a> <button type="button" class="btn btn--small btn--ghost" data-replay="${esc(r.run_id)}">Timeline</button></td></tr>`,
     )
     .join("")}</tbody></table></div>`;
 }
@@ -110,6 +117,16 @@ export function mount(el, ctx) {
   };
 
   (async () => {
+    const h = await api("/api/health");
+    if (h.ok && h.data && h.data.gateway_ok === false) {
+      const go = el.querySelector("#ask-go");
+      go.disabled = true;
+      go.title = "Needs the gateway and Zetaris (Quickstart B)";
+      msg.innerHTML = gatewayDownNote(h.data);
+    }
+  })();
+
+  (async () => {
     const [seeds] = await Promise.all([loadSeeds(), refreshRuns()]);
     const opts = utilityOptions(seeds, runs);
     if (!opts.length) {
@@ -148,6 +165,10 @@ export function mount(el, ctx) {
       note.textContent = `live, run ${liveRun}`;
       status.textContent = `Run ${liveRun} accepted; the steps appear below as they happen.`;
       ctx.announce(`Run ${liveRun} started`);
+    } else if (r.status === 503 && r.data?.code === "gateway_unreachable") {
+      status.textContent = "";
+      go.disabled = true;
+      msg.innerHTML = gatewayDownNote({ gateway: null, gateway_error: r.data.error });
     } else if (r.status === 409) {
       status.textContent = "";
       msg.innerHTML = `<p class="msg msg--warn" role="alert">The agent is busy with run <code>${esc(r.data?.busy_run_id ?? "")}</code>; one model job runs at a time. <button type="button" class="btn btn--small" data-replay="${esc(r.data?.busy_run_id ?? "")}" data-follow="yes">Follow it</button></p>`;
