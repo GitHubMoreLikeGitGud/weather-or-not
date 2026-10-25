@@ -35,6 +35,14 @@ export function renderChunkBars(chart) {
   return `<svg class="bars" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(label)}">${bars}</svg>`;
 }
 
+/** 1 - (measured first prompts) / (naive full-history estimate), summed over the chunks; null when either is missing. */
+export function measuredSaving(chart) {
+  const pts = Array.isArray(chart) ? chart : [];
+  const m = pts.reduce((a, p) => a + (Number(p?.markovian_prompt_tokens_measured) || 0), 0);
+  const n = pts.reduce((a, p) => a + (Number(p?.naive_prompt_tokens_estimated) || 0), 0);
+  return m > 0 && n > 0 ? Number((1 - m / n).toFixed(3)) : null;
+}
+
 /**
  * Pure: the footer from {summary, telemetry, chart, run_id} (the /api/telemetry envelope or a run.json,
  * which carries the same three fields).
@@ -49,7 +57,8 @@ export function renderFooter(t, opts = {}) {
   const calls = s.planner_calls;
   parts.push(item("Planner calls", calls === undefined ? NOT_MEASURED : `<span class="tnum">${esc(fmtNum(calls))}</span>`, calls === undefined ? "" : `${esc(fmtNum(s.planner_valid_first_try))} valid first try, ${esc(fmtNum(s.planner_repaired ?? 0))} repaired${s.planner_repairs_think_off ? ` (${esc(fmtNum(s.planner_repairs_think_off))} think off)` : ""}`, "A planner reply is valid when it parses and matches the schema; a repair round re-asks once with the errors named, with thinking off after an empty length-cut reply"));
   parts.push(item("Fallback steps", s.fallback_steps === undefined ? NOT_MEASURED : `<span class="tnum">${esc(fmtNum(s.fallback_steps))}</span>`, "run by the host", "When the planner fails twice the host runs the checklist's next step itself; the card is the same, the step is marked"));
-  parts.push(item("Prompt per chunk", renderChunkBars(chart), chart.length ? `<span class="label">measured</span> vs <span class="label">naive est.</span>${typeof s.saving_vs_naive_estimated === "number" ? `, ${esc(fmtNum(s.saving_vs_naive_estimated * 100))}% less` : ""}` : "", "Solid bar: the Markovian prompt actually sent (measured by Ollama); outline bar: what a full-history prompt would have been (estimated, chars/4)", "tele__item--bars"));
+  const saving = measuredSaving(chart);
+  parts.push(item("Prompt per chunk", renderChunkBars(chart), chart.length ? `<span class="label">measured</span> vs <span class="label">naive est.</span>${saving === null ? "" : `, ${esc(fmtNum(saving * 100))}% less`}` : "", `Solid bar: the Markovian prompt actually sent (measured by Ollama); outline bar: what a full-history prompt would have been (estimated, chars/4). The saving compares the measured prompts with that estimate${typeof s.saving_vs_naive_estimated === "number" ? `; estimate against estimate it is ${fmtNum(s.saving_vs_naive_estimated * 100)}%` : ""}`, "tele__item--bars"));
   const tps = s.median_planner_tokens_per_s ?? tm.median_planner_tokens_per_s;
   parts.push(item("Median tok/s", tps ? `<span class="tnum">${esc(fmtNum(tps))}</span>` : NOT_MEASURED, tps ? `<span class="label">measured</span>${tm.memo_tokens_per_s ? `, memo ${esc(fmtNum(tm.memo_tokens_per_s))}` : ""}` : ""));
   parts.push(item("Cloud model calls", `<span class="tnum">${esc(fmtNum(tm.cloud_model_calls ?? 0))}</span>`, "", "Zero by construction: the model client refuses any host that is not loopback"));
