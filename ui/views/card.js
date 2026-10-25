@@ -38,6 +38,12 @@ function rangeGlyph(point, lo, hi, axis, label) {
   return `<svg class="rng" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(label)}"><line class="rng__axis" x1="6" x2="${W - 6}" y1="${H / 2}" y2="${H / 2}"/><line class="rng__zero" x1="${zero.toFixed(1)}" x2="${zero.toFixed(1)}" y1="2" y2="${H - 2}"/><line class="rng__band" x1="${x(lo).toFixed(1)}" x2="${x(hi).toFixed(1)}" y1="${H / 2}" y2="${H / 2}"/><circle class="rng__pt" cx="${x(point).toFixed(1)}" cy="${H / 2}" r="4"/></svg>`;
 }
 
+/** What each confidence label means: the rule in agent/src/tools/attribution.ts (confidenceLabel), in words. */
+const CONF_RULE = {
+  high: "the beta range excludes zero, with at least 20 peers and station coverage of at least 0.95. It says the weather effect is above zero, not that its size is narrow",
+  medium: "at least 12 peers and station coverage of at least 0.9, short of the high rule (20 peers, coverage 0.95 and a beta range that excludes zero)",
+  low: "fewer than 12 peers or station coverage below 0.9",
+};
 function splitBlock(run, ev) {
   const a = run.card?.attribution ?? {};
   const g = run.card?.growth?.g;
@@ -59,7 +65,7 @@ function splitBlock(run, ev) {
   return `<section class="panel split" aria-labelledby="split-h">
     <div class="split__head"><h2 class="panel__h" id="split-h">The change, split three ways</h2>${confidenceChip(a.confidence ?? run.card?.verdict?.confidence)} <span class="panel__note">of a ${numBtn(run.run_id, ev.growth, `<span class="fig">${esc(fmtPct(g))}</span>`, "like-for-like revenue growth")} like-for-like change; ranges are the 10th to 90th percentile of ${numBtn(run.run_id, ev.attribution, esc(fmtNum(bs.valid)), "valid bootstrap resamples")} of ${numBtn(run.run_id, ev.attribution, esc(fmtNum(bs.resamples)), "bootstrap resamples")} peer resamples (seed ${esc(bs.seed ?? "")})</span></div>
     <div class="parts">${parts}</div>
-    <p class="split__beta small">Peer sensitivity beta (OLS slope of growth on the degree-day change over ${numBtn(run.run_id, ev.peers, esc(fmtNum(a.peers)), "peers used")} peers) ${numBtn(run.run_id, ev.attribution, `<span class="fig fig--s">${esc(fmtNum(a.beta, 3))}</span>`, "beta")} <span class="muted">(range ${numBtn(run.run_id, ev.attribution, esc(fmtNum(a.ranges?.beta?.lo, 3)), "beta range low")} to ${numBtn(run.run_id, ev.attribution, esc(fmtNum(a.ranges?.beta?.hi, 3)), "beta range high")}; Theil-Sen ${numBtn(run.run_id, ev.attribution, esc(fmtNum(a.theil_sen, 3)), "Theil-Sen slope")})</span>. Confidence ${esc(a.confidence ?? "")} from the range width, the peer count and coverage ${numBtn(run.run_id, ev.weather, esc(fmtNum(a.coverage, 3)), "station coverage")}.</p>
+    <p class="split__beta small">Peer sensitivity beta (OLS slope of growth on the degree-day change over ${numBtn(run.run_id, ev.peers, esc(fmtNum(a.peers)), "peers used")} peers) ${numBtn(run.run_id, ev.attribution, `<span class="fig fig--s">${esc(fmtNum(a.beta, 3))}</span>`, "beta")} <span class="muted">(range ${numBtn(run.run_id, ev.attribution, esc(fmtNum(a.ranges?.beta?.lo, 3)), "beta range low")} to ${numBtn(run.run_id, ev.attribution, esc(fmtNum(a.ranges?.beta?.hi, 3)), "beta range high")}; Theil-Sen ${numBtn(run.run_id, ev.attribution, esc(fmtNum(a.theil_sen, 3)), "Theil-Sen slope")})</span>. Confidence ${esc(a.confidence ?? "")}${CONF_RULE[a.confidence] ? `: ${esc(CONF_RULE[a.confidence])}` : ""}; station coverage ${numBtn(run.run_id, ev.weather, esc(fmtNum(a.coverage, 3)), "station coverage")}.</p>
   </section>`;
 }
 
