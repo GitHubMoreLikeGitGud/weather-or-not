@@ -44,7 +44,7 @@ Wall time of the three runs: 122.4 + 198.1 + 163.3 = 483.8 s of Cursor Agent tim
 
 ## What Cursor Agent did not write
 
-Everything else was written outside Cursor Agent, by the author:
+Everything else was written outside the three Cursor Agent runs:
 
 - the task files, the known-answer fixtures and their generator (`agent/test/fixtures/make_fixtures.py`);
 - the Zetaris objects: every Lightning SQL pair in `zetaris/sql/`, the `weather_or_not_usl` model and its DQ rule, `zetaris/README.md` and the manifest;
